@@ -5,9 +5,10 @@ require 'motion/project/template/osx'
 Motion::Project::App.setup do |app|
   # Use `rake config' to see complete project settings.
   app.name = 'Portly'
-  app.version = '0.2.0'
-  app.short_version = '0.2.0'
+  app.version = '3'
+  app.short_version = '0.2.1'
   app.deployment_target = '10.7'
+  app.codesign_certificate = "Developer ID Application: Fully Brand LLC (DENUL24P9C)"
   app.icon = 'icon.icns'
 
   app.frameworks += ['IOKit', 'CoreFoundation', 'Cocoa', 'Security']
