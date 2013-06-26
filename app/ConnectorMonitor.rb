@@ -48,7 +48,7 @@ class ConnectorMonitor
 
         current_index = App.global.index + App.global.connectors.size
 
-        ApplicationController.singleton.status_menu.insertItem self.menu_item, atIndex: current_index
+        ApplicationController.singleton.status_menu.insertItem menu_item, atIndex: current_index
         App.global.connectors << self
         ApplicationController.singleton.handleMenuDivider
 
@@ -302,12 +302,13 @@ class ConnectorMonitor
     end
 
     def menu_item
-        @menu_item = NSMenuItem.new
-        @menu_item.image = App.offline
-        set_menu_item_title
-        @menu_item.action = 'toggleState:'
-        @menu_item.target = self
-        @menu_item
+      return @menu_item if @menu_item
+      @menu_item = NSMenuItem.new
+      @menu_item.image = App.offline
+      set_menu_item_title
+      @menu_item.action = 'toggleState:'
+      @menu_item.target = self
+      @menu_item
     end
 
     def set_connection_string
@@ -315,7 +316,7 @@ class ConnectorMonitor
     end
 
     def set_menu_item_title
-        @menu_item.title = "#{@connection_string} → " + (@cname.to_s == '' ? "#{@subdomain}.#{App.global.suffix}" : @cname)
+      @menu_item.title = "#{@connection_string} → " + (@cname.to_s == '' ? "#{@subdomain}.#{App.global.suffix}" : @cname)
     end
 
     def pref tableView
@@ -616,7 +617,10 @@ class ConnectorMonitor
             }
             res = App.api_delete("/connectors/#{@connector_id}", data)
             if res
-                self.destroy_model
+              Logger.debug "deleting model too"
+              self.destroy_model
+            else
+              Logger.debug "error deleting connector: #{res.inspect}"
             end
         end
     end

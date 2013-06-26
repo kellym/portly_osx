@@ -279,7 +279,7 @@ class ApplicationController
       tokens.each do |t|
           t.active = 0
       end
-      #App.save!
+      App.save!
       dups = []
       App.global.connectors.each { |c| dups << c }
       dups.each do |connector|

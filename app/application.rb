@@ -243,6 +243,7 @@ class App
         conn = NSURLConnection.sendSynchronousRequest request, returningResponse: resp, error: err
         if err.value
             err = err.value.code
+            Logger.debug "Error with connection: #{err}"
             if err == -1012
                 nil #TODO: handle this 401 later
             else
