@@ -1,0 +1,33 @@
+<?xml version='1.0'?>
+<signatures version='1.0'>
+<class name='Token'>
+<method selector='active'>
+<retval type='@' declared_type='NSNumber*'/>
+</method>
+<method selector='allow_remote'>
+<retval type='@' declared_type='NSNumber*'/>
+</method>
+<method selector='key'>
+<retval type='@' declared_type='NSString*'/>
+</method>
+<method selector='setActive:'>
+<arg name='active' index='0' type='@' declared_type='NSNumber*'/>
+<retval type='v' declared_type='void'/>
+</method>
+<method selector='setAllow_remote:'>
+<arg name='allow_remote' index='0' type='@' declared_type='NSNumber*'/>
+<retval type='v' declared_type='void'/>
+</method>
+<method selector='setKey:'>
+<arg name='key' index='0' type='@' declared_type='NSString*'/>
+<retval type='v' declared_type='void'/>
+</method>
+<method selector='setSuffix:'>
+<arg name='suffix' index='0' type='@' declared_type='NSString*'/>
+<retval type='v' declared_type='void'/>
+</method>
+<method selector='suffix'>
+<retval type='@' declared_type='NSString*'/>
+</method>
+</class>
+</signatures>

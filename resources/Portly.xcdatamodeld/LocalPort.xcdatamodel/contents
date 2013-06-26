@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2057" systemVersion="12C3006" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Connector" representedClassName="Connector" syncable="YES">
+        <attribute name="auth_type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="connector_id" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="host" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="port" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="reference" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="start_on_boot" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="subdomain" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Token" representedClassName="Token" syncable="YES">
+        <attribute name="active" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="allow_remote" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="suffix" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Connector" positionX="160" positionY="192" width="128" height="165"/>
+        <element name="Token" positionX="160" positionY="192" width="128" height="105"/>
+    </elements>
+</model>
