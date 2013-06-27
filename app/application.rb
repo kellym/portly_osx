@@ -232,11 +232,7 @@ class App
         Logger.debug postBodyString
         Logger.debug '----'
         request.setHTTPMethod method
-        if method == 'DELETE'
-          request.setValue "application/json", forHTTPHeaderField: "content-type"
-        else
-          request.setValue "application/x-www-form-urlencoded", forHTTPHeaderField: "content-type"
-        end
+        request.setValue "application/x-www-form-urlencoded", forHTTPHeaderField: "content-type"
         request.setHTTPBody postBodyData
         resp = Pointer.new(:object)
         err = Pointer.new(:object)
