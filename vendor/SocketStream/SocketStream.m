@@ -117,7 +117,7 @@
     }
 }
 
-- (void)keepInputAlive {
+- (bool)keepInputAlive {
 
     CFDataRef socketData = CFReadStreamCopyProperty((CFReadStreamRef)(self.inputStream), kCFStreamPropertySocketNativeHandle);
     CFSocketNativeHandle socket;
@@ -127,10 +127,12 @@
     int on = 1;
     if (setsockopt(socket, SOL_SOCKET, SO_KEEPALIVE, &on, sizeof(on)) == -1) {
         NSLog(@"setsockopt failed: %s", strerror(errno));
+        return false;
     }
+    return true;
 
 }
-- (void)keepOutputAlive {
+- (bool)keepOutputAlive {
 
     CFDataRef socketData = CFReadStreamCopyProperty((CFReadStreamRef)(self.outputStream), kCFStreamPropertySocketNativeHandle);
     CFSocketNativeHandle socket;
@@ -140,7 +142,9 @@
     int on = 1;
     if (setsockopt(socket, SOL_SOCKET, SO_KEEPALIVE, &on, sizeof(on)) == -1) {
         NSLog(@"setsockopt failed: %s", strerror(errno));
+        return false;
     }
+    return true;
 }
 
 - (void)readBytes {

@@ -64,6 +64,7 @@
    if (error || s < 0) {
      return false;
    } else {
+     close(s);
      return true;
    }
 }

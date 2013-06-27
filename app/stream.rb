@@ -40,15 +40,25 @@ class Stream
         end
     end
 
+    def retrySocket
+      @socket_retry_queue ||= Dispatch::Queue.new('socket.connection.retry')
+      closeSocket
+      @socket_retry_queue.sync { Dispatch::Queue.main.async { startSocket }; sleep 5 }
+    end
+
     def handleInput(streamEvent)
         case streamEvent
         when NSStreamEventOpenCompleted
             #Logger.debug "we're loaded"
             if @initInput
                 Logger.debug 'doing keepalive-input'
-                @socket.keepInputAlive
-                Logger.debug 'done with keepalive-input'
-                @initInput = nil
+                if @socket.keepInputAlive
+                  Logger.debug 'done with keepalive-input'
+                  @initInput = nil
+                else
+                  Logger.debug 'could not perform keepalive-input'
+                  retrySocket
+                end
             end
         when NSStreamEventEndEncountered
             Logger.debug "we're done, but we need to reconnect."
@@ -57,9 +67,7 @@ class Stream
         when NSStreamEventErrorOccurred
             Logger.debug @socket.inputStream.streamError.localizedDescription
             Logger.debug "something happened, so let's start over."
-            @socket_retry_queue ||= Dispatch::Queue.new('socket.connection.retry')
-            closeSocket
-            @socket_retry_queue.async { Dispatch::Queue.main.async { startSocket }; sleep 5 }
+            retrySocket
         when NSStreamEventHasBytesAvailable
             Logger.debug 'data available'
             buf = Pointer.new('c', 1024)
@@ -95,11 +103,14 @@ class Stream
         when NSStreamEventOpenCompleted
             if @initOutput
                 Logger.debug 'keepalive-output'
-                @socket.keepOutputAlive
-                Logger.debug 'keepalive-output done'
-
-                @initOutput = nil
-                queuePing
+                if @socket.keepOutputAlive
+                  Logger.debug 'keepalive-output done'
+                  @initOutput = nil
+                  queuePing
+                else
+                  Logger.debug 'keepalive-output failed'
+                  retrySocket
+                end
             end
         when NSStreamEventHasSpaceAvailable
             if @initConnector

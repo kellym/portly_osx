@@ -18,8 +18,8 @@
 - (void)readBytes;
 -(void) handleOutputStreamEvent:(NSStreamEvent)eventCode;
 - (void)handleInputStreamEvent:(NSStreamEvent)eventCode;
-- (void)keepOutputAlive;
-- (void)keepInputAlive;
+- (bool)keepOutputAlive;
+- (bool)keepInputAlive;
 
 @property (retain) NSInputStream * inputStream;
 @property (retain) NSOutputStream * outputStream;

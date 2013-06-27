@@ -343,19 +343,19 @@ class ConnectorMonitor
       @connector_queue ||= Dispatch::Queue.new("#{App.queue_prefix}.ssh_start.#{@reference}")
       @awaiting_reconnect = false
       @connector_queue.async do
-          #return queue_reconnect && ApplicationController.singleton.setConnectorState unless port_open?
-          #pool = NSAutoreleasePool.new
         @reconnect = true
-          @timeout = 0
+        @timeout = 0
         Logger.debug 'Sending connection data.'
-          data = { 'connector_id' => self.model.valueForKey('connector_id'), 'access_token' => App.global.token, 'publish' => 'false' }
+        data = {
+          'connector_id' => self.model.valueForKey('connector_id'),
+          'publish' => 'false'
+        }
         response = App.api_post("/tunnels",data)
+        Logger.debug response.inspect
         if response
             @response = response
             Dispatch::Queue.main.async { event_connect @response['connection_string'], @response['tunnel_string'] }
-        else #if response.is_a? Net::HTTPBadRequest
-            #Logger.debug response.body
-            #@response = JSON.parse(response.body)
+        else
             #if @response['error'] == 'already_connected'
                 disconnect
                 connect
@@ -540,13 +540,11 @@ class ConnectorMonitor
     end
 
     def receivedPing(notif)
-        #pool = NSAutoreleasePool.new
         fh = notif.object
         data = fh.availableData.to_s
         @timeout=0
         Logger.debug data
         fh.waitForDataInBackgroundAndNotifyForModes([NSEventTrackingRunLoopMode, NSDefaultRunLoopMode]) if running?
-        #pool.drain
     end
 
     def taskTerminated(notif)
