@@ -10,7 +10,7 @@
 #  Constants
 
 ENVIRONMENT = 'production'
-DEBUG = false
+DEBUG = RUBYMOTION_ENV == "development"
 
 PrefsToolbarItemConnectors = "prefsToolbarItemConnectors"
 PrefsToolbarItemAccount = "prefsToolbarItemAccount"

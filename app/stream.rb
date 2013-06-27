@@ -18,6 +18,10 @@ class Stream
         @data_queue = []
     end
 
+    def online?
+      @socket_online
+    end
+
     def startSocket
         @socket_online = true
         @initConnector = "EHLO:#{App.global.token}"
@@ -43,7 +47,7 @@ class Stream
     def retrySocket
       @socket_retry_queue ||= Dispatch::Queue.new('socket.connection.retry')
       closeSocket
-      @socket_retry_queue.sync { Dispatch::Queue.main.async { startSocket }; sleep 5 }
+      @socket_retry_queue.async { sleep 5; Dispatch::Queue.main.async { startSocket } }
     end
 
     def handleInput(streamEvent)

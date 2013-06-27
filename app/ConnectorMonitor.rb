@@ -357,8 +357,9 @@ class ConnectorMonitor
             Dispatch::Queue.main.async { event_connect @response['connection_string'], @response['tunnel_string'] }
         else
             #if @response['error'] == 'already_connected'
-                disconnect
-                connect
+            disconnect(true)
+            queue_reconnect
+            #    connect
             #end
         end
       end
@@ -500,20 +501,21 @@ class ConnectorMonitor
     end
 
     def queue_reconnect(seconds=nil)
-        seconds ||= @retry_seconds
-        Logger.debug "Retrying in #{seconds} seconds."
-        @reconnect_queue ||= Dispatch::Queue.new("#{App.queue_prefix}.reconnect.#{@reference}")
-        @reconnect_queue.async do
-            sleep seconds
-            if port_open? && @awaiting_reconnect && !online?
-                Logger.debug "Port is open again."
-                Dispatch::Queue.main.async { connect }
-            elsif @awaiting_reconnect && !online?
-                #requeue_seconds = seconds * 2
-                #requeue_seconds = 60 if requeue_seconds > 60
-                Dispatch::Queue.main.async { queue_reconnect seconds }
-            end
-        end
+      self.performSelectorInBackground('queue_reconnect_in_background:', withObject:seconds)
+    end
+
+    def queue_reconnect_in_background(seconds=nil)
+      seconds ||= @retry_seconds
+      Logger.debug "Retrying in #{seconds} seconds."
+      sleep seconds
+      if port_open? && @awaiting_reconnect && !online? && ApplicationController.singleton.socket.online?
+        Logger.debug "Port is open again."
+        connect
+      elsif @awaiting_reconnect && !online?
+        #requeue_seconds = seconds * 2
+        #requeue_seconds = 60 if requeue_seconds > 60
+        queue_reconnect_in_background seconds
+      end
     end
 
     def receivedError(notif)
