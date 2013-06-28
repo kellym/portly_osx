@@ -39,6 +39,10 @@ class ConnectorsViewController < NSViewController
     @previously_selected_row = nil
   end
 
+  def self.initialized?
+    !!@sharedInstance
+  end
+
   def self.sharedController
     unless @sharedInstance
       @sharedInstance = self.alloc.initWithNibName("PreferencesConnectors", bundle:nil)
@@ -48,7 +52,10 @@ class ConnectorsViewController < NSViewController
   end
 
   def awakeFromNib
-    #self.connectors_list.selectedRow = 0
+    setup
+  end
+
+  def setup
     @connectors_list.selectRowIndexes NSIndexSet.indexSetWithIndex(0), byExtendingSelection:true
     @suffix.stringValue = ".#{App.global.token_model.suffix}"
     @new_suffix.stringValue = ".#{App.global.token_model.suffix}"

@@ -100,6 +100,7 @@ class ApplicationController
             end
         end
         @preferences_menu.setEnabled(true) if App.global.token
+        ConnectorsViewController.sharedController.setup if ConnectorsViewController.initialized?
         loadConnectors
     end
 
