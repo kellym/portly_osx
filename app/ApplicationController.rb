@@ -74,10 +74,6 @@ class ApplicationController
         App.global.path = appDirectory.path
     end
 
-    def createSSHConnection
-
-    end
-
     def startApp
       self.performSelectorInBackground('startAppInBackground:', withObject: nil)
     end
@@ -127,86 +123,92 @@ class ApplicationController
 
     def awakeFromNib
 
-        getMACAddress
-        createPortlyFolder
-        createSSHConnection
+      Logger.debug "awake app"
+      getMACAddress
+      createPortlyFolder
 
-        @updater = SUUpdater.new
-        @status_menu = NSMenu.new
+      Logger.debug "Setting up menu"
+      @updater = SUUpdater.new
+      @status_menu = NSMenu.new
 
-        @online_state = NSMenuItem.new
-        @online_state.title = 'State: Disconnected'
-        @online_state.setEnabled(false)
+      Logger.debug '- online state'
+      @online_state = NSMenuItem.new
+      @online_state.title = 'State: Disconnected'
+      @online_state.setEnabled(false)
 
-        @status_menu.addItem @online_state
-        @status_menu.addItem(NSMenuItem.separatorItem)
-        @preferences_menu =  NSMenuItem.alloc.initWithTitle("Preferences", action: 'showPreferences:', keyEquivalent: 'p')
-        @preferences_menu.setTarget self
-        @preferences_menu.setEnabled(false)
-        @status_menu.addItem @preferences_menu
-        updater = NSMenuItem.alloc.initWithTitle("Check for update...", action: 'checkForUpdates:', keyEquivalent: 'u')
-        updater.setTarget @updater
-        @status_menu.addItem updater
-        @status_menu.addItem(NSMenuItem.separatorItem)
-        @status_menu.addItemWithTitle("Quit Portly", action: 'terminate:', keyEquivalent: 'q')
-        @notification ||= Notification.new(App.title)
+      @status_menu.addItem @online_state
+      @status_menu.addItem(NSMenuItem.separatorItem)
 
-        @statusItem = NSStatusBar.systemStatusBar.statusItemWithLength NSVariableStatusItemLength
-        @statusItem.setMenu @status_menu
-        @statusItem.setToolTip App.title
-        @statusItem.setHighlightMode true
+      Logger.debug '- prefs menu'
+      @preferences_menu =  NSMenuItem.alloc.initWithTitle("Preferences", action: 'showPreferences:', keyEquivalent: ',')
+      @preferences_menu.setTarget self
+      @preferences_menu.setEnabled(false)
+      @status_menu.addItem @preferences_menu
 
-        @status_menu.setAutoenablesItems false
-        setMenuItemState :disconnected
+      Logger.debug '- updater'
+      updater = NSMenuItem.alloc.initWithTitle("Check for update...", action: 'checkForUpdates:', keyEquivalent: 'u')
+      updater.setTarget @updater
+      @status_menu.addItem updater
+      @status_menu.addItem(NSMenuItem.separatorItem)
+      @status_menu.addItemWithTitle("Quit Portly", action: 'terminate:', keyEquivalent: 'q')
 
+      Logger.debug 'Creating notification.'
+      @notification ||= Notification.new(App.title)
 
-        @tokens = Entity.findFromContext(ApplicationController.singleton.managedObjectContext, withEntity:'Token', andPredicate:nil, options:{}).keep_if { |t| t.active == 1 }
-        if @tokens.size > 0
-            App.global.token = @tokens.first
-            startApp
-        else
-            drawLoginScreen
-        end
+      Logger.debug "Putting it on the menu"
+      @statusItem = NSStatusBar.systemStatusBar.statusItemWithLength NSVariableStatusItemLength
+      @statusItem.setMenu @status_menu
+      @statusItem.setToolTip App.title
+      @statusItem.setHighlightMode true
 
-        NSNotificationCenter.defaultCenter.addObserver self, selector:'applicationWillTerminate:', name:NSApplicationWillTerminateNotification, object:NSApplication.sharedApplication
+      @status_menu.setAutoenablesItems false
+      setMenuItemState :disconnected
 
-        Logger.debug NSUserDefaults.standardUserDefaults['user']
+      Logger.debug ("Loading tokens.")
+      @tokens = Entity.findFromContext(ApplicationController.singleton.managedObjectContext, withEntity:'Token', andPredicate:nil, options:{}).keep_if { |t| t.active == 1 }
+      if @tokens.size > 0
+          App.global.token = @tokens.first
+          startApp
+      else
+          drawLoginScreen
+      end
+
+      NSNotificationCenter.defaultCenter.addObserver self, selector:'applicationWillTerminate:', name:NSApplicationWillTerminateNotification, object:NSApplication.sharedApplication
     end
 
     def setMenuItemState(state=:connected)
-        @statusItem.setImage NSImage.imageNamed("icon-#{state.to_s}")
-        @statusItem.setAlternateImage NSImage.imageNamed("icon-#{state.to_s}-on")
+      @statusItem.setImage NSImage.imageNamed("icon-#{state.to_s}")
+      @statusItem.setAlternateImage NSImage.imageNamed("icon-#{state.to_s}-on")
     end
 
     def validateMenuItem(menuItem)
-        Logger.debug "VALIDATION"
-        false
+      false
     end
 
     def loadConnectors
-        ConnectorMonitor.load_all
-        self.handleMenuDivider
+      ConnectorMonitor.load_all
+      self.handleMenuDivider
     end
 
     def handleMenuDivider
-        if !@divider && (App.global.connectors.size > 0)
-            @divider = NSMenuItem.separatorItem
-            self.status_menu.insertItem @divider, atIndex: App.global.index + App.global.connectors.size
-        elsif @divider && App.global.connectors.size == 0
-            self.status_menu.removeItem @divider if @divider && @divider.menu
-            @divider = nil
-        end
+      if !@divider && (App.global.connectors.size > 0)
+        @divider = NSMenuItem.separatorItem
+        self.status_menu.insertItem @divider, atIndex: App.global.index + App.global.connectors.size
+      elsif @divider && App.global.connectors.size == 0
+        self.status_menu.removeItem @divider if @divider && @divider.menu
+        @divider = nil
+      end
     end
 
     def showPreferences(sender)
-        NSApplication.sharedApplication.activateIgnoringOtherApps(true)
-        Logger.debug 'show pref window'
-        PreferencesController.sharedController.showWindow(sender)
+      NSApplication.sharedApplication.activateIgnoringOtherApps(true)
+      Logger.debug 'show pref window'
+      PreferencesController.sharedController.showWindow(sender)
     end
 
     def applicationWillTerminate(a_notification)
-        Logger.debug 'Terminating.'
-        self.dealloc
+      Logger.debug 'Terminating.'
+      self.dealloc
     end
 
     def saveSettings
@@ -214,83 +216,82 @@ class ApplicationController
     end
 
     def toggleState(sender)
-        if  sender.title == "Connect All"
-            connectAll
-        else
-            disconnectAll
-        end
+      if  sender.title == "Connect All"
+        connectAll
+      else
+        disconnectAll
+      end
     end
 
     def connectAll
-        @notification.send("Connecting ports to the outside world.")
-        App.global.connectors.each do |connector|
-            connector.connect unless connector.running?
-        end
-        @online_state.title = "State: Online"
-        @change_state.title = "Disconnect All"
+      @notification.send("Connecting ports to the outside world.")
+      App.global.connectors.each do |connector|
+        connector.connect unless connector.running?
+      end
+      @online_state.title = "State: Online"
+      @change_state.title = "Disconnect All"
     end
 
     def disconnectAll
-        @notification.send("Disconnecting ports from the outside world.")
-        App.global.connectors.each do |connector|
-            connector.disconnect if connector.running?
-        end
+      @notification.send("Disconnecting ports from the outside world.")
+      App.global.connectors.each do |connector|
+        connector.disconnect if connector.running?
+      end
 
-        @online_state.title = "State: Offline"
-        @change_state.title = "Connect All"
+      @online_state.title = "State: Offline"
+      @change_state.title = "Connect All"
     end
 
     def dealloc
-        Logger.debug "Disconnecting all ports."
-        @socket.closeSocket if @socket
-        App.global.connectors.each do |connector|
-            connector.disconnect
-            connector.thread.exit if connector.thread
-        end
+      Logger.debug "Disconnecting all ports."
+      @socket.closeSocket if @socket
+      App.global.connectors.each do |connector|
+        connector.disconnect
+        connector.thread.exit if connector.thread
+      end
     end
 
     def setConnectorState
+      statuses = App.global.connectors.map(&:online?).uniq
 
-        statuses = App.global.connectors.map(&:online?).uniq
+      if statuses == [true]
+        setMenuItemState :connected
+        status = 'Connected'
+      elsif statuses == [false] || statuses == []
+        setMenuItemState :disconnected
+        status = 'Disconnected'
+      else
+        setMenuItemState :connected
+        status = 'Partially Connected'
+      end
 
-        if statuses == [true]
-            setMenuItemState :connected
-            status = 'Connected'
-        elsif statuses == [false] || statuses == []
-            setMenuItemState :disconnected
-            status = 'Disconnected'
-        else
-            setMenuItemState :connected
-            status = 'Partially Connected'
-        end
-
-        @online_state.title = "State: #{status}"
+      @online_state.title = "State: #{status}"
     end
 
     def signOut
-        @preferences_menu.setEnabled(false)
-        File.delete(App.private_key_path) if File.exists?(App.private_key_path)
-        ApplicationController.singleton.drawLoginScreen
+      @preferences_menu.setEnabled(false)
+      File.delete(App.private_key_path) if File.exists?(App.private_key_path)
+      ApplicationController.singleton.drawLoginScreen
 
-        self.performSelectorInBackground('destroy_data:', withObject: nil)
-        App.global.token = nil
-        ApplicationController.singleton.socket.closeSocket
-        ApplicationController.singleton.dealloc
-        PreferencesController.sharedController.close rescue nil
+      self.performSelectorInBackground('destroy_data:', withObject: nil)
+      App.global.token = nil
+      ApplicationController.singleton.socket.closeSocket
+      ApplicationController.singleton.dealloc
+      PreferencesController.sharedController.close rescue nil
     end
 
     def destroy_data(obj)
       tokens = Entity.findFromContext(ApplicationController.singleton.managedObjectContext, withEntity:'Token', andPredicate:nil, options:{})
       tokens.each do |t|
-          t.active = 0
+        t.active = 0
       end
       App.save!
       dups = []
       App.global.connectors.each { |c| dups << c }
       dups.each do |connector|
-          Logger.debug connector.subdomain
-          connector.disconnect
-          connector.destroy_model
+        Logger.debug connector.subdomain
+        connector.disconnect
+        connector.destroy_model
       end
     end
 end
