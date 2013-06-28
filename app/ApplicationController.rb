@@ -92,7 +92,10 @@ class ApplicationController
             }
             res = App.api_put("/tokens/#{App.global.token}", data)
             Logger.debug 'started'
-            unless res
+            if res
+              App.global.token_model.suffix = res['suffix']
+              App.save!
+            else
                 # we need to close out this joint, yo!
                 Dispatch::Queue.main.async do
                     signOut
