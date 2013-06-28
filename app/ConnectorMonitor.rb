@@ -340,11 +340,11 @@ class ConnectorMonitor
       @_init = false
       return if running?
       @hide_reconnect = false
-      @connector_queue ||= Dispatch::Queue.new("#{App.queue_prefix}.ssh_start.#{@reference}")
       @awaiting_reconnect = false
+      @reconnect = true
+      @timeout = 0
+      @connector_queue ||= Dispatch::Queue.new("#{App.queue_prefix}.ssh_start.#{@reference}")
       @connector_queue.async do
-        @reconnect = true
-        @timeout = 0
         Logger.debug 'Sending connection data.'
         data = {
           'connector_id' => self.model.valueForKey('connector_id'),
@@ -353,17 +353,14 @@ class ConnectorMonitor
         response = App.api_post("/tunnels",data)
         Logger.debug response.inspect
         if response
-            @response = response
-            Dispatch::Queue.main.async { event_connect @response['connection_string'], @response['tunnel_string'] }
+          @response = response
+          event_connect @response['connection_string'], @response['tunnel_string']
         else
-            #if @response['error'] == 'already_connected'
-            disconnect(true)
-            queue_reconnect
-            #    connect
-            #end
+          # publish_disconnect
+          @awaiting_reconnect = true
+          queue_reconnect
         end
       end
-
     end
 
     def event_connect(connection_string, tunnel_string)
@@ -446,43 +443,13 @@ class ConnectorMonitor
     end
 
     def connect_to(host, port, timeout)
-        begin
-            type = :INET
-            if host.gsub(/[^0-9\:\[\]\.]/, '') == host
-                Logger.debug 'IP address'
-                addr = host
-                if host =~ /:/
-                    type = :INET6
-                end
-            else
-                Logger.debug 'Hostname'
-                #addr = Socket.getaddrinfo(host, nil)
-                #type = addr[2][0]
-                #addr = addr[2][3]
-            end
-            #sock = Socket.new(type, Socket::SOCK_STREAM, 0)
-
-            optval = [timeout, 0].pack("l_2")
-            puts 'trying'
-            return Sock.connect(host, port:port)
-            #sock.setsockopt Socket::SOL_SOCKET, Socket::SO_RCVTIMEO, optval
-            #sock.setsockopt Socket::SOL_SOCKET, Socket::SO_SNDTIMEO, optval
-
-
-            #return true
-            #sock.connect(Socket.pack_sockaddr_in(port, addr))
-            #sock.close
-            #true
-        rescue Exception => e
-            Logger.debug e.inspect
-            #Logger.debug addr[0][3].inspect
-            #Logger.debug port.inspect
-            false
-        ensure
-            addr = nil
-            sock = nil
-            optval = nil
-        end
+      begin
+        Logger.debug "trying to connect locally to #{host}:#{port}"
+        return Sock.connect(host, port:port)
+      rescue Exception => e
+        Logger.debug e.inspect
+        false
+      end
     end
 
     def port_open?
@@ -512,8 +479,7 @@ class ConnectorMonitor
         Logger.debug "Port is open again."
         connect
       elsif @awaiting_reconnect && !online?
-        #requeue_seconds = seconds * 2
-        #requeue_seconds = 60 if requeue_seconds > 60
+        Logger.debug "Requeueing connection."
         queue_reconnect_in_background seconds
       end
     end
@@ -551,35 +517,36 @@ class ConnectorMonitor
 
     def taskTerminated(notif)
        Logger.debug "Task was terminated."
-       disconnect
-       connect
+       disconnect(true)
+       queue_reconnect
     end
 
     def disconnect(awaiting_reconnect=false)
-        #return unless online? && !@awaiting_reconnect
-        if @awaiting_reconnect && (awaiting_reconnect == false)
-            @awaiting_reconnect = false
-            event_disconnect(false)
-        else
+      if @awaiting_reconnect && (awaiting_reconnect == false)
+        @awaiting_reconnect = false
+        event_disconnect(false)
+      else
+        @awaiting_reconnect = awaiting_reconnect
+        publish_disconnect
+        event_disconnect(false)
+      end
+    end
 
-            @awaiting_reconnect = awaiting_reconnect
-            @disconnect_port_queue ||= Dispatch::Queue.new("#{App.queue_prefix}.disconnect.#{@reference}")
-            @disconnect_port_queue.async do
-                data = {
-                    'publish' => 'false'
-                }
-                Logger.debug 'publishing disconnect'
-                res = App.api_delete("/tunnels/#{@connector_id}", data)
-            end
-            event_disconnect(false)
-        end
+    def publish_disconnect
+      @disconnect_port_queue ||= Dispatch::Queue.new("#{App.queue_prefix}.disconnect.#{@reference}")
+      @disconnect_port_queue.async do
+        data = {
+          'publish' => 'false'
+        }
+        Logger.debug 'publishing disconnect'
+        res = App.api_delete("/tunnels/#{@connector_id}", data)
+      end
     end
 
     def force_disconnect
-        @awaiting_reconnect = false
-        event_disconnect
+      @awaiting_reconnect = false
+      event_disconnect
     end
-
 
     def event_disconnect(hide_updates = false)
 
