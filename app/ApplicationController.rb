@@ -95,6 +95,7 @@ class ApplicationController
             if res
               App.global.token_model.suffix = res['suffix']
               App.save!
+              ConnectorsViewController.sharedController.setup if ConnectorsViewController.initialized?
             else
                 # we need to close out this joint, yo!
                 Dispatch::Queue.main.async do
@@ -103,7 +104,6 @@ class ApplicationController
             end
         end
         @preferences_menu.setEnabled(true) if App.global.token
-        ConnectorsViewController.sharedController.setup if ConnectorsViewController.initialized?
         loadConnectors
     end
 
