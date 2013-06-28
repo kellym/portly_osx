@@ -27,6 +27,7 @@ Motion::Project::App.setup do |app|
   app.files_dependencies 'app/inheritable_attrs.rb' => 'app/core_data.rb'
   app.files_dependencies 'app/Entity.rb' => 'app/inheritable_attrs.rb'
   app.files_dependencies 'app/ApplicationController.rb' => 'app/stream.rb'
+  app.files_dependencies 'app/ApplicationController.rb' => 'app/ConnectorsViewController.rb'
   app.info_plist['SUFeedURL'] = 'https://getportly.com/downloads/sparkle_updates.xml'
   app.info_plist['SUPublicDSAKeyFile'] = 'dsa_pub.pem'
   app.info_plist['LSUIElement'] = true

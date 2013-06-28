@@ -79,32 +79,33 @@ class ApplicationController
     end
 
     def startApp
-        # let's do the tcp socket thing here
-        @socket = Stream.new
-        # verify that our token is still valid.
-        @token_verification = Dispatch::Queue.new('token.check')
-        @token_verification.async do
-            data = {
-                'computer_model' => Computer.machineModel,
-                'computer_name' => NSHost.currentHost.localizedName,
-                'access_token' => App.global.token,
-                'mac_address' => App.global.mac_address
-            }
-            res = App.api_put("/tokens/#{App.global.token}", data)
-            Logger.debug 'started'
-            if res
-              App.global.token_model.suffix = res['suffix']
-              App.save!
-              ConnectorsViewController.sharedController.setup if ConnectorsViewController.initialized?
-            else
-                # we need to close out this joint, yo!
-                Dispatch::Queue.main.async do
-                    signOut
-                end
-            end
-        end
-        @preferences_menu.setEnabled(true) if App.global.token
-        loadConnectors
+      self.performSelectorInBackground('startAppInBackground:', withObject: nil)
+    end
+
+    def startAppInBackground(obj)
+      # let's do the tcp socket thing here
+      @socket = Stream.new
+      Logger.debug "Socket opened."
+      @preferences_menu.setEnabled(true) if App.global.token
+      loadConnectors
+      Logger.debug "Connectors loaded."
+      # verify that our token is still valid.
+      data = {
+          'computer_model' => Computer.machineModel,
+          'computer_name' => NSHost.currentHost.localizedName,
+          'access_token' => App.global.token,
+          'mac_address' => App.global.mac_address
+      }
+      res = App.api_put("/tokens/#{App.global.token}", data)
+      Logger.debug 'started'
+      if res
+        App.global.token_model.suffix = res['suffix']
+        App.save!
+        ConnectorsViewController.setup
+      else
+        # we need to close out this joint, yo!
+        signOut
+      end
     end
 
     def getMACAddress

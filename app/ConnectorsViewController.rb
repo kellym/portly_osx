@@ -39,6 +39,12 @@ class ConnectorsViewController < NSViewController
     @previously_selected_row = nil
   end
 
+  def self.setup
+    if initialized?
+      @sharedInstance.setup
+    end
+  end
+
   def self.initialized?
     !!@sharedInstance
   end
