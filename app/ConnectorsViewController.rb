@@ -34,6 +34,7 @@ class ConnectorsViewController < NSViewController
   attr_accessor :manage_users_table
 
   attr_accessor :auth_users
+  attr_accessor :initialized
 
   def initialize
     @previously_selected_row = nil
@@ -46,7 +47,7 @@ class ConnectorsViewController < NSViewController
   end
 
   def self.initialized?
-    !!@sharedInstance
+    @sharedInstance && @sharedInstance.initialized
   end
 
   def self.sharedController
@@ -59,6 +60,7 @@ class ConnectorsViewController < NSViewController
 
   def awakeFromNib
     setup
+    @initialized = true
   end
 
   def setup
