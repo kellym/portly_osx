@@ -5,12 +5,12 @@ require 'motion/project/template/osx'
 Motion::Project::App.setup do |app|
   # Use `rake config' to see complete project settings.
   app.name = 'Portly'
-  app.version = '11'
-  app.short_version = '0.3.4'
+  app.version = '12'
+  app.short_version = '0.3.5'
   app.deployment_target = '10.7'
   app.codesign_certificate = "Developer ID Application: Fully Brand LLC (DENUL24P9C)"
   app.icon = 'icon.icns'
-  app.entitlements['com.apple.security.app-sandbox'] = true
+  app.entitlements['com.apple.security.app-sandbox'] = false
 
   app.frameworks += ['IOKit', 'CoreFoundation', 'Cocoa', 'Security']
   app.embedded_frameworks = ['vendor/Sparkle.framework']
