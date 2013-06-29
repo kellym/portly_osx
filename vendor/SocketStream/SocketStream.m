@@ -21,33 +21,33 @@
     return self;
 }
 -(id)initWithHost:(NSString *)hostString port:(int)port {
-    self = [super init];
-    if (self) {
-        self.host = [NSHost hostWithName:hostString];
-        self.port = port;
-    }
-    return self;
+  self = [super init];
+  if (self) {
+    self.host = [NSHost hostWithName:hostString];
+    self.port = port;
+  }
+  return self;
 }
 -(id)initWithAddress:(NSString *)addressString port:(int)port {
-    self = [super init];
-    if (self) {
-        self.host = [NSHost hostWithAddress:addressString];
-        self.port = port;
-    }
-    return self;
+  self = [super init];
+  if (self) {
+    self.host = [NSHost hostWithAddress:addressString];
+    self.port = port;
+  }
+  return self;
 }
 - (void)open:(NSStream <NSStreamDelegate>*)inputDelegate output:(NSStream <NSStreamDelegate>*)outputDelegate {
 
     CFReadStreamRef readStream = NULL;
     CFWriteStreamRef writeStream = NULL;
 
-
+    NSLog(self.host.name);
     CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)self.host.name, self.port, &readStream, &writeStream);
 
     self.inputStream = (NSInputStream *)readStream;
     self.outputStream = (NSOutputStream *)writeStream;
 
-    [self.inputStream setDelegate: inputDelegate];
+    [self.inputStream setDelegate: self];
     [self.outputStream setDelegate: outputDelegate];
 
     [self.inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
@@ -68,16 +68,28 @@
     [self.outputStream setProperty:NSStreamSocketSecurityLevelNegotiatedSSL
                     forKey:NSStreamSocketSecurityLevelKey];
 
+    NSDictionary *settings = [[NSDictionary alloc] initWithObjectsAndKeys:
+                              @"app.getportly.com",kCFStreamSSLPeerName,
+                              nil];
+
+    CFReadStreamSetProperty((CFReadStreamRef)self.inputStream, kCFStreamPropertySSLSettings, (CFTypeRef)settings);
+    CFWriteStreamSetProperty((CFWriteStreamRef)self.outputStream, kCFStreamPropertySSLSettings, (CFTypeRef)settings);
+
+    NSLog(@"SSL Settings enabled.");
+    if(self.inputStream.streamStatus ==NSStreamStatusOpening ) {
+      NSLog(@"Opening connection.");
+    }
 }
 
 // Both streams call this when events happen
-/*- (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent {
-    if (theStream == inputStream) {
+- (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent {
+  NSLog(@"DATA RECEIVED");
+    if (theStream == self.inputStream) {
         [self handleInputStreamEvent:streamEvent];
-    } else if (theStream == outputStream) {
+    } else if (theStream == self.outputStream) {
         [self handleOutputStreamEvent:streamEvent];
     }
-}*/
+}
 - (void)handleInputStreamEvent:(NSStreamEvent)eventCode {
     switch (eventCode) {
         case NSStreamEventHasBytesAvailable:
@@ -108,6 +120,7 @@
             //NSLog(@"my ns string = %@", string);
             break;
         case NSStreamEventOpenCompleted:
+            NSLog(@"Stream Opened Successfully"); //[self readBytes];
             // Do Something
             break;
         default:

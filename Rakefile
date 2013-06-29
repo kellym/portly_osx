@@ -10,6 +10,7 @@ Motion::Project::App.setup do |app|
   app.deployment_target = '10.7'
   app.codesign_certificate = "Developer ID Application: Fully Brand LLC (DENUL24P9C)"
   app.icon = 'icon.icns'
+  app.entitlements['com.apple.security.app-sandbox'] = true
 
   app.frameworks += ['IOKit', 'CoreFoundation', 'Cocoa', 'Security']
   app.embedded_frameworks = ['vendor/Sparkle.framework']

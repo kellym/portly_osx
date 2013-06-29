@@ -20,6 +20,7 @@
 - (void)handleInputStreamEvent:(NSStreamEvent)eventCode;
 - (bool)keepOutputAlive;
 - (bool)keepInputAlive;
+- (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent;
 
 @property (retain) NSInputStream * inputStream;
 @property (retain) NSOutputStream * outputStream;
