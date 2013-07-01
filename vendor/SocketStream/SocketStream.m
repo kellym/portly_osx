@@ -36,7 +36,7 @@
   }
   return self;
 }
-- (void)open:(NSStream <NSStreamDelegate>*)inputDelegate output:(NSStream <NSStreamDelegate>*)outputDelegate {
+- (bool)open:(NSStream <NSStreamDelegate>*)inputDelegate output:(NSStream <NSStreamDelegate>*)outputDelegate {
 
     CFReadStreamRef readStream = NULL;
     CFWriteStreamRef writeStream = NULL;
@@ -47,17 +47,17 @@
     self.inputStream = (NSInputStream *)readStream;
     self.outputStream = (NSOutputStream *)writeStream;
 
-    [self.inputStream setDelegate: self];
+    [self.inputStream setDelegate: inputDelegate];
     [self.outputStream setDelegate: outputDelegate];
 
-    [self.inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
+    [self.inputStream scheduleInRunLoop:[NSRunLoop mainRunLoop]
                        forMode:NSDefaultRunLoopMode];
-    [self.outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
+    [self.outputStream scheduleInRunLoop:[NSRunLoop mainRunLoop]
                         forMode:NSDefaultRunLoopMode];
 
-    [self.inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
+    [self.inputStream scheduleInRunLoop:[NSRunLoop mainRunLoop]
                         forMode:NSEventTrackingRunLoopMode];
-    [self.outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop]
+    [self.outputStream scheduleInRunLoop:[NSRunLoop mainRunLoop]
                         forMode:NSEventTrackingRunLoopMode];
 
     [self.inputStream open];
@@ -76,8 +76,11 @@
     CFWriteStreamSetProperty((CFWriteStreamRef)self.outputStream, kCFStreamPropertySSLSettings, (CFTypeRef)settings);
 
     NSLog(@"SSL Settings enabled.");
-    if(self.inputStream.streamStatus ==NSStreamStatusOpening ) {
+    if(self.inputStream.streamStatus == NSStreamStatusOpening ) {
       NSLog(@"Opening connection.");
+      return true;
+    } else {
+      return false;
     }
 }
 
@@ -191,10 +194,10 @@
     [self.inputStream close];
     [self.outputStream close];
 
-    [self.inputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [self.outputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-    [self.inputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSEventTrackingRunLoopMode];
-    [self.outputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSEventTrackingRunLoopMode];
+    [self.inputStream removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    [self.outputStream removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    [self.inputStream removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSEventTrackingRunLoopMode];
+    [self.outputStream removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSEventTrackingRunLoopMode];
 
     //self.inputStream = nil;
     //self.outputStream = nil;

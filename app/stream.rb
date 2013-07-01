@@ -16,6 +16,7 @@ class Stream
 
         @timeout_max = 15
         startSocket
+        queuePing
         @data_queue = []
     end
 
@@ -24,40 +25,17 @@ class Stream
     end
 
     def startSocket
-        @socket_online = true
-        @initConnector = "EHLO:#{App.global.token}"
-        @initInput = @initOutput = true
         Logger.debug "Starting Secure Socket on #{App.socket[:host]}:#{App.socket[:port]} with connection: #{@initConnector}"
-        NSLog('test message')
         @socket = SocketStream.alloc.initWithHost App.socket[:host], port:App.socket[:port]
-        @socket.open(self, output:self)
-        Logger.debug "Socket Opened"
-        @timeout = 0
-        self.performSelectorInBackground("startConnection:", withObject: @socket)
-        #Dispatch::Queue.main.async do
-        #  sleep 5
-        #  Logger.debug "has bytes: #{@socket.inputStream.hasBytesAvailable}"
-#
-#          sendData("test data")
-#        end
-    end
-
-    def startConnection(obj)
-      while obj.outputStream.streamStatus != 2 || obj.inputStream.streamStatus != 2
-        sleep 0.01
-      end
-      publish_as_online
-      setup_output
-      read_loop
-    end
-
-    def read_loop
-      while !@socket.inputStream.hasBytesAvailable
-        sleep 0.1
-      end
-      Logger.debug '#read_loop data available'
-      handle_input
-      read_loop
+        if @socket.open(self, output:self)
+          @socket_online = true
+          @initConnector = "EHLO:#{App.global.token}"
+          @initInput = @initOutput = true
+          Logger.debug "Socket Opened"
+          @timeout = 0
+        else
+          retrySocket
+        end
     end
 
     def closeSocket
@@ -77,14 +55,17 @@ class Stream
     end
 
     def retrySocket
-      self.performSelectorInBackground('retrySocketInBackground:', withObject: nil)
-    end
-
-    def retrySocketInBackground(obj=nil)
-      Logger.debug "Retrying Secure Socket"
-      closeSocket
-      sleep 5
-      startSocket
+      return unless @socket_online
+      @socket_online = false
+      @socket_retry = Dispatch::Queue.new('socket.connection.retry')
+      @socket_retry.async do
+        Logger.debug "Retrying Secure Socket"
+        closeSocket
+        while(!Sock.connect(App.socket[:host], port:App.socket[:port]))
+          sleep 1
+        end
+        Dispatch::Queue.main.async { startSocket }
+      end
     end
 
     def handleInput(streamEvent)
@@ -104,11 +85,12 @@ class Stream
             end
         when NSStreamEventEndEncountered
             Logger.debug "we're done, but we need to reconnect."
-            closeSocket
-            startSocket
+            Logger.debug "SOCKETSTREAM OFFLINE (A)"
+            retrySocket
         when NSStreamEventErrorOccurred
             Logger.debug @socket.inputStream.streamError.localizedDescription
             Logger.debug "something happened, so let's start over."
+            Logger.debug "SOCKETSTREAM OFFLINE (B)"
             retrySocket
         when NSStreamEventHasBytesAvailable
             Logger.debug 'data available'
@@ -147,33 +129,30 @@ class Stream
     def setup_output
       if @initOutput
           Logger.debug 'keepalive-output'
-          #if @socket.keepOutputAlive
-          #  Logger.debug 'keepalive-output done'
+          if @socket.keepOutputAlive
+            Logger.debug 'keepalive-output done'
             @initOutput = nil
-            queuePing
             Logger.debug '#setup_output done'
-          #else
-          #  Logger.debug 'keepalive-output failed'
-          #  retrySocket
-          #end
+          else
+            Logger.debug 'keepalive-output failed'
+            retrySocket
+          end
       end
     end
 
     def queuePing
       @socket_queue.async do
-          if @socket_online
+        loop do
+          if !@initOutput && @socket_online
               if @timeout >= @timeout_max
-              #    closeSocket
-              #    startSocket
+                retrySocket
               else
-                  sendData "\n"
-                  sleep 5
-                  queuePing
-              #    Logger.debug 'Ping'
-              #    queuePing
+                sendData "\n"
+                Logger.debug 'Ping'
               end
           end
-          #sleep 5
+          sleep 5
+        end
       end
     end
 
@@ -183,6 +162,10 @@ class Stream
           setup_output
         when NSStreamEventHasSpaceAvailable
           publish_as_online
+        when NSStreamEventErrorOccurred
+            Logger.debug @socket.outputStream.streamError.localizedDescription
+            Logger.debug "something happened, so let's start over."
+            retrySocket
         end
     end
 

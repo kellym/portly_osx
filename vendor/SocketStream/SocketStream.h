@@ -13,7 +13,7 @@
 -(id) init;
 -(id) initWithHost:(NSString *)hostString port:(int)port;
 -(id) initWithAddress:(NSString *)addressString port:(int)port;
-- (void)open:(NSStream <NSStreamDelegate>*)inputDelegate output:(NSStream <NSStreamDelegate>*)outputDelegate;
+- (bool)open:(NSStream <NSStreamDelegate>*)inputDelegate output:(NSStream <NSStreamDelegate>*)outputDelegate;
 -(void) close;
 - (void)readBytes;
 -(void) handleOutputStreamEvent:(NSStreamEvent)eventCode;
