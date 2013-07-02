@@ -13,11 +13,14 @@
    struct addrinfo hints, *res, *res0;
    struct sockaddr_in *ipv4;
    struct sockaddr_in6 *ipv6;
+   struct timeval time;
    int error;
    int s;
    const char *cause = NULL;
 
+   memset(&time, 0, sizeof(time));
    memset(&hints, 0, sizeof(hints));
+   time.tv_sec = 5;
    hints.ai_family = AF_UNSPEC;
    hints.ai_socktype = SOCK_STREAM;
    error = getaddrinfo(hostname, nil, &hints, &res0);
@@ -32,8 +35,8 @@
                    cause = "socket";
                    continue;
            }
-            //setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, time, sizeof(time));
-            //setsockopt(s, SOL_SOCKET, SO_SNDTIMEO, time, sizeof(time));
+           setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (char *)&time, sizeof(time));
+           setsockopt(s, SOL_SOCKET, SO_SNDTIMEO, (char *)&time, sizeof(time));
            if (res->ai_family == AF_INET) {
              struct sockaddr_in *ipv4 = (struct sockaddr_in *)res->ai_addr;
              ipv4->sin_port = htons(port);

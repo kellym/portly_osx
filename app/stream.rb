@@ -151,6 +151,7 @@ class Stream
                 Logger.debug 'Ping'
               end
           end
+          @timeout += 5
           sleep 5
         end
       end
@@ -207,7 +208,7 @@ class Stream
     end
 
     def sendData(data)
-        Logger.debug "writing data: #{data}"
+        Logger.debug "writing data"
         return unless @socket.outputStream
         max_bytes = 1024
         data = data.dataUsingEncoding(NSUTF8StringEncoding)
