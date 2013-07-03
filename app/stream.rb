@@ -150,6 +150,8 @@ class Stream
                 sendData "\n"
                 Logger.debug 'Ping'
               end
+          elsif !@socket_online
+            Logger.debug "PING: Something is wrong."
           end
           @timeout += 5
           sleep 5

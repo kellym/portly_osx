@@ -222,7 +222,7 @@ class App
         #@uri ||= URI.parse("#{App.api_endpoint}")
         data['access_token'] = App.global.token if App.global.token && App.global.token != ''
         postBodyString = []
-        data.each { |k,v| postBodyString << "#{k.to_s}=#{v}" }
+        data.each { |k,v| postBodyString << "#{k.to_s}=#{v.gsub('+','%2B')}" }
         postBodyString = postBodyString.join '&'
         postBodyData = postBodyString.dataUsingEncoding(NSUTF8StringEncoding)
         #NSData.dataWithBytes(postBodyString.pointer, length:postBodyString.length)

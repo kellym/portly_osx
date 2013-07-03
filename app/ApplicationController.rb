@@ -80,7 +80,12 @@ class ApplicationController
 
     def startAppInBackground(obj)
       # let's do the tcp socket thing here
-      @socket ||= Stream.new
+      if @socket
+        @socket.startSocket
+      else
+        @socket = Stream.new
+      end
+
       Logger.debug "Socket opened."
       @preferences_menu.setEnabled(true) if App.global.token
       loadConnectors
