@@ -25,6 +25,7 @@ class Entity < NSManagedObject
   end
 
   def self.findFromContext(context, withEntity:ename, andPredicate:pred, options:options)
+    Logger.debug "findFromContext"
     fetchRequest = NSFetchRequest.alloc.init
     entity = NSEntityDescription.entityForName(ename, inManagedObjectContext:context)
 

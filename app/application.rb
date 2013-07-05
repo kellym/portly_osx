@@ -156,6 +156,13 @@ class App
         @private_key_path ||= File.join(App.global.path, App.title.downcase, 'portly.key')
     end
 
+    def self.public_key_path
+        @public_key_path ||= File.join(App.global.path, App.title.downcase, 'portly.host')
+    end
+    def public_key_path
+        @public_key_path ||= File.join(App.global.path, App.title.downcase, 'portly.host')
+    end
+
     def initialize
         @@singleton = self
         self.index = 2
@@ -222,7 +229,10 @@ class App
         #@uri ||= URI.parse("#{App.api_endpoint}")
         data['access_token'] = App.global.token if App.global.token && App.global.token != ''
         postBodyString = []
-        data.each { |k,v| postBodyString << "#{k.to_s}=#{v.gsub('+','%2B')}" }
+        data.each do |k,v|
+          v = v.to_s
+          postBodyString << "#{k.to_s}=#{v.gsub('+','%2B')}"
+        end
         postBodyString = postBodyString.join '&'
         postBodyData = postBodyString.dataUsingEncoding(NSUTF8StringEncoding)
         #NSData.dataWithBytes(postBodyString.pointer, length:postBodyString.length)

@@ -157,8 +157,8 @@ class ApplicationController
       @status_menu.addItem(NSMenuItem.separatorItem)
       @status_menu.addItemWithTitle("Quit Portly", action: 'terminate:', keyEquivalent: 'q')
 
-      Logger.debug 'Creating notification.'
-      @notification ||= Notification.new(App.title)
+      #Logger.debug 'Creating notification.'
+      #@notification ||= Notification.new(App.title)
 
       Logger.debug "Putting it on the menu"
       @statusItem = NSStatusBar.systemStatusBar.statusItemWithLength NSVariableStatusItemLength
@@ -171,6 +171,7 @@ class ApplicationController
 
       Logger.debug ("Loading tokens.")
       @tokens = Entity.findFromContext(ApplicationController.singleton.managedObjectContext, withEntity:'Token', andPredicate:nil, options:{}).keep_if { |t| t.active == 1 }
+      Logger.debug "Tokens loaded."
       if @tokens.size > 0
           App.global.token = @tokens.first
           startApp
@@ -229,7 +230,7 @@ class ApplicationController
     end
 
     def connectAll
-      @notification.send("Connecting ports to the outside world.")
+      #@notification.send("Connecting ports to the outside world.")
       App.global.connectors.each do |connector|
         connector.connect unless connector.running?
       end
@@ -238,7 +239,7 @@ class ApplicationController
     end
 
     def disconnectAll
-      @notification.send("Disconnecting ports from the outside world.")
+      #@notification.send("Disconnecting ports from the outside world.")
       App.global.connectors.each do |connector|
         connector.disconnect if connector.running?
       end
@@ -276,6 +277,7 @@ class ApplicationController
     def signOut
       @preferences_menu.setEnabled(false)
       File.delete(App.private_key_path) if File.exists?(App.private_key_path)
+      File.delete(App.public_key_path) if File.exists?(App.public_key_path)
       ApplicationController.singleton.drawLoginScreen
 
       self.performSelectorInBackground('destroy_data:', withObject: nil)

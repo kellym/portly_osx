@@ -176,31 +176,38 @@ class Stream
       Logger.debug 'triggering action'
         @data = data.to_s
         Logger.debug @data
-        return unless App.global.token_model.allow_remote
         @socket_action.async do
             case @data
+            when /^signout$/
+              ApplicationController.singleton.signOut
             when /^connect:(.*)$/
-                id, connection_string, tunnel_string = $1.split "|"
-                m = App.global.connectors.select { |c| c.connector_id == id.to_i }.first
-                m.event_connect(connection_string, tunnel_string) if m
+              return unless App.global.token_model.allow_remote
+              id, connection_string, tunnel_string = $1.split "|"
+              m = App.global.connectors.select { |c| c.connector_id == id.to_i }.first
+              m.event_connect(connection_string, tunnel_string) if m
             when /^kill:(.*)$/
-                m = App.global.connectors.select { |c| c.connector_id == $1.to_i }.first
-                m.force_disconnect if m
+              return unless App.global.token_model.allow_remote
+              m = App.global.connectors.select { |c| c.connector_id == $1.to_i }.first
+              m.force_disconnect if m
             when /^update:(.*)$/
-                m = App.global.connectors.select { |c| c.connector_id == $1.to_i }.first
-                m.update if m
+              return unless App.global.token_model.allow_remote
+              m = App.global.connectors.select { |c| c.connector_id == $1.to_i }.first
+              m.update if m
             when /^create:(.*)$/
-                Logger.debug 'loading all'
-                ConnectorMonitor.load_all
+              return unless App.global.token_model.allow_remote
+              Logger.debug 'loading all'
+              ConnectorMonitor.load_all
             when /^destroy:(.*)$/
-                m = App.global.connectors.select { |c| c.connector_id == $1.to_i }.first
-                if m
-                    m.force_disconnect if m.running?
-                    m.destroy_model
-                end
+              return unless App.global.token_model.allow_remote
+              m = App.global.connectors.select { |c| c.connector_id == $1.to_i }.first
+              if m
+                  m.force_disconnect if m.running?
+                  m.destroy_model
+              end
             when /^auths:(.*)$/
-                m = App.global.connectors.select { |c| c.connector_id == $1.to_i }.first
-                m.getAuthUsers if m
+              return unless App.global.token_model.allow_remote
+              m = App.global.connectors.select { |c| c.connector_id == $1.to_i }.first
+              m.getAuthUsers if m
             end
         end
 

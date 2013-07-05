@@ -375,14 +375,17 @@ class ConnectorMonitor
         #@connector_queue ||= Dispatch::Queue.new("#{App.queue_prefix}.ssh_start.#{@reference}")
         #@connector_queue.async do
             @task = NSTask.new
+            env = NSProcessInfo.processInfo.environment
             ##CFMakeCollectable(@task)
-            @task.setEnvironment({"CID" => @connector_id,"TOKEN" => App.global.token})
+            @task.setEnvironment({"CID" => @connector_id,"TOKEN" => App.global.token, 'SSH_SOCK_AUTH' => env.objectForKey("SSH_AUTH_SOCK")})
             @task.setLaunchPath("/usr/bin/ssh")
             Logger.debug "\"#{tunnel_string}\" \"#{connection_string}\" #{@connector_id}"
-            arr = ["-2", connection_string, "-o SendEnv=CID", "-o SendEnv=TOKEN", "-R #{tunnel_string}:#{@host}:#{@port}", "-i", App.private_key_path]
+            Logger.debug "Private Key Path: #{App.private_key_path}"
+            Logger.debug "Public Key Path: #{App.public_key_path}"
+            arr = ["-2", connection_string, "-o UserKnownHostsFile=\"#{App.public_key_path.gsub('"', '\"')}\"", "-o SendEnv=CID", "-o SendEnv=TOKEN", "-R #{tunnel_string}:#{@host}:#{@port}", "-i", App.private_key_path]
             @task.setArguments(arr)
 
-            puts "EVENT CONNECT"
+            Logger.debug "EVENT CONNECT"
             po = NSPipe.new
             ##CFMakeCollectable(po)
             p_error = NSPipe.new

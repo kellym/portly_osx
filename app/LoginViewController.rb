@@ -79,6 +79,7 @@ class LoginViewController < NSViewController
                 token.suffix = result['suffix']
                 App.save!
                 App.global.token = token
+                savePublicKeyToFile(result['public_key'])
                 savePrivateKeyToFile(result['private_key'])
                 ApplicationController.singleton.startApp
                 # gotta do something with the code now!!!
@@ -99,4 +100,12 @@ class LoginViewController < NSViewController
             f.chmod(0600)
         end
     end
+
+    def savePublicKeyToFile(public_key)
+      File.open(App.public_key_path, 'w') do |f|
+        f << public_key
+        f.chmod(0600)
+      end
+    end
+
 end
