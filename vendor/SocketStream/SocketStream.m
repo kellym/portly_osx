@@ -84,55 +84,6 @@
     }
 }
 
-// Both streams call this when events happen
-- (void)stream:(NSStream *)theStream handleEvent:(NSStreamEvent)streamEvent {
-  NSLog(@"DATA RECEIVED");
-    if (theStream == self.inputStream) {
-        [self handleInputStreamEvent:streamEvent];
-    } else if (theStream == self.outputStream) {
-        [self handleOutputStreamEvent:streamEvent];
-    }
-}
-- (void)handleInputStreamEvent:(NSStreamEvent)eventCode {
-    switch (eventCode) {
-        case NSStreamEventHasBytesAvailable:
-            //if ([inputStream hasBytesAvailable]) {
-            //  [self readBytes];
-            //}
-            //NSInteger       bytesRead;
-            //static uint8_t  buffer[kBufferSize];
-            /*
-            if (firstPacket)
-            {
-                firstPacket = NO;*/
-            /*    uint64_t lengthIn;
-                bytesRead = [inputStream read:(unsigned char *)&lengthIn maxLength:sizeof(uint64_t)];
-                if (bytesRead != sizeof(uint64_t))
-                    NSLog(@"zoiks!");
-                currentTargetLength = lengthIn;*/
-            //}
-            /*uint8_t buf[1024];
-            NSInteger len;
-            while((len = [(NSInputStream *)inputStream read:buf maxLength:1024])) {
-                [data appendBytes:(const void *)buf length:len];
-                // bytesRead is an instance variable of type NSNumber.
-                //bytesRead = bytesRead + len;
-            }*/
-            NSLog(@"data available from input."); //[self readBytes];
-            //NSString *string = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-            //NSLog(@"my ns string = %@", string);
-            break;
-        case NSStreamEventOpenCompleted:
-            NSLog(@"Stream Opened Successfully"); //[self readBytes];
-            // Do Something
-            break;
-        default:
-        case NSStreamEventErrorOccurred:
-            NSLog(@"An error occurred on the input stream.");
-            break;
-    }
-}
-
 - (bool)keepInputAlive {
 
     CFDataRef socketData = CFReadStreamCopyProperty((CFReadStreamRef)(self.inputStream), kCFStreamPropertySocketNativeHandle);
@@ -163,31 +114,6 @@
     return true;
 }
 
-- (void)readBytes {
-    //uint8_t buf[1024];
-    //NSInteger len;
-   // while((len = [(NSInputStream *)inputStream read:buf maxLength:1024])) {
-    //    [data appendBytes:(const void *)buf length:len];
-        // bytesRead is an instance variable of type NSNumber.
-        //bytesRead = bytesRead + len;
-   // }
-}
-
-- (void)handleOutputStreamEvent:(NSStreamEvent)eventCode {
-    switch (eventCode) {
-        case NSStreamEventHasBytesAvailable:
-            NSLog(@"data available to output."); //[self readBytes];
-            break;
-        case NSStreamEventOpenCompleted:
-            // Do Something
-            break;
-        default:
-        case NSStreamEventErrorOccurred:
-            NSLog(@"An error occurred on the output stream.");
-            break;
-    }
-}
-
 -(void)close {
     [self.inputStream setDelegate:nil];
     [self.outputStream setDelegate:nil];
@@ -198,10 +124,6 @@
     [self.outputStream removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
     [self.inputStream removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSEventTrackingRunLoopMode];
     [self.outputStream removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSEventTrackingRunLoopMode];
-
-    //self.inputStream = nil;
-    //self.outputStream = nil;
-
 }
 
 @end
