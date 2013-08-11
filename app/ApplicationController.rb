@@ -41,14 +41,11 @@ class ApplicationController
     end
 
     def addConnector(record)
-        connector = ConnectorMonitor.new(record)
+        ConnectorMonitor.new(record)
     end
 
     def save
-        error = Pointer.new_with_type('@')
-        unless ApplicationController.singleton.managedObjectContext.save(error)
-            NSApplication.sharedApplication.presentError(error[0])
-        end
+      App.save!
     end
 
     def drawLoginScreen
@@ -87,34 +84,36 @@ class ApplicationController
       end
 
       Logger.debug "Socket opened."
-      @preferences_menu.setEnabled(true) if App.global.token
-      loadConnectors
       Logger.debug "Connectors loaded."
       # verify that our token is still valid.
       data = {
           'computer_model' => Computer.machineModel,
           'computer_name' => NSHost.currentHost.localizedName,
           'access_token' => App.global.token,
-          'mac_address' => App.global.mac_address
+          'uuid' => App.global.uuid
       }
       res = App.api_put("/tokens/#{App.global.token}", data)
       Logger.debug 'started'
       if res
         App.global.token_model.suffix = res['suffix']
+        App.global.plan_type = res['plan_type']
         App.save!
+        loadConnectors
         ConnectorsViewController.setup
+        @preferences_menu.setEnabled(true)
       else
         # we need to close out this joint, yo!
+        Logger.debug "Putting token failed. Signing out."
         signOut
       end
     end
 
-    def getMACAddress
+    def getUUID
       if NSUserDefaults.standardUserDefaults['uuid']
-        App.global.mac_address = NSUserDefaults.standardUserDefaults['uuid']
+        App.global.uuid = NSUserDefaults.standardUserDefaults['uuid']
       else
-        App.global.mac_address = UUID.uuidString
-        NSUserDefaults.standardUserDefaults.setObject App.global.mac_address, forKey:"uuid"
+        App.global.uuid = UUID.uuidString
+        NSUserDefaults.standardUserDefaults.setObject App.global.uuid, forKey:"uuid"
         NSUserDefaults.standardUserDefaults.synchronize
       end
     end
@@ -125,11 +124,10 @@ class ApplicationController
     end
 
 
-
     def awakeFromNib
 
       Logger.debug "awake app"
-      getMACAddress
+      getUUID
       createPortlyFolder
 
       Logger.debug "Setting up menu"
@@ -258,17 +256,18 @@ class ApplicationController
     end
 
     def setConnectorState
-      statuses = App.global.connectors.map(&:online?).uniq
+      statuses = App.global.connectors.map(&:online?)
 
-      if statuses == [true]
-        setMenuItemState :connected
-        status = 'Connected'
-      elsif statuses == [false] || statuses == []
+      if statuses.empty? || !statuses.include?(true)
         setMenuItemState :disconnected
         status = 'Disconnected'
       else
         setMenuItemState :connected
-        status = 'Partially Connected'
+        count = 0
+        statuses.each do |c|
+          count += 1 if c
+        end
+        status = "#{count} Open Connection#{count == 1 ? '' : 's'}"
       end
 
       @online_state.title = "State: #{status}"

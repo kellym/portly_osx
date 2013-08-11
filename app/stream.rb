@@ -152,6 +152,7 @@ class Stream
               end
           elsif !@socket_online
             Logger.debug "PING: Something is wrong."
+            retrySocket
           end
           @timeout += 5
           sleep 5
@@ -178,6 +179,8 @@ class Stream
         Logger.debug @data
         @socket_action.async do
             case @data
+            when /^plan:(.*)$/
+              App.global.plan_type = $1
             when /^signout$/
               ApplicationController.singleton.signOut
             when /^connect:(.*)$/
@@ -218,7 +221,7 @@ class Stream
 
     def sendData(data)
         Logger.debug "writing data"
-        return unless @socket.outputStream
+        return unless @socket.outputStream && data
         max_bytes = 1024
         data = data.dataUsingEncoding(NSUTF8StringEncoding)
         readBytes = data.mutableBytes

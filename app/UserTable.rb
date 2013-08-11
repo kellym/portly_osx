@@ -39,8 +39,8 @@ class UserTable
   end
 
   def auth_users
-    Logger.debug 'calling auth'
-    Logger.debug ConnectorsViewController.sharedController.auth_users.inspect
+    #Logger.debug 'calling auth'
+    #Logger.debug ConnectorsViewController.sharedController.auth_users.inspect
     ConnectorsViewController.sharedController.auth_users
   end
 

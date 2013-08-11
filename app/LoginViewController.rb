@@ -40,7 +40,7 @@ class LoginViewController < NSViewController
                 'client_secret' => App.client_secret,
                 'computer_name' => NSHost.currentHost.localizedName,
                 'computer_model' => Computer.machineModel,
-                'mac_address' => App.global.mac_address,
+                'uuid' => App.global.uuid,
                 'user[email]' => self.email.stringValue,
                 'user[password]' => self.password.stringValue
             }
@@ -78,6 +78,7 @@ class LoginViewController < NSViewController
                 token.allow_remote = true
                 token.suffix = result['suffix']
                 App.save!
+                App.global.plan_type = result['plan_type']
                 App.global.token = token
                 savePublicKeyToFile(result['public_key'])
                 savePrivateKeyToFile(result['private_key'])

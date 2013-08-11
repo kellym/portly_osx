@@ -267,38 +267,37 @@ class ConnectorMonitor
                 Logger.debug 'destroying'
                 Logger.debug deleted_connector.inspect
                 deleted_connector.disconnect
-                #deleted_connector.destroy_model
             end
         end
     end
 
     def update
-        @update_sync ||= Dispatch::Queue.new("update_sync:#{@connector_id}")
-        @update_sync.async do
-            res = App.api_get("/connectors/#{@connector_id}")
-            self.synchronize_with(res) if res
-        end
+      @update_sync ||= Dispatch::Queue.new("update_sync:#{@connector_id}")
+      @update_sync.async do
+        res = App.api_get("/connectors/#{@connector_id}")
+        self.synchronize_with(res) if res
+      end
     end
 
     def synchronize_with(data)
-        @connector_id = data['id']
-        @auth_users = data['auths'] if data.has_key?('auths')
-        reconnect = false
-        if online? && (data.has_key?('host') || data.has_key?('port'))
-            reconnect = true
-            event_disconnect(true) # hide the updated status
-        end
-        data.each do |k,v|
-            instance_variable_set(:"@#{k}",v) unless %w(id auths).include?(k)
-        end
-        save_model
-        set_connection_string
-        set_menu_item_title
-        set_pref_title
-        ConnectorsViewController.sharedController.connectors_list.reloadData() if ConnectorsViewController.sharedController.connectors_list
-        if reconnect
-            event_connect(@event_connection_string, @event_tunnel_string)
-        end
+      @connector_id = data['id']
+      @auth_users = data['auths'] if data.has_key?('auths')
+      should_reconnect = false
+      if online? && (data.has_key?('host') || data.has_key?('port'))
+        should_reconnect = true
+        event_disconnect(true) # hide the updated status
+      end
+      data.each do |k,v|
+        instance_variable_set(:"@#{k}",v) unless %w(id auths).include?(k)
+      end
+      save_model
+      set_connection_string
+      set_menu_item_title
+      set_pref_title
+      ConnectorsViewController.sharedController.connectors_list.reloadData() if ConnectorsViewController.sharedController.connectors_list
+      if should_reconnect
+        event_connect(@event_connection_string, @event_tunnel_string)
+      end
     end
 
     def menu_item
@@ -312,7 +311,7 @@ class ConnectorMonitor
     end
 
     def set_connection_string
-        @connection_string = "#{@host}:#{@port}"
+      @connection_string = "#{@host}:#{@port}"
     end
 
     def set_menu_item_title
@@ -320,19 +319,23 @@ class ConnectorMonitor
     end
 
     def pref tableView
-        #return @pref if @pref
-        @pref = tableView.makeViewWithIdentifier "ConnectorPref", owner:self
-        set_pref_title
-        @pref.imageView.image = port_open? ? (running? ? App.online : App.offline) : App.disabled
-        @pref
+      #return @pref if @pref
+      @pref = tableView.makeViewWithIdentifier "ConnectorPref", owner:self
+      set_pref_title
+      @pref.imageView.image = port_open? ? (running? ? App.online : App.offline) : App.disabled
+      @pref
     end
     def set_pref_title
-        @pref.textField.stringValue = @connection_string if @pref
+      @pref.textField.stringValue = @connection_string if @pref
     end
 
     def toggleState(menu_item)
-        Logger.debug 'Toggling state.'
-        menu_item.state == NSOnState ? disconnect : connect
+      Logger.debug 'Toggling state.'
+      menu_item.state == NSOnState ? disconnect : connect
+    end
+
+    def get_reconnect_default
+      App.free? ? false : true
     end
 
     def connect
@@ -341,7 +344,7 @@ class ConnectorMonitor
       return if running?
       @hide_reconnect = false
       @awaiting_reconnect = false
-      @reconnect = true
+      @reconnect = get_reconnect_default
       @timeout = 0
       @connector_queue ||= Dispatch::Queue.new("#{App.queue_prefix}.ssh_start.#{@reference}")
       @connector_queue.async do
@@ -364,85 +367,76 @@ class ConnectorMonitor
     end
 
     def event_connect(connection_string, tunnel_string)
-        return disconnect if connection_string.to_s == '' || tunnel_string.to_s == ''
-        Dispatch::Queue.main.async do
-            Logger.debug "STARTING TUNNEL!"
-            @menu_item.state = NSOnState
-            @event_connection_string = connection_string
-            @event_tunnel_string = tunnel_string
-            # create a new task
-            Logger.debug "REFERENCE: #{@reference}"
-        #@connector_queue ||= Dispatch::Queue.new("#{App.queue_prefix}.ssh_start.#{@reference}")
-        #@connector_queue.async do
-            @task = NSTask.new
-            env = NSProcessInfo.processInfo.environment
-            ##CFMakeCollectable(@task)
-            @task.setEnvironment({"CID" => @connector_id,"TOKEN" => App.global.token, 'SSH_SOCK_AUTH' => env.objectForKey("SSH_AUTH_SOCK")})
-            @task.setLaunchPath("/usr/bin/ssh")
-            Logger.debug "\"#{tunnel_string}\" \"#{connection_string}\" #{@connector_id}"
-            Logger.debug "Private Key Path: #{App.private_key_path}"
-            Logger.debug "Public Key Path: #{App.public_key_path}"
-            arr = ["-2", connection_string, "-o UserKnownHostsFile=\"#{App.public_key_path.gsub('"', '\"')}\"", "-o SendEnv=CID", "-o SendEnv=TOKEN", "-R #{tunnel_string}:#{@host}:#{@port}", "-i", App.private_key_path]
-            @task.setArguments(arr)
+      return disconnect if connection_string.to_s == '' || tunnel_string.to_s == ''
+      Dispatch::Queue.main.async do
+        Logger.debug "STARTING TUNNEL!"
+        @menu_item.state = NSOnState
+        @event_connection_string = connection_string
+        @event_tunnel_string = tunnel_string
+        # create a new task
+        Logger.debug "REFERENCE: #{@reference}"
+        @task = NSTask.new
+        env = NSProcessInfo.processInfo.environment
+        @task.setEnvironment({"CID" => @connector_id,"TOKEN" => App.global.token, 'SSH_SOCK_AUTH' => env.objectForKey("SSH_AUTH_SOCK")})
+        @task.setLaunchPath("/usr/bin/ssh")
+        Logger.debug "\"#{tunnel_string}\" \"#{connection_string}\" #{@connector_id}"
+        Logger.debug "Private Key Path: #{App.private_key_path}"
+        Logger.debug "Public Key Path: #{App.public_key_path}"
+        arr = ["-2", connection_string, "-o UserKnownHostsFile=\"#{App.public_key_path.gsub('"', '\"')}\"", "-o SendEnv=CID", "-o SendEnv=TOKEN", "-R #{tunnel_string}:#{@host}:#{@port}", "-i", App.private_key_path]
+        @task.setArguments(arr)
 
-            Logger.debug "EVENT CONNECT"
-            po = NSPipe.new
-            ##CFMakeCollectable(po)
-            p_error = NSPipe.new
-            ##CFMakeCollectable(p_error)
-            @task.standardOutput = po
-            @task.standardError = p_error
-            @task.launch
+        Logger.debug "EVENT CONNECT"
+        po = NSPipe.new
+        p_error = NSPipe.new
+        @task.standardOutput = po
+        @task.standardError = p_error
+        @task.launch
 
-            @error_handle = p_error.fileHandleForReading
-            ##CFMakeCollectable(@error_handle)
-            @fh = po.fileHandleForReading
-            ##CFMakeCollectable(@fh)
+        @error_handle = p_error.fileHandleForReading
+        @fh = po.fileHandleForReading
 
-            @error_handle.waitForDataInBackgroundAndNotifyForModes [NSEventTrackingRunLoopMode, NSDefaultRunLoopMode]
-            @fh.waitForDataInBackgroundAndNotifyForModes [NSEventTrackingRunLoopMode, NSDefaultRunLoopMode]
+        @error_handle.waitForDataInBackgroundAndNotifyForModes [NSEventTrackingRunLoopMode, NSDefaultRunLoopMode]
+        @fh.waitForDataInBackgroundAndNotifyForModes [NSEventTrackingRunLoopMode, NSDefaultRunLoopMode]
 
-            # error handling
-            #Logger.debug 'Adding error handling.'
-            #Dispatch::Queue.main.async do
-                NSNotificationCenter.defaultCenter.addObserver(self, selector:'receivedError:', name:NSFileHandleDataAvailableNotification, object: @error_handle)
+        # error handling
+        #Logger.debug 'Adding error handling.'
+        NSNotificationCenter.defaultCenter.addObserver(self, selector:'receivedError:', name:NSFileHandleDataAvailableNotification, object: @error_handle)
 
-                # regular handling
-                NSNotificationCenter.defaultCenter.addObserver(self, selector:'receivedPing:', name:    NSFileHandleDataAvailableNotification, object: @fh)
-                NSNotificationCenter.defaultCenter.addObserver(self, selector:'taskTerminated:', name: NSTaskDidTerminateNotification, object: @task)
-            #end
-            Logger.debug 'Connecting to port.'
-            @online = true
-            @menu_item.image = App.online
-            @pref.imageView.image = App.online if @pref
-            ApplicationController.singleton.setConnectorState
-        #end
-        end
+        # regular handling
+        NSNotificationCenter.defaultCenter.addObserver(self, selector:'receivedPing:', name:    NSFileHandleDataAvailableNotification, object: @fh)
+        NSNotificationCenter.defaultCenter.addObserver(self, selector:'taskTerminated:', name: NSTaskDidTerminateNotification, object: @task)
+
+        Logger.debug 'Connecting to port.'
+        @online = true
+        @menu_item.image = App.online
+        @pref.imageView.image = App.online if @pref
+        ApplicationController.singleton.setConnectorState
+      end
     end
 
     def monitor_port(seconds=0)
-        seconds = seconds.to_f
-        loop do
-            catch(:done) do
-                Logger.debug "monitoring port status of #{@port}"
-                if connect_to(@host, @port, 1)
-                    Logger.debug 'set online'
-                    set_port_online
-                else
-                    Logger.debug 'set offline'
-                    set_port_offline
-                end
-                Logger.debug "----"
-                100.times do
-                    if @check_port_status
-                        @check_port_status = false
-                        throw :done
-                    else
-                        sleep seconds / 100.0
-                    end
-                end
+      seconds = seconds.to_f
+      loop do
+        catch(:done) do
+          Logger.debug "monitoring port status of #{@port}"
+          if connect_to(@host, @port, 1)
+            Logger.debug 'set online'
+            set_port_online
+          else
+            Logger.debug 'set offline'
+            set_port_offline
+          end
+          Logger.debug "----"
+          100.times do
+            if @check_port_status
+              @check_port_status = false
+              throw :done
+            else
+              sleep seconds / 100.0
             end
+          end
         end
+      end
     end
 
     def connect_to(host, port, timeout)
@@ -462,8 +456,8 @@ class ConnectorMonitor
     end
 
     def reconnect
-        disconnect
-        connect
+        disconnect(true)
+        connect unless App.free?
     end
 
     def running?
@@ -471,7 +465,9 @@ class ConnectorMonitor
     end
 
     def queue_reconnect(seconds=nil)
-      self.performSelectorInBackground('queue_reconnect_in_background:', withObject:seconds)
+      unless App.free?
+        self.performSelectorInBackground('queue_reconnect_in_background:', withObject:seconds)
+      end
     end
 
     def queue_reconnect_in_background(seconds=nil)
@@ -515,6 +511,10 @@ class ConnectorMonitor
         data = fh.availableData.to_s
         @timeout=0
         Logger.debug data
+        if data['TIMEOUT']
+          @reconnect = false
+          disconnect(false)
+        end
         fh.waitForDataInBackgroundAndNotifyForModes([NSEventTrackingRunLoopMode, NSDefaultRunLoopMode]) if running?
     end
 
@@ -552,29 +552,28 @@ class ConnectorMonitor
     end
 
     def event_disconnect(hide_updates = false)
+      Logger.debug 'Disconnecting task.'
+      unless @awaiting_reconnect
+        @menu_item.state = NSOffState
+        @menu_item.setEnabled(false) unless port_open?
+      end
 
-        Logger.debug 'Disconnecting task.'
-        unless @awaiting_reconnect
-            @menu_item.state = NSOffState
-            @menu_item.setEnabled(false) unless port_open?
-        end
+      NSNotificationCenter.defaultCenter.removeObserver(self, name:NSFileHandleDataAvailableNotification, object: @error_handle)
+      NSNotificationCenter.defaultCenter.removeObserver(self, name:NSFileHandleDataAvailableNotification, object: @fh)
+      NSNotificationCenter.defaultCenter.removeObserver(self, name:NSTaskDidTerminateNotification, object: @task)
 
-        NSNotificationCenter.defaultCenter.removeObserver(self, name:NSFileHandleDataAvailableNotification, object: @error_handle)
-        NSNotificationCenter.defaultCenter.removeObserver(self, name:NSFileHandleDataAvailableNotification, object: @fh)
-        NSNotificationCenter.defaultCenter.removeObserver(self, name:NSTaskDidTerminateNotification, object: @task)
+      @task.terminate if running?
+      @pref.imageView.image = port_open? ? App.offline : App.disabled if @pref
+      @menu_item.image = port_open? ? App.offline : App.disabled
+      @online = false
+      @hide_reconnect = hide_updates
+      @reconnect = false
 
-        @task.terminate if running?
-        @pref.imageView.image = port_open? ? App.offline : App.disabled if @pref
-        @menu_item.image = port_open? ? App.offline : App.disabled
-        @online = false
-        @hide_reconnect = hide_updates
-        @reconnect = false
-
-        @task = nil
-        @fh = nil
-        @error_handle = nil
-        ApplicationController.singleton.setConnectorState unless hide_updates
-        Logger.debug 'done disconnecting'
+      @task = nil
+      @fh = nil
+      @error_handle = nil
+      ApplicationController.singleton.setConnectorState unless hide_updates
+      Logger.debug 'done disconnecting'
     end
 
     def destroy

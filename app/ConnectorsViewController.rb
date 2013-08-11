@@ -116,8 +116,12 @@ class ConnectorsViewController < NSViewController
       self.cname.stringValue = connector.cname || ''
       self.subdomain.stringValue = connector.subdomain || ''
       self.start_on_boot.state = connector.start_on_boot || false
-      self.authentication.selectItemAtIndex connector.auth_type == 'basic' ? 1 : 0
-      self.manage_users_button.setHidden( connector.auth_type != 'basic' )
+      if App.free?
+        self.authentication.setHidden( true )
+      else
+        self.authentication.selectItemAtIndex connector.auth_type == 'basic' ? 1 : 0
+      end
+      self.manage_users_button.setHidden( App.free? || (connector.auth_type != 'basic') )
     else
       # hide all that stuff
       self.connector_box.setHidden true
@@ -200,14 +204,15 @@ class ConnectorsViewController < NSViewController
 
   def setHTTPAuthentication(sender)
     #self.authentication.indexOfSelectedItem
-    self.manage_users_button.setHidden( self.authentication.indexOfSelectedItem == 0 )
+    self.manage_users_button.setHidden( App.free? || (self.authentication.indexOfSelectedItem == 0 ) )
     self.saveConnector(sender)
   end
 
   def saveConnector(sender)
     connector = App.global.connectors[self.connectors_list.selectedRow]
     Logger.debug self.authentication.indexOfSelectedItem
-    connector.auth_type = self.authentication.indexOfSelectedItem == 1 ? 'basic' : nil
+    Logger.debug "SAVING CONNECTOR"
+    connector.auth_type = App.free? ? nil : (self.authentication.indexOfSelectedItem == 1 ? 'basic' : nil)
     connector.connection_string = self.connection_string.stringValue || ''
     connector.cname = self.cname.stringValue || ''
     connector.subdomain = self.subdomain.stringValue || ''

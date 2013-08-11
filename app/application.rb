@@ -29,13 +29,17 @@ class App
     attr_accessor :index
     attr_accessor :path
     attr_accessor :ssh
-    attr_accessor :mac_address
+    attr_accessor :uuid
+    attr_accessor :plan_type
 
     def self.save!
         error = Pointer.new_with_type('@')
+        while(@saving == true) do; end
+        @saving = true
         unless ApplicationController.singleton.managedObjectContext.save(error)
             NSApplication.sharedApplication.presentError(error[0])
         end
+        @saving = false
     end
 
     def env
@@ -56,6 +60,10 @@ class App
         else
             {:host => 'app.getportly.com', :port => 443 }
         end
+    end
+
+    def self.free?
+      self.global.plan_type == 'free'
     end
 
     def self.api_endpoint
