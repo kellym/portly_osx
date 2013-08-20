@@ -105,8 +105,11 @@ class ConnectorsViewController < NSViewController
   end
 
   def tableViewSelectionDidChange(notification)
+    if self.connectors_list.selectedRow > -1
+      @selectedRow = self.connectors_list.selectedRow
+    end
     # populate the data on the right
-    connector = App.global.connectors[self.connectors_list.selectedRow]
+    connector = App.global.connectors[@selectedRow]
     if connector
       self.connector_box.setHidden false
       if self.connection_string != @currently_selected_field
@@ -186,14 +189,17 @@ class ConnectorsViewController < NSViewController
   def removeConnector(sender)
     self.hideRemoveConnectorPane(sender)
     selectedRow = self.connectors_list.selectedRow
-    App.global.connectors[self.connectors_list.selectedRow].destroy
-    self.connectors_list.removeRowsAtIndexes NSIndexSet.indexSetWithIndex(selectedRow), withAnimation: NSTableViewAnimationSlideUp
-    if selectedRow < self.connectors_list.numberOfRows
-      selectedRow -= 1
-    end
+    if selectedRow > -1
+      App.global.connectors[selectedRow].destroy
+      self.connectors_list.removeRowsAtIndexes NSIndexSet.indexSetWithIndex(selectedRow), withAnimation: NSTableViewAnimationSlideUp
 
-    selectedRow = 0 if selectedRow < 0
-    self.connectors_list.selectRowIndexes NSIndexSet.indexSetWithIndex(selectedRow), byExtendingSelection:true
+      @selectedRow = selectedRow - 1
+      @selectedRow = 0 if @selectedRow < 0
+
+      self.connectors_list.selectRowIndexes NSIndexSet.indexSetWithIndex(@selectedRow), byExtendingSelection:true
+      @currently_selected_field = nil
+      tableViewSelectionDidChange(sender)
+    end
   end
 
   def hideRemoveConnectorPane(sender)
@@ -207,9 +213,6 @@ class ConnectorsViewController < NSViewController
   end
 
   def saveConnector(sender)
-    if self.connectors_list.selectedRow > -1
-      @selectedRow = self.connectors_list.selectedRow
-    end
     if @selectedRow
       connector = App.global.connectors[@selectedRow]
       Logger.debug self.authentication.indexOfSelectedItem

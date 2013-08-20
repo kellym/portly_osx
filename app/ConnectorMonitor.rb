@@ -579,16 +579,14 @@ class ConnectorMonitor
     def destroy
         disconnect if running?
 
+        destroy_model
         @disconnect_port_queue ||= Dispatch::Queue.new("#{App.queue_prefix}.disconnect.#{@reference}")
         @disconnect_port_queue.async do
             data = {
                 'publish' => 'false'
             }
             res = App.api_delete("/connectors/#{@connector_id}", data)
-            if res
-              Logger.debug "deleting model too"
-              self.destroy_model
-            else
+            if !res
               Logger.debug "error deleting connector: #{res.inspect}"
             end
         end
