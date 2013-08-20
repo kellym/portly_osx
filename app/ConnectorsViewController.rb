@@ -19,7 +19,6 @@ class ConnectorsViewController < NSViewController
   attr_accessor :connection_string
   attr_accessor :subdomain
   attr_accessor :cname
-  attr_accessor :start_on_boot
   attr_accessor :authentication
   attr_accessor :connector_panel
   attr_accessor :remove_connector_panel
@@ -115,7 +114,7 @@ class ConnectorsViewController < NSViewController
       end
       self.cname.stringValue = connector.cname || ''
       self.subdomain.stringValue = connector.subdomain || ''
-      self.start_on_boot.state = connector.start_on_boot || false
+      #self.start_on_boot.state = connector.start_on_boot || false
       if App.free?
         self.authentication.setHidden( true )
       else
@@ -143,7 +142,7 @@ class ConnectorsViewController < NSViewController
       data[:connection_string] = self.new_connection_string.stringValue
       data[:cname] = self.new_cname.stringValue
       data[:subdomain] = self.new_subdomain.stringValue
-      data[:start_on_boot] = true
+      #data[:start_on_boot] = true
       ConnectorMonitor.create(data)
 
       self.connectors_list.selectRowIndexes NSIndexSet.indexSetWithIndex(self.connectors_list.numberOfRows-1), byExtendingSelection:true
@@ -155,7 +154,7 @@ class ConnectorsViewController < NSViewController
 
   def setStartOnBoot(sender)
     connector = App.global.connectors[self.connectors_list.selectedRow]
-    connector.start_on_boot = self.start_on_boot.state
+    #connector.start_on_boot = self.start_on_boot.state
     connector.save
   end
 
@@ -203,22 +202,26 @@ class ConnectorsViewController < NSViewController
   end
 
   def setHTTPAuthentication(sender)
-    #self.authentication.indexOfSelectedItem
     self.manage_users_button.setHidden( App.free? || (self.authentication.indexOfSelectedItem == 0 ) )
     self.saveConnector(sender)
   end
 
   def saveConnector(sender)
-    connector = App.global.connectors[self.connectors_list.selectedRow]
-    Logger.debug self.authentication.indexOfSelectedItem
-    Logger.debug "SAVING CONNECTOR"
-    connector.auth_type = App.free? ? nil : (self.authentication.indexOfSelectedItem == 1 ? 'basic' : nil)
-    connector.connection_string = self.connection_string.stringValue || ''
-    connector.cname = self.cname.stringValue || ''
-    connector.subdomain = self.subdomain.stringValue || ''
-    connector.start_on_boot = self.start_on_boot.state || false
-    connector.save
-    ApplicationController.singleton.save
+    if self.connectors_list.selectedRow > -1
+      @selectedRow = self.connectors_list.selectedRow
+    end
+    if @selectedRow
+      connector = App.global.connectors[@selectedRow]
+      Logger.debug self.authentication.indexOfSelectedItem
+      Logger.debug "SAVING CONNECTOR"
+      connector.auth_type = App.free? ? nil : (self.authentication.indexOfSelectedItem == 1 ? 'basic' : nil)
+      connector.connection_string = self.connection_string.stringValue || ''
+      connector.cname = self.cname.stringValue || ''
+      connector.subdomain = self.subdomain.stringValue || ''
+      #connector.start_on_boot = self.start_on_boot.state || false
+      connector.save
+      ApplicationController.singleton.save
+    end
   end
 
   def controlTextDidChange(notification)

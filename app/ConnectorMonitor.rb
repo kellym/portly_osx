@@ -29,7 +29,7 @@ class ConnectorMonitor
         @connector_id = data.connector_id
         @subdomain = data.subdomain
         @cname = data.cname
-        @start_on_boot = data.start_on_boot == 1
+        @start_on_boot = false #data.start_on_boot == 1
         @_init = @start_on_boot
         @auth_type = data.auth_type
         @pref = nil
