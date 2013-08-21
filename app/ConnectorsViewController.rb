@@ -64,8 +64,8 @@ class ConnectorsViewController < NSViewController
 
   def setup
     @connectors_list.selectRowIndexes NSIndexSet.indexSetWithIndex(0), byExtendingSelection:true
-    @suffix.stringValue = ".#{App.global.token_model.suffix}"
-    @new_suffix.stringValue = ".#{App.global.token_model.suffix}"
+    @suffix.stringValue = "-#{App.global.token_model.suffix}"
+    @new_suffix.stringValue = "-#{App.global.token_model.suffix}"
   end
 
   def title

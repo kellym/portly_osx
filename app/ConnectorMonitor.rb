@@ -315,7 +315,7 @@ class ConnectorMonitor
     end
 
     def set_menu_item_title
-      @menu_item.title = "#{@connection_string} → " + (@cname.to_s == '' ? "#{@subdomain}.#{App.global.suffix}" : @cname)
+      @menu_item.title = "#{@connection_string} → " + (@cname.to_s == '' ? "#{@subdomain}-#{App.global.suffix}" : @cname)
     end
 
     def pref tableView
