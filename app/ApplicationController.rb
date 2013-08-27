@@ -101,6 +101,7 @@ class ApplicationController
         loadConnectors
         ConnectorsViewController.setup
         @preferences_menu.setEnabled(true)
+        @add_tunnel_menu.setEnabled(true)
       else
         # we need to close out this joint, yo!
         Logger.debug "Putting token failed. Signing out."
@@ -123,6 +124,12 @@ class ApplicationController
       self
     end
 
+    def addTunnel(sender)
+      showPreferences(sender)
+      PreferencesController.sharedController.showWindow(sender)
+      PreferencesController.sharedController.switchToModule(PreferencesController.sharedController.modules.first)
+      ConnectorsViewController.sharedController.showNewConnectorPane(sender)
+    end
 
     def awakeFromNib
 
@@ -142,12 +149,18 @@ class ApplicationController
       @status_menu.addItem @online_state
       @status_menu.addItem(NSMenuItem.separatorItem)
 
+      @add_tunnel_menu =  NSMenuItem.alloc.initWithTitle("Add a tunnel...", action: 'addTunnel:', keyEquivalent: '')
+      @add_tunnel_menu.setTarget self
+      @add_tunnel_menu.setEnabled(false)
+      @status_menu.addItem @add_tunnel_menu
+
       Logger.debug '- prefs menu'
       @preferences_menu =  NSMenuItem.alloc.initWithTitle("Preferences", action: 'showPreferences:', keyEquivalent: ',')
       @preferences_menu.setTarget self
       @preferences_menu.setEnabled(false)
       @status_menu.addItem @preferences_menu
 
+      @status_menu.addItem(NSMenuItem.separatorItem)
       Logger.debug '- updater'
       updater = NSMenuItem.alloc.initWithTitle("Check for update...", action: 'checkForUpdates:', keyEquivalent: 'u')
       updater.setTarget @updater
@@ -275,6 +288,7 @@ class ApplicationController
 
     def signOut
       @preferences_menu.setEnabled(false)
+      @add_tunnel_menu.setEnabled(false)
       File.delete(App.private_key_path) if File.exists?(App.private_key_path)
       File.delete(App.public_key_path) if File.exists?(App.public_key_path)
       ApplicationController.singleton.drawLoginScreen

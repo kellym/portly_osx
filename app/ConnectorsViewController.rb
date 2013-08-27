@@ -35,6 +35,8 @@ class ConnectorsViewController < NSViewController
   attr_accessor :auth_users
   attr_accessor :initialized
 
+  attr_accessor :char_formatter
+
   def initialize
     @previously_selected_row = nil
   end
@@ -66,6 +68,9 @@ class ConnectorsViewController < NSViewController
     @connectors_list.selectRowIndexes NSIndexSet.indexSetWithIndex(0), byExtendingSelection:true
     @suffix.stringValue = "-#{App.global.token_model.suffix}"
     @new_suffix.stringValue = "-#{App.global.token_model.suffix}"
+    @formatter = AlphaNumericFormatter.new
+    @subdomain.formatter = @formatter
+    @new_subdomain.formatter = @formatter
   end
 
   def title

@@ -96,9 +96,12 @@ class ConnectorMonitor
         #Dispatch::Queue.main.async {
                     publish_state
                     Logger.debug "port is running: #{@port}"
+                    update_menu_item( online: running? )
                     @menu_item.image = running? ? App.online : App.offline
-                    @menu_item.setEnabled true
                     @pref.imageView.image = (running? ? App.online : App.offline) if @pref
+                    @menu_item.setEnabled true
+                    @submenu_toggle.setEnabled true
+                    @submenu_copy.setEnabled true
 
                     ### Logger.debug "TIMEOUT AT: #{@timeout} (#{@host}:#{@port})"
 
@@ -300,6 +303,16 @@ class ConnectorMonitor
       end
     end
 
+    def update_menu_item(state={})
+      if state[:online]
+        @menu_item.image = App.online
+        @pref.imageView.image = App.online if @pref
+      else
+        @menu_item.image = App.offline
+        @pref.imageView.image = App.offline if @pref
+      end
+    end
+
     def menu_item
       return @menu_item if @menu_item
       @menu_item = NSMenuItem.new
@@ -307,6 +320,14 @@ class ConnectorMonitor
       set_menu_item_title
       @menu_item.action = 'toggleState:'
       @menu_item.target = self
+      @submenu = NSMenu.new
+      @submenu_toggle = NSMenuItem.alloc.initWithTitle("Start", action: 'toggleStateFromSubmenu:', keyEquivalent: '')
+      @submenu_toggle.setTarget self
+      @submenu.addItem @submenu_toggle
+      @submenu_copy = NSMenuItem.alloc.initWithTitle("Copy Link", action: 'copyLink:', keyEquivalent: '')
+      @submenu_copy.setTarget self
+      @submenu.addItem @submenu_copy
+      @menu_item.setSubmenu @submenu
       @menu_item
     end
 
@@ -315,7 +336,15 @@ class ConnectorMonitor
     end
 
     def set_menu_item_title
-      @menu_item.title = "#{@connection_string} → " + (@cname.to_s == '' ? "#{@subdomain}-#{App.global.suffix}" : @cname)
+      @menu_item.title = "#{@connection_string} → " + domain_string
+    end
+
+    def http
+      App.free? || @cname.to_s != '' ? 'http://' : 'https://'
+    end
+
+    def domain_string
+      (@cname.to_s == '' ? "#{@subdomain}-#{App.global.suffix}" : @cname)
     end
 
     def pref tableView
@@ -327,6 +356,16 @@ class ConnectorMonitor
     end
     def set_pref_title
       @pref.textField.stringValue = @connection_string if @pref
+    end
+
+    def copyLink(menu_item)
+      pasteboard = NSPasteboard.generalPasteboard
+      pasteboard.clearContents
+      pasteboard.writeObjects [http, domain_string]
+    end
+
+    def toggleStateFromSubmenu(menu_item)
+      menu_item.title == 'Start' ? connect : disconnect
     end
 
     def toggleState(menu_item)
@@ -371,6 +410,7 @@ class ConnectorMonitor
       Dispatch::Queue.main.async do
         Logger.debug "STARTING TUNNEL!"
         @menu_item.state = NSOnState
+        @submenu_toggle.title = "Stop"
         @event_connection_string = connection_string
         @event_tunnel_string = tunnel_string
         # create a new task
@@ -555,7 +595,10 @@ class ConnectorMonitor
       Logger.debug 'Disconnecting task.'
       unless @awaiting_reconnect
         @menu_item.state = NSOffState
-        @menu_item.setEnabled(false) unless port_open?
+        @submenu_toggle.title = "Start"
+        unless port_open?
+          @menu_item.setEnabled(false)
+        end
       end
 
       NSNotificationCenter.defaultCenter.removeObserver(self, name:NSFileHandleDataAvailableNotification, object: @error_handle)

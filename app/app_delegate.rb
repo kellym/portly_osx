@@ -6,4 +6,5 @@ class AppDelegate
   def buildWindow
     ApplicationController.new.awakeFromNib
   end
+
 end

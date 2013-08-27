@@ -13,6 +13,7 @@ class PreferencesController < NSWindowController
 
     attr_accessor :connectorsPane
     attr_accessor :settingsPane
+    attr_reader :modules
 
     def self.sharedController
         unless @sharedInstance
@@ -91,7 +92,6 @@ class PreferencesController < NSWindowController
     switchToModule(defaultModule)
   end
 
-  private
   def setupToolbar
     toolbar = NSToolbar.alloc.initWithIdentifier("preferencesToolbar")
     toolbar.delegate = self
