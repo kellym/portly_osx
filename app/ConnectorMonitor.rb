@@ -344,7 +344,15 @@ class ConnectorMonitor
     end
 
     def domain_string
-      (@cname.to_s == '' ? "#{@subdomain}-#{App.global.suffix}" : @cname)
+      if @cname.to_s == ''
+        if @subdomain.to_s == ''
+          App.global.suffix
+        else
+          "#{@subdomain}-#{App.global.suffix}"
+        end
+      else
+        @cname
+      end
     end
 
     def pref tableView
@@ -361,7 +369,7 @@ class ConnectorMonitor
     def copyLink(menu_item)
       pasteboard = NSPasteboard.generalPasteboard
       pasteboard.clearContents
-      pasteboard.writeObjects [http, domain_string]
+      pasteboard.writeObjects ["#{http}#{domain_string}"]
     end
 
     def toggleStateFromSubmenu(menu_item)
@@ -422,7 +430,7 @@ class ConnectorMonitor
         Logger.debug "\"#{tunnel_string}\" \"#{connection_string}\" #{@connector_id}"
         Logger.debug "Private Key Path: #{App.private_key_path}"
         Logger.debug "Public Key Path: #{App.public_key_path}"
-        arr = ["-2", connection_string, "-o UserKnownHostsFile=\"#{App.public_key_path.gsub('"', '\"')}\"", "-o SendEnv=CID", "-o SendEnv=TOKEN", "-R #{tunnel_string}:#{@host}:#{@port}", "-i", App.private_key_path]
+        arr = ["-C", "-2", connection_string, "-o UserKnownHostsFile=\"#{App.public_key_path.gsub('"', '\"')}\"", "-o SendEnv=CID", "-o SendEnv=TOKEN", "-R #{tunnel_string}:#{@host}:#{@port}", "-i", App.private_key_path]
         @task.setArguments(arr)
 
         Logger.debug "EVENT CONNECT"
