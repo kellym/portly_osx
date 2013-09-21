@@ -5,6 +5,7 @@
 #  Created by Kelly Martin on 3/3/13.
 #  Copyright 2013 Kelly Martin. All rights reserved.
 #
+#
 
 class ApplicationController
 
@@ -23,6 +24,9 @@ class ApplicationController
 
     attr_accessor :mco
     attr_accessor :socket
+    attr_accessor :statusItemView
+    attr_accessor :panel
+    attr_accessor :ports
 
     def initialize
         @@singleton = self
@@ -53,6 +57,10 @@ class ApplicationController
         LoginController.sharedController.showWindow nil
     end
 
+    def closeLogin
+      LoginController.close
+    end
+
     def createPortlyFolder
 
         # Create App directory if not exists:
@@ -72,7 +80,11 @@ class ApplicationController
     end
 
     def startApp
-      self.performSelectorInBackground('startAppInBackground:', withObject: nil)
+      Dispatch::Queue.main.async do
+        self.panel.showBlankSlate
+      end
+      startAppInBackground(nil)
+      #self.performSelectorInBackground('startAppInBackground:', withObject: nil)
     end
 
     def startAppInBackground(obj)
@@ -84,19 +96,21 @@ class ApplicationController
       end
 
       Logger.debug "Socket opened."
-      Logger.debug "Connectors loaded."
+      Logger.debug "Connectors loading."
       # verify that our token is still valid.
       data = {
           'computer_model' => Computer.machineModel,
           'computer_name' => NSHost.currentHost.localizedName,
           'access_token' => App.global.token,
+          'version' => App.version,
           'uuid' => App.global.uuid
       }
       res = App.api_put("/tokens/#{App.global.token}", data)
-      Logger.debug 'started'
+      Logger.debug 'PUT TOKENS COMPLETE'
       if res
         App.global.token_model.suffix = res['suffix']
         App.global.plan_type = res['plan_type']
+        self.panel.header = "#{App.global.plan_type.to_s} Plan"
         App.save!
         loadConnectors
         ConnectorsViewController.setup
@@ -131,25 +145,70 @@ class ApplicationController
       ConnectorsViewController.sharedController.showNewConnectorPane(sender)
     end
 
+    def listOnlinePorts
+      # task: `lsof -i -n -P +c 0 | grep LISTEN`
+      @task = NSTask.new
+      @task.setLaunchPath("/usr/sbin/lsof")
+      arr = ["-i", "-n", "-P", "+c", "0"]
+      @task.setArguments(arr)
+
+      po = NSPipe.new
+      p_error = NSPipe.new
+      @task.standardOutput = po
+      @task.standardError = p_error
+        @error_handle = p_error.fileHandleForReading
+        @fh = po.fileHandleForReading
+      @task.launch
+      data = @fh.readDataToEndOfFile
+      data2 = @error_handle.readDataToEndOfFile
+      @task.waitUntilExit
+
+      data = NSString.alloc.initWithData data, encoding: NSUTF8StringEncoding
+      data = data.split("\n")
+      data.keep_if { |l| l.match(/LISTEN/) }
+      ports = {}
+      data.each do |line|
+        line = line.split(/\s+/)
+        ports[line[-2].gsub('*', 'localhost')] = line[0] unless line[-2].match(/^\[/)
+      end
+      @ports = ports
+      #Logger.debug @ports.inspect
+      #ConnectorsViewController.sharedController.new_connection_string.removeAllItems
+      #ConnectorsViewController.sharedController.new_connection_string.addItemsWithObjectValues(ports.values)
+      # Logger.debug ports.inspect
+    end
+
+    def showPopup(sender)
+      if !@popover
+        @popover = NSPopover.new
+        @popover.contentViewController = NSViewController.alloc.initWithNibName("PreferencesAccount", bundle:nil)
+        @popover.animates = false
+      end
+      if @popover.isShown
+        @popover.close
+      else
+        @statusItem.drawStatusBarBackgroundInRect(NSZeroRect,
+                                withHighlight: true)
+        @popover.showRelativeToRect(
+          NSZeroRect,
+          ofView: sender,
+          preferredEdge: 1
+        )
+      end
+    end
+
     def awakeFromNib
 
       Logger.debug "awake app"
       getUUID
       createPortlyFolder
+      listOnlinePorts
 
       Logger.debug "Setting up menu"
       @updater = SUUpdater.new
-      @status_menu = NSMenu.new
+      @status_menu = self.panel.statusMenu
 
-      Logger.debug '- online state'
-      @online_state = NSMenuItem.new
-      @online_state.title = 'State: Disconnected'
-      @online_state.setEnabled(false)
-
-      @status_menu.addItem @online_state
-      @status_menu.addItem(NSMenuItem.separatorItem)
-
-      @add_tunnel_menu =  NSMenuItem.alloc.initWithTitle("Add a tunnel...", action: 'addTunnel:', keyEquivalent: '')
+      @add_tunnel_menu =  NSMenuItem.alloc.initWithTitle("Add a port...", action: 'addTunnel:', keyEquivalent: '')
       @add_tunnel_menu.setTarget self
       @add_tunnel_menu.setEnabled(false)
       @status_menu.addItem @add_tunnel_menu
@@ -167,18 +226,21 @@ class ApplicationController
       @status_menu.addItem updater
       @status_menu.addItem(NSMenuItem.separatorItem)
       @status_menu.addItemWithTitle("Quit Portly", action: 'terminate:', keyEquivalent: 'q')
+      @status_menu.setAutoenablesItems false
 
       #Logger.debug 'Creating notification.'
       #@notification ||= Notification.new(App.title)
 
       Logger.debug "Putting it on the menu"
-      @statusItem = NSStatusBar.systemStatusBar.statusItemWithLength NSVariableStatusItemLength
-      @statusItem.setMenu @status_menu
-      @statusItem.setToolTip App.title
-      @statusItem.setHighlightMode true
-
-      @status_menu.setAutoenablesItems false
+      @statusItem = NSStatusBar.systemStatusBar.statusItemWithLength 24
+      @statusItemView = StatusItemView.alloc.initWithStatusItem @statusItem
+      @statusItemView.action = "togglePanel:"
+      @statusItemView.image = NSImage.imageNamed "icon-connected"
+      @statusItemView.alternateImage = NSImage.imageNamed "icon-connected"
+      @statusItemView.setNeedsDisplay true
+      @statusItem.toolTip = "Portly"
       setMenuItemState :disconnected
+
 
       Logger.debug ("Loading tokens.")
       @tokens = Entity.findFromContext(ApplicationController.singleton.managedObjectContext, withEntity:'Token', andPredicate:nil, options:{}).keep_if { |t| t.active == 1 }
@@ -193,9 +255,26 @@ class ApplicationController
       NSNotificationCenter.defaultCenter.addObserver self, selector:'applicationWillTerminate:', name:NSApplicationWillTerminateNotification, object:NSApplication.sharedApplication
     end
 
+    def applicationDidResignActive(sender=nil)
+      Logger.debug "LOST FOCUS"
+    end
+    def appLostFocus(object=nil)
+      Logger.debug "LOST FOCUS"
+    end
+
     def setMenuItemState(state=:connected)
-      @statusItem.setImage NSImage.imageNamed("icon-#{state.to_s}")
-      @statusItem.setAlternateImage NSImage.imageNamed("icon-#{state.to_s}-on")
+      @statusItemView.setImage NSImage.imageNamed("icon-#{state.to_s}")
+      @statusItemView.setAlternateImage NSImage.imageNamed("icon-#{state.to_s}-on")
+      @statusItemView.setNeedsDisplay true
+    end
+
+
+    def hasActiveIcon
+      @statusItemView.isHighlighted
+    end
+
+    def hasActiveIcon=(flag)
+      @statusItemView.setHighlighted flag
     end
 
     def validateMenuItem(menuItem)
@@ -203,18 +282,21 @@ class ApplicationController
     end
 
     def loadConnectors
+      App.global.connectors = []
       ConnectorMonitor.load_all
-      self.handleMenuDivider
+      if App.global.connectors.size == 0
+        self.panel.showBlankSlate
+      end
     end
 
     def handleMenuDivider
-      if !@divider && (App.global.connectors.size > 0)
-        @divider = NSMenuItem.separatorItem
-        self.status_menu.insertItem @divider, atIndex: App.global.index + App.global.connectors.size
-      elsif @divider && App.global.connectors.size == 0
-        self.status_menu.removeItem @divider if @divider && @divider.menu
-        @divider = nil
-      end
+     # if !@divider && (App.global.connectors.size > 0)
+     #   @divider = NSMenuItem.separatorItem
+     #   #self.status_menu.insertItem @divider, atIndex: App.global.index + App.global.connectors.size
+     # elsif @divider && App.global.connectors.size == 0
+     #   self.status_menu.removeItem @divider if @divider && @divider.menu
+     #   @divider = nil
+     # end
     end
 
     def showPreferences(sender)
@@ -238,6 +320,10 @@ class ApplicationController
       else
         disconnectAll
       end
+    end
+
+    def closeLogin
+      controller.close
     end
 
     def connectAll
@@ -271,6 +357,8 @@ class ApplicationController
     def setConnectorState
       statuses = App.global.connectors.map(&:online?)
 
+      @stay_awake ||= StayAwake.new
+      @stay_awake.stop
       if statuses.empty? || !statuses.include?(true)
         setMenuItemState :disconnected
         status = 'Disconnected'
@@ -280,13 +368,15 @@ class ApplicationController
         statuses.each do |c|
           count += 1 if c
         end
-        status = "#{count} Open Connection#{count == 1 ? '' : 's'}"
+        status = "#{count} Open Port#{count == 1 ? '' : 's'}"
+        @stay_awake.start if App.stay_awake?
       end
 
-      @online_state.title = "State: #{status}"
+      self.panel.title = "State: #{status}"
     end
 
     def signOut
+      self.panel.header = ""
       @preferences_menu.setEnabled(false)
       @add_tunnel_menu.setEnabled(false)
       File.delete(App.private_key_path) if File.exists?(App.private_key_path)
@@ -294,9 +384,10 @@ class ApplicationController
       ApplicationController.singleton.drawLoginScreen
 
       self.performSelectorInBackground('destroy_data:', withObject: nil)
+      #destroy_data(nil)
       App.global.token = nil
       ApplicationController.singleton.socket.closeSocket
-      ApplicationController.singleton.dealloc
+      #ApplicationController.singleton.dealloc
       PreferencesController.sharedController.close rescue nil
     end
 
@@ -306,13 +397,40 @@ class ApplicationController
         t.active = 0
       end
       App.save!
-      dups = []
-      App.global.connectors.each { |c| dups << c }
-      dups.each do |connector|
-        Logger.debug connector.subdomain
-        connector.disconnect
-        connector.destroy_model
+      count = App.global.connectors.size
+      Logger.debug "REMOVING THIS MANY: #{count}"
+      @async_destroy ||= Dispatch::Queue.new('async_destroy')
+      App.global.connectors.each do |c|
+        Logger.debug "About to kill: #{c.connection_string}"
       end
+
+      App.global.connectors.each do |c|
+        #if c
+          Logger.debug "KILL: #{c.connection_string}"
+          c.disconnect(false) #, false)
+          #c.thread.exit if c.thread
+          c.remove_row
+          #c.destroy_model
+        #end
+      end
+      Logger.debug "ROWS LEFT: #{self.panel.rows.count}"
+      self.panel.rows.count.times do
+        self.panel.rows.first.remove
+      end
+      #self.panel.rows.each do |r|
+      #  r.remove
+      #end
+      Logger.debug "CONNECTORS LEFT: #{App.global.connectors.size}"
+      # just to make sure we destroy them all
+      ConnectorMonitor.all.each do |c|
+        ApplicationController.singleton.managedObjectContext.deleteObject c
+      end
+      App.save!
+      App.global.connectors = []
+
+      ConnectorsViewController.sharedController.connectors_list.reloadData if ConnectorsViewController.sharedController.connectors_list
+      ConnectorsViewController.sharedController.connector_box.setHidden(true) if ConnectorsViewController.sharedController.connector_box
+      self.panel.hideBlankSlate
     end
 end
 

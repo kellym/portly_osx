@@ -15,6 +15,7 @@
 @property (nonatomic, retain) NSString * auth_type;
 @property (nonatomic, retain) NSString * cname;
 @property (nonatomic, retain) NSNumber * connector_id;
+@property (nonatomic, retain) NSString * nickname;
 @property (nonatomic, retain) NSString * host;
 @property (nonatomic, retain) NSNumber * port;
 @property (nonatomic, retain) NSNumber * start_on_boot;

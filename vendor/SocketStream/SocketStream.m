@@ -75,6 +75,7 @@
     CFReadStreamSetProperty((CFReadStreamRef)self.inputStream, kCFStreamPropertySSLSettings, (CFTypeRef)settings);
     CFWriteStreamSetProperty((CFWriteStreamRef)self.outputStream, kCFStreamPropertySSLSettings, (CFTypeRef)settings);
 
+    [settings release];
     NSLog(@"SSL Settings enabled.");
     if(self.inputStream.streamStatus == NSStreamStatusOpening ) {
       NSLog(@"Opening connection.");

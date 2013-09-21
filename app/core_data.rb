@@ -54,8 +54,12 @@ module CoreDataSupport
       end
 
       url = NSURL.fileURLWithPath(applicationSupportFolder.stringByAppendingPathComponent(App.data_file))
+      options = {
+        NSMigratePersistentStoresAutomaticallyOption => 1,
+        NSInferMappingModelAutomaticallyOption => 1
+      }
       @persistentStoreCoordinator = NSPersistentStoreCoordinator.alloc.initWithManagedObjectModel(self.managedObjectModel)
-      if !@persistentStoreCoordinator.addPersistentStoreWithType(NSBinaryStoreType, configuration:nil, URL:url, options:nil, error:error)
+      if !@persistentStoreCoordinator.addPersistentStoreWithType(NSBinaryStoreType, configuration:nil, URL:url, options:options, error:error)
         NSApplication.sharedApplication.presentError(error[0])
       end
     end

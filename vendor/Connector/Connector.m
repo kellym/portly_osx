@@ -14,6 +14,7 @@
 @dynamic auth_type;
 @dynamic cname;
 @dynamic connector_id;
+@dynamic nickname;
 @dynamic host;
 @dynamic port;
 @dynamic start_on_boot;

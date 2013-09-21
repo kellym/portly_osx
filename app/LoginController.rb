@@ -15,6 +15,13 @@ class LoginController < NSWindowController
         @sharedInstance
     end
 
+    def self.close
+      if @sharedInstance
+        @sharedInstance.close
+        @sharedInstance.release
+      end
+    end
+
     def init
         if super
             loginWindow = LoginWindow.alloc.initWithContentRect(

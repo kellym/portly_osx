@@ -1,0 +1,414 @@
+<?xml version='1.0'?>
+<signatures version='1.0'>
+<enum value='8' name='ARROW_HEIGHT'/>
+<enum value='16' name='ARROW_WIDTH'/>
+<enum value='24.0' name='STATUS_ITEM_VIEW_WIDTH'/>
+<class name='BackgroundView'>
+<method selector='arrowX'>
+<retval declared_type='NSInteger' type='i' type64='q'/>
+</method>
+<method selector='isAnimating'>
+<retval declared_type='BOOL' type='B'/>
+</method>
+<method selector='panel'>
+<retval declared_type='int*' type='^i'/>
+</method>
+<method selector='setArrowX:'>
+<arg index='0' declared_type='NSInteger' type='i' type64='q' name='arrowX'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setIsAnimating:'>
+<arg index='0' declared_type='BOOL' type='B' name='isAnimating'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setPanel:'>
+<arg index='0' declared_type='int*' type='^i' name='panel'/>
+<retval declared_type='void' type='v'/>
+</method>
+</class>
+<class name='Button'>
+<method selector='delegate'>
+<retval declared_type='NSResponder*' type='@'/>
+</method>
+<method selector='initWithFrame:'>
+<arg index='0' declared_type='NSRect' type='{_NSRect={_NSPoint=ff}{_NSSize=ff}}' type64='{CGRect={CGPoint=dd}{CGSize=dd}}' name='frame'/>
+<retval declared_type='id' type='@'/>
+</method>
+<method selector='setDelegate:'>
+<arg index='0' declared_type='NSResponder*' type='@' name='delegate'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setTitle:'>
+<arg index='0' declared_type='NSString*' type='@' name='title'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='title'>
+<retval declared_type='NSString*' type='@'/>
+</method>
+</class>
+<class name='ColorGradientView'>
+<method selector='angle'>
+<retval declared_type='int' type='i'/>
+</method>
+<method selector='endingColor'>
+<retval declared_type='NSColor*' type='@'/>
+</method>
+<method selector='location'>
+<retval declared_type='float' type='f'/>
+</method>
+<method selector='setAngle:'>
+<arg index='0' declared_type='int' type='i' name='angle'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setEndingColor:'>
+<arg index='0' declared_type='NSColor*' type='@' name='endingColor'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setLocation:'>
+<arg index='0' declared_type='float' type='f' name='location'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setStartingColor:'>
+<arg index='0' declared_type='NSColor*' type='@' name='startingColor'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='startingColor'>
+<retval declared_type='NSColor*' type='@'/>
+</method>
+</class>
+<class name='NSObject'>
+<method selector='statusItemViewForPanelController:'>
+<arg index='0' declared_type='PanelController*' type='@' name='controller'/>
+<retval declared_type='StatusItemView*' type='@'/>
+</method>
+</class>
+<class name='PanelController'>
+<method selector='addRowWithDelegate:'>
+<arg index='0' declared_type='NSResponder*' type='@' name='delegate'/>
+<retval declared_type='Row*' type='@'/>
+</method>
+<method selector='backgroundView'>
+<retval declared_type='BackgroundView*' type='@'/>
+</method>
+<method selector='closePanel'>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='defineStatusMenu:'>
+<arg index='0' declared_type='NSMenu*' type='@' name='menu'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='delegate'>
+<retval declared_type='id' type='@'/>
+</method>
+<method selector='hasActivePanel'>
+<retval declared_type='BOOL' type='B'/>
+</method>
+<method selector='header'>
+<retval declared_type='NSString*' type='@'/>
+</method>
+<method selector='hideBlankSlate'>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='initWithDelegate:'>
+<arg index='0' declared_type='id' type='@' name='delegate'/>
+<retval declared_type='id' type='@'/>
+</method>
+<method selector='isAnimating'>
+<retval declared_type='BOOL' type='B'/>
+</method>
+<method selector='linkClicked:'>
+<arg index='0' declared_type='id' type='@' name='sender'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='openPanel'>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='removeRowView:'>
+<arg index='0' declared_type='id' type='@' name='sender'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='rows'>
+<retval declared_type='NSMutableArray*' type='@'/>
+</method>
+<method selector='setBackgroundView:'>
+<arg index='0' declared_type='BackgroundView*' type='@' name='backgroundView'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setDelegate:'>
+<arg index='0' declared_type='id' type='@' name='delegate'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setHasActivePanel:'>
+<arg index='0' declared_type='BOOL' type='B' name='hasActivePanel'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setHeader:'>
+<arg index='0' declared_type='NSString*' type='@' name='header'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setIsAnimating:'>
+<arg index='0' declared_type='BOOL' type='B' name='isAnimating'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setRows:'>
+<arg index='0' declared_type='NSMutableArray*' type='@' name='rows'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setSettingsView:'>
+<arg index='0' declared_type='SettingsView*' type='@' name='settingsView'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setStatusMenu:'>
+<arg index='0' declared_type='NSMenu*' type='@' name='statusMenu'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setTextField:'>
+<arg index='0' declared_type='NSTextField*' type='@' name='textField'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setTitle:'>
+<arg index='0' declared_type='NSString*' type='@' name='title'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='settingsView'>
+<retval declared_type='SettingsView*' type='@'/>
+</method>
+<method selector='showBlankSlate'>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='showSettings:'>
+<arg index='0' declared_type='id' type='@' name='sender'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='statusMenu'>
+<retval declared_type='NSMenu*' type='@'/>
+</method>
+<method selector='textField'>
+<retval declared_type='NSTextField*' type='@'/>
+</method>
+<method selector='title'>
+<retval declared_type='NSString*' type='@'/>
+</method>
+<method selector='triggerActivePanel:'>
+<arg index='0' declared_type='BOOL' type='B' name='flag'/>
+<retval declared_type='void' type='v'/>
+</method>
+</class>
+<class name='Row'>
+<method selector='activityButton'>
+<retval declared_type='Button*' type='@'/>
+</method>
+<method selector='backgroundColor'>
+<retval declared_type='NSColor*' type='@'/>
+</method>
+<method selector='buttonClicked:'>
+<arg index='0' declared_type='id' type='@' name='sender'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='currentState'>
+<retval declared_type='RowStatus*' type='@'/>
+</method>
+<method selector='delegate'>
+<retval declared_type='NSResponder*' type='@'/>
+</method>
+<method selector='initWithFrame:delegate:parent:'>
+<arg index='0' declared_type='NSRect' type='{_NSRect={_NSPoint=ff}{_NSSize=ff}}' type64='{CGRect={CGPoint=dd}{CGSize=dd}}' name='frame'/>
+<arg index='1' declared_type='NSResponder*' type='@' name='delegateObject'/>
+<arg index='2' declared_type='NSObject*' type='@' name='parentObject'/>
+<retval declared_type='id' type='@'/>
+</method>
+<method selector='lineColor'>
+<retval declared_type='NSColor*' type='@'/>
+</method>
+<method selector='parent'>
+<retval declared_type='NSObject*' type='@'/>
+</method>
+<method selector='setActivityButton:'>
+<arg index='0' declared_type='Button*' type='@' name='activityButton'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setBackgroundColor:'>
+<arg index='0' declared_type='NSColor*' type='@' name='backgroundColor'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setCurrentState:'>
+<arg index='0' declared_type='RowStatus*' type='@' name='currentState'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setDelegate:'>
+<arg index='0' declared_type='NSResponder*' type='@' name='delegate'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setLineColor:'>
+<arg index='0' declared_type='NSColor*' type='@' name='lineColor'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setParent:'>
+<arg index='0' declared_type='NSObject*' type='@' name='parent'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setSubtitle:'>
+<arg index='0' declared_type='NSString*' type='@' name='subtitle'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setTitle:'>
+<arg index='0' declared_type='NSString*' type='@' name='title'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='showActivityButtonIfMouseEntered'>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='subtitle'>
+<retval declared_type='NSString*' type='@'/>
+</method>
+<method selector='title'>
+<retval declared_type='NSString*' type='@'/>
+</method>
+</class>
+<class name='RowStatus'>
+<method selector='initWithFrame:'>
+<arg index='0' declared_type='NSRect' type='{_NSRect={_NSPoint=ff}{_NSSize=ff}}' type64='{CGRect={CGPoint=dd}{CGSize=dd}}' name='frame'/>
+<retval declared_type='id' type='@'/>
+</method>
+<method selector='isActive'>
+<retval declared_type='BOOL' type='B'/>
+</method>
+<method selector='isOnline'>
+<retval declared_type='BOOL' type='B'/>
+</method>
+<method selector='refresh:'>
+<arg index='0' declared_type='id' type='@' name='sender'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setActive'>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setInactive'>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setIsActive:'>
+<arg index='0' declared_type='BOOL' type='B' name='isActive'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setIsOnline:'>
+<arg index='0' declared_type='BOOL' type='B' name='isOnline'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setOffline'>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setOnline'>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setTitle:'>
+<arg index='0' declared_type='NSString*' type='@' name='title'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setTitleAutomatically'>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setTitleField:'>
+<arg index='0' declared_type='NSTextField*' type='@' name='titleField'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='title'>
+<retval declared_type='NSString*' type='@'/>
+</method>
+<method selector='titleField'>
+<retval declared_type='NSTextField*' type='@'/>
+</method>
+<method selector='toggleActiveState'>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='toggleState'>
+<retval declared_type='void' type='v'/>
+</method>
+</class>
+<class name='SettingsView'>
+<method selector='initWithFrame:delegate:'>
+<arg index='0' declared_type='NSRect' type='{_NSRect={_NSPoint=ff}{_NSSize=ff}}' type64='{CGRect={CGPoint=dd}{CGSize=dd}}' name='frame'/>
+<arg index='1' declared_type='NSResponder*' type='@' name='delegateObject'/>
+<retval declared_type='id' type='@'/>
+</method>
+</class>
+<class name='StatusItemView'>
+<method selector='action'>
+<retval declared_type='SEL' type=':'/>
+</method>
+<method selector='alternateImage'>
+<retval declared_type='NSImage*' type='@'/>
+</method>
+<method selector='globalRect'>
+<retval declared_type='NSRect' type='{_NSRect={_NSPoint=ff}{_NSSize=ff}}' type64='{CGRect={CGPoint=dd}{CGSize=dd}}'/>
+</method>
+<method selector='image'>
+<retval declared_type='NSImage*' type='@'/>
+</method>
+<method selector='initWithStatusItem:'>
+<arg index='0' declared_type='NSStatusItem*' type='@' name='statusItem'/>
+<retval declared_type='id' type='@'/>
+</method>
+<method selector='isHighlighted'>
+<retval declared_type='BOOL' type='B'/>
+</method>
+<method selector='setAction:'>
+<arg index='0' declared_type='SEL' type=':' name='action'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setAlternateImage:'>
+<arg index='0' declared_type='NSImage*' type='@' name='alternateImage'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setHighlighted:'>
+<arg index='0' declared_type='BOOL' type='B' name='isHighlighted'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setImage:'>
+<arg index='0' declared_type='NSImage*' type='@' name='image'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setStatusItem:'>
+<arg index='0' declared_type='NSStatusItem*' type='@' name='statusItem'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setTarget:'>
+<arg index='0' declared_type='id' type='@' name='target'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='statusItem'>
+<retval declared_type='NSStatusItem*' type='@'/>
+</method>
+<method selector='target'>
+<retval declared_type='id' type='@'/>
+</method>
+</class>
+<class name='UrlView'>
+<method selector='color'>
+<retval declared_type='NSColor*' type='@'/>
+</method>
+<method selector='hoverColor'>
+<retval declared_type='NSColor*' type='@'/>
+</method>
+<method selector='initWithFrame:title:url:delegate:'>
+<arg index='0' declared_type='NSRect' type='{_NSRect={_NSPoint=ff}{_NSSize=ff}}' type64='{CGRect={CGPoint=dd}{CGSize=dd}}' name='frame'/>
+<arg index='1' declared_type='NSString*' type='@' name='textValue'/>
+<arg index='2' declared_type='NSString*' type='@' name='urlValue'/>
+<arg index='3' declared_type='NSResponder*' type='@' name='delegateObject'/>
+<retval declared_type='id' type='@'/>
+</method>
+<method selector='setColor:'>
+<arg index='0' declared_type='NSColor*' type='@' name='color'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setHoverColor:'>
+<arg index='0' declared_type='NSColor*' type='@' name='hoverColor'/>
+<retval declared_type='void' type='v'/>
+</method>
+</class>
+<informal_protocol name='PanelControllerDelegate'>
+<method type='@12@0:4@8' selector='statusItemViewForPanelController:' type64='@24@0:8@16'>
+<arg index='0' declared_type='PanelController*' type='@' name='controller'/>
+<retval declared_type='StatusItemView*' type='@'/>
+</method>
+</informal_protocol>
+</signatures>

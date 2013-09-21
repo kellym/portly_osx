@@ -14,6 +14,7 @@ DEBUG = RUBYMOTION_ENV == "development"
 
 PrefsToolbarItemConnectors = "prefsToolbarItemConnectors"
 PrefsToolbarItemAccount = "prefsToolbarItemAccount"
+PrefsToolbarItemGeneral = "prefsToolbarItemGeneral"
 
 ShowUnreadCount = "ShowUnreadCount"
 OpenWithChrome = "OpenWithChrome"
@@ -50,6 +51,10 @@ class App
         DEBUG || false
     end
 
+    def self.version
+      NSBundle.mainBundle.infoDictionary.objectForKey("CFBundleShortVersionString")
+    end
+
     def self.development?
         @development ||= ENVIRONMENT == 'development'
     end
@@ -63,7 +68,7 @@ class App
     end
 
     def self.free?
-      self.global.plan_type == 'free'
+      self.global.plan_type.downcase == 'free'
     end
 
     def self.api_endpoint
@@ -188,6 +193,33 @@ class App
 
     def token_model
         @token
+    end
+
+    def self.savePrivateKeyToFile(private_key)
+        File.open(App.private_key_path, 'w') do |f|
+            f << private_key
+            f.chmod(0600)
+        end
+    end
+
+    def self.savePublicKeyToFile(public_key)
+      File.open(App.public_key_path, 'w') do |f|
+        f << public_key
+        f.chmod(0600)
+      end
+    end
+
+    def self.get_keys!
+      res = App.api_get('/authorizations/keys')
+      if res
+        App.savePrivateKeyToFile(res['private_key'])
+        App.savePublicKeyToFile(res['public_key'])
+      end
+    end
+
+    def self.stay_awake?
+      Logger.debug "State of Stay Awake: #{NSUserDefaults.standardUserDefaults.boolForKey('stay_awake')}"
+      NSUserDefaults.standardUserDefaults.boolForKey('stay_awake')
     end
 
     def suffix

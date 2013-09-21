@@ -21,9 +21,6 @@ class AccountViewController < NSViewController
     end
 
     def awakeFromNib
-        @allow_remote.state = App.global.token_model.allow_remote || false
-        @launchController ||= LaunchAtLoginController.alloc.init
-        @start_on_login.state = @launchController.launchAtLogin
         @connected_as.stringValue = "You are connected as #{NSHost.currentHost.localizedName}."
     end
 
@@ -43,22 +40,5 @@ class AccountViewController < NSViewController
         ApplicationController.singleton.signOut
     end
 
-    def setAllowRemote(sender)
-        App.global.token_model.allow_remote = self.allow_remote.state #App.global.token_model.allow_remote == 0 ? 1 : 0
-        ApplicationController.singleton.save
-        @set_remote ||= Dispatch::Queue.new('set_remote')
-        @set_remote.async do
-            'Logger.debug setting auth'
-            data = {
-                'allow_remote' => App.global.token_model.allow_remote == 1 ? 'true' : 'false'
-            }
-            Logger.debug data['allow_remote']
-            res = App.api_put("/api/authorizations", data)
-            Logger.debug res.inspect
-        end
-    end
 
-    def setStartOnLogin(sender)
-        @launchController.setLaunchAtLogin self.start_on_login.state
-    end
 end

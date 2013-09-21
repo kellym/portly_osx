@@ -1,8 +1,8 @@
 <?xml version='1.0'?>
 <signatures version='1.0'>
 <class name='Computer'>
-<method class_method='true' selector='machineModel'>
-<retval type='@' declared_type='NSString*'/>
+<method selector='machineModel' class_method='true'>
+<retval declared_type='NSString*' type='@'/>
 </method>
 </class>
 </signatures>

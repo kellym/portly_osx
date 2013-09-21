@@ -176,7 +176,9 @@ class Stream
     def triggerAction(data)
       Logger.debug 'triggering action'
         @data = data.to_s
-        Logger.debug @data
+        Logger.debug "--------------\n"
+        #Logger.debug @data
+        Logger.debug "--------------\n"
         @socket_action.async do
             case @data
             when /^plan:(.*)$/
@@ -220,7 +222,7 @@ class Stream
     end
 
     def sendData(data)
-        Logger.debug "writing data"
+        #Logger.debug "writing data"
         return unless @socket.outputStream && data
         max_bytes = 1024
         data = data.dataUsingEncoding(NSUTF8StringEncoding)
@@ -233,7 +235,7 @@ class Stream
             bytesRead = @socket.outputStream.write(data, maxLength:len)
             byteIndex += len
         end
-        Logger.debug 'done writing ^'
+        #Logger.debug 'done writing ^'
     end
 
     def send(msg)

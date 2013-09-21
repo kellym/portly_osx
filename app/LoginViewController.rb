@@ -40,6 +40,7 @@ class LoginViewController < NSViewController
                 'client_secret' => App.client_secret,
                 'computer_name' => NSHost.currentHost.localizedName,
                 'computer_model' => Computer.machineModel,
+                'version' => App.version,
                 'uuid' => App.global.uuid,
                 'user[email]' => self.email.stringValue,
                 'user[password]' => self.password.stringValue
@@ -80,11 +81,12 @@ class LoginViewController < NSViewController
                 App.save!
                 App.global.plan_type = result['plan_type']
                 App.global.token = token
-                savePublicKeyToFile(result['public_key'])
-                savePrivateKeyToFile(result['private_key'])
+                App.savePublicKeyToFile(result['public_key'])
+                App.savePrivateKeyToFile(result['private_key'])
                 ApplicationController.singleton.startApp
                 # gotta do something with the code now!!!
-                ApplicationController.singleton.loadConnectors
+                #ApplicationController.singleton.loadConnectors
+                #ApplicationController.singleton.closeLogin
                 self.window.close
             end
         end
@@ -93,20 +95,6 @@ class LoginViewController < NSViewController
     def forgotPasswordClicked(sender)
         NSWorkspace.sharedWorkspace.openURL NSURL.URLWithString(App.forgot_password_url)
         NSApp.terminate(sender)
-    end
-
-    def savePrivateKeyToFile(private_key)
-        File.open(App.private_key_path, 'w') do |f|
-            f << private_key
-            f.chmod(0600)
-        end
-    end
-
-    def savePublicKeyToFile(public_key)
-      File.open(App.public_key_path, 'w') do |f|
-        f << public_key
-        f.chmod(0600)
-      end
     end
 
 end

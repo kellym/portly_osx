@@ -1,0 +1,1203 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A2E218DA17E687A400B81D4E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2184417E687A400B81D4E /* Cocoa.framework */; };
+		A2E218DB17E687A400B81D4E /* Computer.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2184717E687A400B81D4E /* Computer.m.o */; };
+		A2E218DC17E687A400B81D4E /* libComputer (Avocado's conflicted copy 2013-07-04).a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2184917E687A400B81D4E /* libComputer (Avocado's conflicted copy 2013-07-04).a */; };
+		A2E218DD17E687A500B81D4E /* libComputer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2184A17E687A400B81D4E /* libComputer.a */; };
+		A2E218DE17E687A500B81D4E /* Computer.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = A2E2184B17E687A400B81D4E /* Computer.bridgesupport */; };
+		A2E218DF17E687A500B81D4E /* Computer.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E2184D17E687A400B81D4E /* Computer.m */; };
+		A2E218E017E687A500B81D4E /* Connector.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2185017E687A400B81D4E /* Connector.m.o */; };
+		A2E218E117E687A500B81D4E /* libConnector (Avocado's conflicted copy 2013-07-04).a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2185217E687A400B81D4E /* libConnector (Avocado's conflicted copy 2013-07-04).a */; };
+		A2E218E217E687A500B81D4E /* libConnector.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2185317E687A400B81D4E /* libConnector.a */; };
+		A2E218E317E687A500B81D4E /* Connector.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = A2E2185417E687A400B81D4E /* Connector.bridgesupport */; };
+		A2E218E417E687A500B81D4E /* Connector.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E2185617E687A400B81D4E /* Connector.m */; };
+		A2E218E517E687A500B81D4E /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2185717E687A400B81D4E /* CoreFoundation.framework */; };
+		A2E218E617E687A500B81D4E /* HoverButton.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2185A17E687A400B81D4E /* HoverButton.m.o */; };
+		A2E218E717E687A500B81D4E /* libHoverButton (Avocado's conflicted copy 2013-07-04).a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2185C17E687A400B81D4E /* libHoverButton (Avocado's conflicted copy 2013-07-04).a */; };
+		A2E218E817E687A500B81D4E /* libHoverButton.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2185D17E687A400B81D4E /* libHoverButton.a */; };
+		A2E218E917E687A500B81D4E /* HoverButton.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = A2E2185E17E687A400B81D4E /* HoverButton.bridgesupport */; };
+		A2E218EA17E687A500B81D4E /* HoverButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E2186017E687A400B81D4E /* HoverButton.m */; };
+		A2E218EB17E687A500B81D4E /* LaunchAtLoginController.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2186317E687A400B81D4E /* LaunchAtLoginController.m.o */; };
+		A2E218EC17E687A500B81D4E /* libLaunchAtLoginController (Avocado's conflicted copy 2013-07-04).a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2186517E687A400B81D4E /* libLaunchAtLoginController (Avocado's conflicted copy 2013-07-04).a */; };
+		A2E218ED17E687A500B81D4E /* libLaunchAtLoginController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2186617E687A400B81D4E /* libLaunchAtLoginController.a */; };
+		A2E218EE17E687A500B81D4E /* LaunchAtLoginController.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = A2E2186717E687A400B81D4E /* LaunchAtLoginController.bridgesupport */; };
+		A2E218EF17E687A500B81D4E /* LaunchAtLoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E2186917E687A400B81D4E /* LaunchAtLoginController.m */; };
+		A2E218F017E687A500B81D4E /* libLoginView (Avocado's conflicted copy 2013-07-04).a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2186C17E687A400B81D4E /* libLoginView (Avocado's conflicted copy 2013-07-04).a */; };
+		A2E218F117E687A500B81D4E /* libLoginView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2186D17E687A400B81D4E /* libLoginView.a */; };
+		A2E218F217E687A500B81D4E /* LoginView.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2186E17E687A400B81D4E /* LoginView.m.o */; };
+		A2E218F317E687A500B81D4E /* LoginView.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = A2E2187017E687A400B81D4E /* LoginView.bridgesupport */; };
+		A2E218F417E687A500B81D4E /* LoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E2187217E687A400B81D4E /* LoginView.m */; };
+		A2E218F517E687A500B81D4E /* libLoginWindow (Avocado's conflicted copy 2013-07-04).a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2187517E687A400B81D4E /* libLoginWindow (Avocado's conflicted copy 2013-07-04).a */; };
+		A2E218F617E687A500B81D4E /* libLoginWindow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2187617E687A400B81D4E /* libLoginWindow.a */; };
+		A2E218F717E687A500B81D4E /* LoginWindow.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2187717E687A400B81D4E /* LoginWindow.m.o */; };
+		A2E218F817E687A500B81D4E /* LoginWindow.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = A2E2187917E687A400B81D4E /* LoginWindow.bridgesupport */; };
+		A2E218F917E687A500B81D4E /* LoginWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E2187B17E687A400B81D4E /* LoginWindow.m */; };
+		A2E218FA17E687A500B81D4E /* BackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E2187E17E687A400B81D4E /* BackgroundView.m */; };
+		A2E218FB17E687A500B81D4E /* BackgroundView.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2188017E687A400B81D4E /* BackgroundView.m.o */; };
+		A2E218FC17E687A500B81D4E /* Button.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2188117E687A400B81D4E /* Button.m.o */; };
+		A2E218FD17E687A500B81D4E /* ColorGradientView.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2188217E687A400B81D4E /* ColorGradientView.m.o */; };
+		A2E218FE17E687A500B81D4E /* libPanel.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2188317E687A400B81D4E /* libPanel.a */; };
+		A2E218FF17E687A500B81D4E /* Panel.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2188417E687A400B81D4E /* Panel.m.o */; };
+		A2E2190017E687A500B81D4E /* PanelController.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2188617E687A400B81D4E /* PanelController.m.o */; };
+		A2E2190117E687A500B81D4E /* Row.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2188717E687A400B81D4E /* Row.m.o */; };
+		A2E2190217E687A500B81D4E /* RowStatus.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2188817E687A400B81D4E /* RowStatus.m.o */; };
+		A2E2190317E687A500B81D4E /* SettingsView.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2188917E687A400B81D4E /* SettingsView.m.o */; };
+		A2E2190417E687A500B81D4E /* StatusItemView.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2188A17E687A400B81D4E /* StatusItemView.m.o */; };
+		A2E2190517E687A500B81D4E /* Button.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E2188C17E687A400B81D4E /* Button.m */; };
+		A2E2190617E687A500B81D4E /* ColorGradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E2188E17E687A400B81D4E /* ColorGradientView.m */; };
+		A2E2190817E687A500B81D4E /* Panel.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = A2E2189017E687A400B81D4E /* Panel.bridgesupport */; };
+		A2E2190917E687A500B81D4E /* Panel.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E2189217E687A400B81D4E /* Panel.m */; };
+		A2E2190A17E687A500B81D4E /* PanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E2189417E687A400B81D4E /* PanelController.m */; };
+		A2E2190B17E687A500B81D4E /* Row.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E2189617E687A400B81D4E /* Row.m */; };
+		A2E2190C17E687A500B81D4E /* RowStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E2189817E687A400B81D4E /* RowStatus.m */; };
+		A2E2190D17E687A500B81D4E /* SettingsView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E2189A17E687A400B81D4E /* SettingsView.m */; };
+		A2E2190E17E687A500B81D4E /* StatusItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E2189C17E687A400B81D4E /* StatusItemView.m */; };
+		A2E2190F17E687A500B81D4E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2189D17E687A400B81D4E /* Security.framework */; };
+		A2E2191017E687A500B81D4E /* libSock (Avocado's conflicted copy 2013-07-04).a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E218A017E687A400B81D4E /* libSock (Avocado's conflicted copy 2013-07-04).a */; };
+		A2E2191117E687A500B81D4E /* libSock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E218A117E687A400B81D4E /* libSock.a */; };
+		A2E2191217E687A500B81D4E /* Sock.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E218A217E687A400B81D4E /* Sock.m.o */; };
+		A2E2191317E687A500B81D4E /* Sock.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = A2E218A417E687A400B81D4E /* Sock.bridgesupport */; };
+		A2E2191417E687A500B81D4E /* Sock.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E218A617E687A400B81D4E /* Sock.m */; };
+		A2E2191517E687A500B81D4E /* libSocketStream (Avocado's conflicted copy 2013-07-04).a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E218A917E687A400B81D4E /* libSocketStream (Avocado's conflicted copy 2013-07-04).a */; };
+		A2E2191617E687A500B81D4E /* libSocketStream.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E218AA17E687A400B81D4E /* libSocketStream.a */; };
+		A2E2191717E687A500B81D4E /* SocketStream.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E218AB17E687A400B81D4E /* SocketStream.m.o */; };
+		A2E2191817E687A500B81D4E /* SocketStream.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = A2E218AD17E687A400B81D4E /* SocketStream.bridgesupport */; };
+		A2E2191917E687A500B81D4E /* SocketStream.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E218AF17E687A400B81D4E /* SocketStream.m */; };
+		A2E2191A17E687A500B81D4E /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E218B017E687A400B81D4E /* Sparkle.framework */; };
+		A2E2191B17E687A500B81D4E /* StatusItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E218B517E687A400B81D4E /* StatusItemView.m */; };
+		A2E2191C17E687A500B81D4E /* libStayAwake.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E218B817E687A400B81D4E /* libStayAwake.a */; };
+		A2E2191D17E687A500B81D4E /* StayAwake.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E218B917E687A400B81D4E /* StayAwake.m.o */; };
+		A2E2191E17E687A500B81D4E /* StayAwake.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = A2E218BB17E687A400B81D4E /* StayAwake.bridgesupport */; };
+		A2E2191F17E687A500B81D4E /* StayAwake.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E218BD17E687A400B81D4E /* StayAwake.m */; };
+		A2E2192017E687A500B81D4E /* libToken (Avocado's conflicted copy 2013-07-04).a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E218C417E687A400B81D4E /* libToken (Avocado's conflicted copy 2013-07-04).a */; };
+		A2E2192117E687A500B81D4E /* libToken.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E218C517E687A400B81D4E /* libToken.a */; };
+		A2E2192217E687A500B81D4E /* Token.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E218C617E687A400B81D4E /* Token.m.o */; };
+		A2E2192317E687A500B81D4E /* Token.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = A2E218C817E687A400B81D4E /* Token.bridgesupport */; };
+		A2E2192417E687A500B81D4E /* Token.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E218CA17E687A400B81D4E /* Token.m */; };
+		A2E2192517E687A500B81D4E /* ApplicationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E218CE17E687A400B81D4E /* ApplicationDelegate.m */; };
+		A2E2192617E687A500B81D4E /* MenubarController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E218D017E687A400B81D4E /* MenubarController.m */; };
+		A2E2192717E687A500B81D4E /* libUUID (Avocado's conflicted copy 2013-07-04).a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E218D317E687A400B81D4E /* libUUID (Avocado's conflicted copy 2013-07-04).a */; };
+		A2E2192817E687A500B81D4E /* libUUID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E218D417E687A400B81D4E /* libUUID.a */; };
+		A2E2192917E687A500B81D4E /* UUID.m.o in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E218D517E687A400B81D4E /* UUID.m.o */; };
+		A2E2192A17E687A500B81D4E /* UUID.bridgesupport in Resources */ = {isa = PBXBuildFile; fileRef = A2E218D717E687A400B81D4E /* UUID.bridgesupport */; };
+		A2E2192B17E687A500B81D4E /* UUID.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E218D917E687A400B81D4E /* UUID.m */; };
+		A2E2197117E687AF00B81D4E /* account-old.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2192D17E687AE00B81D4E /* account-old.png */; };
+		A2E2197217E687AF00B81D4E /* account.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2192E17E687AE00B81D4E /* account.png */; };
+		A2E2197317E687AF00B81D4E /* app.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = A2E2192F17E687AE00B81D4E /* app.entitlements */; };
+		A2E2197417E687AF00B81D4E /* closelogin-down.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2193017E687AE00B81D4E /* closelogin-down.png */; };
+		A2E2197517E687AF00B81D4E /* closelogin-down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2193117E687AE00B81D4E /* closelogin-down@2x.png */; };
+		A2E2197617E687AF00B81D4E /* closelogin-hover.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2193217E687AE00B81D4E /* closelogin-hover.png */; };
+		A2E2197717E687AF00B81D4E /* closelogin-hover@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2193317E687AE00B81D4E /* closelogin-hover@2x.png */; };
+		A2E2197817E687AF00B81D4E /* closelogin.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2193417E687AF00B81D4E /* closelogin.png */; };
+		A2E2197917E687AF00B81D4E /* closelogin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2193517E687AF00B81D4E /* closelogin@2x.png */; };
+		A2E2197A17E687AF00B81D4E /* ConnectionBasicView.nib in Resources */ = {isa = PBXBuildFile; fileRef = A2E2193617E687AF00B81D4E /* ConnectionBasicView.nib */; };
+		A2E2197B17E687AF00B81D4E /* ConnectionBasicView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2E2193717E687AF00B81D4E /* ConnectionBasicView.xib */; };
+		A2E2197C17E687AF00B81D4E /* ConnectionListItem.nib in Resources */ = {isa = PBXBuildFile; fileRef = A2E2193817E687AF00B81D4E /* ConnectionListItem.nib */; };
+		A2E2197D17E687AF00B81D4E /* ConnectionListItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2E2193917E687AF00B81D4E /* ConnectionListItem.xib */; };
+		A2E2197E17E687AF00B81D4E /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A2E2193A17E687AF00B81D4E /* Credits.rtf */; };
+		A2E2197F17E687AF00B81D4E /* disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2193B17E687AF00B81D4E /* disabled.png */; };
+		A2E2198017E687AF00B81D4E /* disabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2193C17E687AF00B81D4E /* disabled@2x.png */; };
+		A2E2198117E687AF00B81D4E /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = A2E2193D17E687AF00B81D4E /* dsa_pub.pem */; };
+		A2E2198217E687AF00B81D4E /* forgot-down.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2193E17E687AF00B81D4E /* forgot-down.png */; };
+		A2E2198317E687AF00B81D4E /* forgot-down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2193F17E687AF00B81D4E /* forgot-down@2x.png */; };
+		A2E2198417E687AF00B81D4E /* forgot.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2194017E687AF00B81D4E /* forgot.png */; };
+		A2E2198517E687AF00B81D4E /* forgot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2194117E687AF00B81D4E /* forgot@2x.png */; };
+		A2E2198617E687AF00B81D4E /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2194217E687AF00B81D4E /* gear.png */; };
+		A2E2198717E687AF00B81D4E /* gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2194317E687AF00B81D4E /* gear@2x.png */; };
+		A2E2198817E687AF00B81D4E /* general-old.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2194417E687AF00B81D4E /* general-old.png */; };
+		A2E2198917E687AF00B81D4E /* general.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2194517E687AF00B81D4E /* general.png */; };
+		A2E2198A17E687AF00B81D4E /* icon-connected-on.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2194617E687AF00B81D4E /* icon-connected-on.png */; };
+		A2E2198B17E687AF00B81D4E /* icon-connected-on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2194717E687AF00B81D4E /* icon-connected-on@2x.png */; };
+		A2E2198C17E687AF00B81D4E /* icon-connected.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2194817E687AF00B81D4E /* icon-connected.png */; };
+		A2E2198D17E687AF00B81D4E /* icon-connected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2194917E687AF00B81D4E /* icon-connected@2x.png */; };
+		A2E2198E17E687AF00B81D4E /* icon-disconnected-on.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2194A17E687AF00B81D4E /* icon-disconnected-on.png */; };
+		A2E2198F17E687AF00B81D4E /* icon-disconnected-on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2194B17E687AF00B81D4E /* icon-disconnected-on@2x.png */; };
+		A2E2199017E687AF00B81D4E /* icon-disconnected.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2194C17E687AF00B81D4E /* icon-disconnected.png */; };
+		A2E2199117E687AF00B81D4E /* icon-disconnected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2194D17E687AF00B81D4E /* icon-disconnected@2x.png */; };
+		A2E2199217E687AF00B81D4E /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = A2E2194E17E687AF00B81D4E /* icon.icns */; };
+		A2E2199317E687AF00B81D4E /* link.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2194F17E687AF00B81D4E /* link.png */; };
+		A2E2199417E687AF00B81D4E /* LoginScreen.nib in Resources */ = {isa = PBXBuildFile; fileRef = A2E2195017E687AF00B81D4E /* LoginScreen.nib */; };
+		A2E2199517E687AF00B81D4E /* LoginScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2E2195117E687AF00B81D4E /* LoginScreen.xib */; };
+		A2E2199617E687AF00B81D4E /* offline.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2195217E687AF00B81D4E /* offline.png */; };
+		A2E2199717E687AF00B81D4E /* offline@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2195317E687AF00B81D4E /* offline@2x.png */; };
+		A2E2199817E687AF00B81D4E /* online.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2195417E687AF00B81D4E /* online.png */; };
+		A2E2199917E687AF00B81D4E /* online@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2195517E687AF00B81D4E /* online@2x.png */; };
+		A2E2199A17E687AF00B81D4E /* Panel.nib in Resources */ = {isa = PBXBuildFile; fileRef = A2E2195617E687AF00B81D4E /* Panel.nib */; };
+		A2E2199B17E687AF00B81D4E /* Panel.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2E2195717E687AF00B81D4E /* Panel.xib */; };
+		A2E2199C17E687AF00B81D4E /* portly-login.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2195817E687AF00B81D4E /* portly-login.png */; };
+		A2E2199D17E687AF00B81D4E /* portly-login@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2195917E687AF00B81D4E /* portly-login@2x.png */; };
+		A2E2199E17E687AF00B81D4E /* LocalPort.mom in Resources */ = {isa = PBXBuildFile; fileRef = A2E2195B17E687AF00B81D4E /* LocalPort.mom */; };
+		A2E2199F17E687AF00B81D4E /* Portly.mom in Resources */ = {isa = PBXBuildFile; fileRef = A2E2195C17E687AF00B81D4E /* Portly.mom */; };
+		A2E219A017E687AF00B81D4E /* Portly.omo in Resources */ = {isa = PBXBuildFile; fileRef = A2E2195D17E687AF00B81D4E /* Portly.omo */; };
+		A2E219A117E687AF00B81D4E /* VersionInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = A2E2195E17E687AF00B81D4E /* VersionInfo.plist */; };
+		A2E219A217E687AF00B81D4E /* Portly.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A2E2195F17E687AF00B81D4E /* Portly.xcdatamodeld */; };
+		A2E219A317E687AF00B81D4E /* PreferencesAccount.nib in Resources */ = {isa = PBXBuildFile; fileRef = A2E2196217E687AF00B81D4E /* PreferencesAccount.nib */; };
+		A2E219A417E687AF00B81D4E /* PreferencesAccount.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2E2196317E687AF00B81D4E /* PreferencesAccount.xib */; };
+		A2E219A517E687AF00B81D4E /* PreferencesConnectors.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2E2196417E687AF00B81D4E /* PreferencesConnectors.xib */; };
+		A2E219A617E687AF00B81D4E /* PreferencesGeneral.nib in Resources */ = {isa = PBXBuildFile; fileRef = A2E2196517E687AF00B81D4E /* PreferencesGeneral.nib */; };
+		A2E219A717E687AF00B81D4E /* PreferencesGeneral.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2E2196617E687AF00B81D4E /* PreferencesGeneral.xib */; };
+		A2E219A817E687AF00B81D4E /* PreferencesUsers.nib in Resources */ = {isa = PBXBuildFile; fileRef = A2E2196717E687AF00B81D4E /* PreferencesUsers.nib */; };
+		A2E219A917E687AF00B81D4E /* PreferencesUsers.xib in Resources */ = {isa = PBXBuildFile; fileRef = A2E2196817E687AF00B81D4E /* PreferencesUsers.xib */; };
+		A2E219AA17E687AF00B81D4E /* sign-in-down.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2196917E687AF00B81D4E /* sign-in-down.png */; };
+		A2E219AB17E687AF00B81D4E /* sign-in-down@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2196A17E687AF00B81D4E /* sign-in-down@2x.png */; };
+		A2E219AC17E687AF00B81D4E /* sign-in-hover.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2196B17E687AF00B81D4E /* sign-in-hover.png */; };
+		A2E219AD17E687AF00B81D4E /* sign-in-hover@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2196C17E687AF00B81D4E /* sign-in-hover@2x.png */; };
+		A2E219AE17E687AF00B81D4E /* sign-in.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2196D17E687AF00B81D4E /* sign-in.png */; };
+		A2E219AF17E687AF00B81D4E /* sign-in@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2196E17E687AF00B81D4E /* sign-in@2x.png */; };
+		A2E219B017E687AF00B81D4E /* tunnels-old.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2196F17E687AF00B81D4E /* tunnels-old.png */; };
+		A2E219B117E687AF00B81D4E /* tunnels.png in Resources */ = {isa = PBXBuildFile; fileRef = A2E2197017E687AF00B81D4E /* tunnels.png */; };
+		A2E219B417E687F300B81D4E /* ConnectorsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E219B317E687F300B81D4E /* ConnectorsViewController.m */; };
+		A2E219B717E6A7D000B81D4E /* UrlView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2E219B617E6A7D000B81D4E /* UrlView.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A2E2184217E6878F00B81D4E /* Portly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Portly.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A2E2184417E687A400B81D4E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Cocoa.framework; sourceTree = "<group>"; };
+		A2E2184717E687A400B81D4E /* Computer.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = Computer.m.o; sourceTree = "<group>"; };
+		A2E2184817E687A400B81D4E /* Computer.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Computer.pch; sourceTree = "<group>"; };
+		A2E2184917E687A400B81D4E /* libComputer (Avocado's conflicted copy 2013-07-04).a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libComputer (Avocado's conflicted copy 2013-07-04).a"; sourceTree = "<group>"; };
+		A2E2184A17E687A400B81D4E /* libComputer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libComputer.a; sourceTree = "<group>"; };
+		A2E2184B17E687A400B81D4E /* Computer.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Computer.bridgesupport; sourceTree = "<group>"; };
+		A2E2184C17E687A400B81D4E /* Computer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Computer.h; sourceTree = "<group>"; };
+		A2E2184D17E687A400B81D4E /* Computer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Computer.m; sourceTree = "<group>"; };
+		A2E2185017E687A400B81D4E /* Connector.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = Connector.m.o; sourceTree = "<group>"; };
+		A2E2185117E687A400B81D4E /* Connector.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connector.pch; sourceTree = "<group>"; };
+		A2E2185217E687A400B81D4E /* libConnector (Avocado's conflicted copy 2013-07-04).a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libConnector (Avocado's conflicted copy 2013-07-04).a"; sourceTree = "<group>"; };
+		A2E2185317E687A400B81D4E /* libConnector.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libConnector.a; sourceTree = "<group>"; };
+		A2E2185417E687A400B81D4E /* Connector.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Connector.bridgesupport; sourceTree = "<group>"; };
+		A2E2185517E687A400B81D4E /* Connector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connector.h; sourceTree = "<group>"; };
+		A2E2185617E687A400B81D4E /* Connector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Connector.m; sourceTree = "<group>"; };
+		A2E2185717E687A400B81D4E /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreFoundation.framework; sourceTree = "<group>"; };
+		A2E2185A17E687A400B81D4E /* HoverButton.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = HoverButton.m.o; sourceTree = "<group>"; };
+		A2E2185B17E687A400B81D4E /* HoverButton.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HoverButton.pch; sourceTree = "<group>"; };
+		A2E2185C17E687A400B81D4E /* libHoverButton (Avocado's conflicted copy 2013-07-04).a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libHoverButton (Avocado's conflicted copy 2013-07-04).a"; sourceTree = "<group>"; };
+		A2E2185D17E687A400B81D4E /* libHoverButton.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libHoverButton.a; sourceTree = "<group>"; };
+		A2E2185E17E687A400B81D4E /* HoverButton.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = HoverButton.bridgesupport; sourceTree = "<group>"; };
+		A2E2185F17E687A400B81D4E /* HoverButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HoverButton.h; sourceTree = "<group>"; };
+		A2E2186017E687A400B81D4E /* HoverButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HoverButton.m; sourceTree = "<group>"; };
+		A2E2186317E687A400B81D4E /* LaunchAtLoginController.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = LaunchAtLoginController.m.o; sourceTree = "<group>"; };
+		A2E2186417E687A400B81D4E /* LaunchAtLoginController.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchAtLoginController.pch; sourceTree = "<group>"; };
+		A2E2186517E687A400B81D4E /* libLaunchAtLoginController (Avocado's conflicted copy 2013-07-04).a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libLaunchAtLoginController (Avocado's conflicted copy 2013-07-04).a"; sourceTree = "<group>"; };
+		A2E2186617E687A400B81D4E /* libLaunchAtLoginController.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libLaunchAtLoginController.a; sourceTree = "<group>"; };
+		A2E2186717E687A400B81D4E /* LaunchAtLoginController.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LaunchAtLoginController.bridgesupport; sourceTree = "<group>"; };
+		A2E2186817E687A400B81D4E /* LaunchAtLoginController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchAtLoginController.h; sourceTree = "<group>"; };
+		A2E2186917E687A400B81D4E /* LaunchAtLoginController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchAtLoginController.m; sourceTree = "<group>"; };
+		A2E2186C17E687A400B81D4E /* libLoginView (Avocado's conflicted copy 2013-07-04).a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libLoginView (Avocado's conflicted copy 2013-07-04).a"; sourceTree = "<group>"; };
+		A2E2186D17E687A400B81D4E /* libLoginView.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libLoginView.a; sourceTree = "<group>"; };
+		A2E2186E17E687A400B81D4E /* LoginView.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = LoginView.m.o; sourceTree = "<group>"; };
+		A2E2186F17E687A400B81D4E /* LoginView.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.pch; sourceTree = "<group>"; };
+		A2E2187017E687A400B81D4E /* LoginView.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LoginView.bridgesupport; sourceTree = "<group>"; };
+		A2E2187117E687A400B81D4E /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.h; sourceTree = "<group>"; };
+		A2E2187217E687A400B81D4E /* LoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginView.m; sourceTree = "<group>"; };
+		A2E2187517E687A400B81D4E /* libLoginWindow (Avocado's conflicted copy 2013-07-04).a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libLoginWindow (Avocado's conflicted copy 2013-07-04).a"; sourceTree = "<group>"; };
+		A2E2187617E687A400B81D4E /* libLoginWindow.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libLoginWindow.a; sourceTree = "<group>"; };
+		A2E2187717E687A400B81D4E /* LoginWindow.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = LoginWindow.m.o; sourceTree = "<group>"; };
+		A2E2187817E687A400B81D4E /* LoginWindow.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginWindow.pch; sourceTree = "<group>"; };
+		A2E2187917E687A400B81D4E /* LoginWindow.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LoginWindow.bridgesupport; sourceTree = "<group>"; };
+		A2E2187A17E687A400B81D4E /* LoginWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginWindow.h; sourceTree = "<group>"; };
+		A2E2187B17E687A400B81D4E /* LoginWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginWindow.m; sourceTree = "<group>"; };
+		A2E2187D17E687A400B81D4E /* BackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundView.h; sourceTree = "<group>"; };
+		A2E2187E17E687A400B81D4E /* BackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundView.m; sourceTree = "<group>"; };
+		A2E2188017E687A400B81D4E /* BackgroundView.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = BackgroundView.m.o; sourceTree = "<group>"; };
+		A2E2188117E687A400B81D4E /* Button.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = Button.m.o; sourceTree = "<group>"; };
+		A2E2188217E687A400B81D4E /* ColorGradientView.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = ColorGradientView.m.o; sourceTree = "<group>"; };
+		A2E2188317E687A400B81D4E /* libPanel.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libPanel.a; sourceTree = "<group>"; };
+		A2E2188417E687A400B81D4E /* Panel.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = Panel.m.o; sourceTree = "<group>"; };
+		A2E2188517E687A400B81D4E /* Panel.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Panel.pch; sourceTree = "<group>"; };
+		A2E2188617E687A400B81D4E /* PanelController.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = PanelController.m.o; sourceTree = "<group>"; };
+		A2E2188717E687A400B81D4E /* Row.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = Row.m.o; sourceTree = "<group>"; };
+		A2E2188817E687A400B81D4E /* RowStatus.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = RowStatus.m.o; sourceTree = "<group>"; };
+		A2E2188917E687A400B81D4E /* SettingsView.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = SettingsView.m.o; sourceTree = "<group>"; };
+		A2E2188A17E687A400B81D4E /* StatusItemView.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = StatusItemView.m.o; sourceTree = "<group>"; };
+		A2E2188B17E687A400B81D4E /* Button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Button.h; sourceTree = "<group>"; };
+		A2E2188C17E687A400B81D4E /* Button.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Button.m; sourceTree = "<group>"; };
+		A2E2188D17E687A400B81D4E /* ColorGradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorGradientView.h; sourceTree = "<group>"; };
+		A2E2188E17E687A400B81D4E /* ColorGradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorGradientView.m; sourceTree = "<group>"; };
+		A2E2189017E687A400B81D4E /* Panel.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Panel.bridgesupport; sourceTree = "<group>"; };
+		A2E2189117E687A400B81D4E /* Panel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Panel.h; sourceTree = "<group>"; };
+		A2E2189217E687A400B81D4E /* Panel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Panel.m; sourceTree = "<group>"; };
+		A2E2189317E687A400B81D4E /* PanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PanelController.h; sourceTree = "<group>"; };
+		A2E2189417E687A400B81D4E /* PanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PanelController.m; sourceTree = "<group>"; };
+		A2E2189517E687A400B81D4E /* Row.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Row.h; sourceTree = "<group>"; };
+		A2E2189617E687A400B81D4E /* Row.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Row.m; sourceTree = "<group>"; };
+		A2E2189717E687A400B81D4E /* RowStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RowStatus.h; sourceTree = "<group>"; };
+		A2E2189817E687A400B81D4E /* RowStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RowStatus.m; sourceTree = "<group>"; };
+		A2E2189917E687A400B81D4E /* SettingsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsView.h; sourceTree = "<group>"; };
+		A2E2189A17E687A400B81D4E /* SettingsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsView.m; sourceTree = "<group>"; };
+		A2E2189B17E687A400B81D4E /* StatusItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusItemView.h; sourceTree = "<group>"; };
+		A2E2189C17E687A400B81D4E /* StatusItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusItemView.m; sourceTree = "<group>"; };
+		A2E2189D17E687A400B81D4E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Security.framework; sourceTree = "<group>"; };
+		A2E218A017E687A400B81D4E /* libSock (Avocado's conflicted copy 2013-07-04).a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libSock (Avocado's conflicted copy 2013-07-04).a"; sourceTree = "<group>"; };
+		A2E218A117E687A400B81D4E /* libSock.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSock.a; sourceTree = "<group>"; };
+		A2E218A217E687A400B81D4E /* Sock.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = Sock.m.o; sourceTree = "<group>"; };
+		A2E218A317E687A400B81D4E /* Sock.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sock.pch; sourceTree = "<group>"; };
+		A2E218A417E687A400B81D4E /* Sock.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Sock.bridgesupport; sourceTree = "<group>"; };
+		A2E218A517E687A400B81D4E /* Sock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sock.h; sourceTree = "<group>"; };
+		A2E218A617E687A400B81D4E /* Sock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sock.m; sourceTree = "<group>"; };
+		A2E218A917E687A400B81D4E /* libSocketStream (Avocado's conflicted copy 2013-07-04).a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libSocketStream (Avocado's conflicted copy 2013-07-04).a"; sourceTree = "<group>"; };
+		A2E218AA17E687A400B81D4E /* libSocketStream.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSocketStream.a; sourceTree = "<group>"; };
+		A2E218AB17E687A400B81D4E /* SocketStream.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = SocketStream.m.o; sourceTree = "<group>"; };
+		A2E218AC17E687A400B81D4E /* SocketStream.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketStream.pch; sourceTree = "<group>"; };
+		A2E218AD17E687A400B81D4E /* SocketStream.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = SocketStream.bridgesupport; sourceTree = "<group>"; };
+		A2E218AE17E687A400B81D4E /* SocketStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketStream.h; sourceTree = "<group>"; };
+		A2E218AF17E687A400B81D4E /* SocketStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketStream.m; sourceTree = "<group>"; };
+		A2E218B017E687A400B81D4E /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
+		A2E218B317E687A400B81D4E /* StatusItemView.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusItemView.pch; sourceTree = "<group>"; };
+		A2E218B417E687A400B81D4E /* StatusItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusItemView.h; sourceTree = "<group>"; };
+		A2E218B517E687A400B81D4E /* StatusItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusItemView.m; sourceTree = "<group>"; };
+		A2E218B817E687A400B81D4E /* libStayAwake.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libStayAwake.a; sourceTree = "<group>"; };
+		A2E218B917E687A400B81D4E /* StayAwake.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = StayAwake.m.o; sourceTree = "<group>"; };
+		A2E218BA17E687A400B81D4E /* StayAwake.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StayAwake.pch; sourceTree = "<group>"; };
+		A2E218BB17E687A400B81D4E /* StayAwake.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = StayAwake.bridgesupport; sourceTree = "<group>"; };
+		A2E218BC17E687A400B81D4E /* StayAwake.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StayAwake.h; sourceTree = "<group>"; };
+		A2E218BD17E687A400B81D4E /* StayAwake.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StayAwake.m; sourceTree = "<group>"; };
+		A2E218C417E687A400B81D4E /* libToken (Avocado's conflicted copy 2013-07-04).a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libToken (Avocado's conflicted copy 2013-07-04).a"; sourceTree = "<group>"; };
+		A2E218C517E687A400B81D4E /* libToken.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libToken.a; sourceTree = "<group>"; };
+		A2E218C617E687A400B81D4E /* Token.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = Token.m.o; sourceTree = "<group>"; };
+		A2E218C717E687A400B81D4E /* Token.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Token.pch; sourceTree = "<group>"; };
+		A2E218C817E687A400B81D4E /* Token.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Token.bridgesupport; sourceTree = "<group>"; };
+		A2E218C917E687A400B81D4E /* Token.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Token.h; sourceTree = "<group>"; };
+		A2E218CA17E687A400B81D4E /* Token.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Token.m; sourceTree = "<group>"; };
+		A2E218CC17E687A400B81D4E /* ApplicationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationController.h; sourceTree = "<group>"; };
+		A2E218CD17E687A400B81D4E /* ApplicationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationDelegate.h; sourceTree = "<group>"; };
+		A2E218CE17E687A400B81D4E /* ApplicationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplicationDelegate.m; sourceTree = "<group>"; };
+		A2E218CF17E687A400B81D4E /* MenubarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenubarController.h; sourceTree = "<group>"; };
+		A2E218D017E687A400B81D4E /* MenubarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenubarController.m; sourceTree = "<group>"; };
+		A2E218D317E687A400B81D4E /* libUUID (Avocado's conflicted copy 2013-07-04).a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libUUID (Avocado's conflicted copy 2013-07-04).a"; sourceTree = "<group>"; };
+		A2E218D417E687A400B81D4E /* libUUID.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libUUID.a; sourceTree = "<group>"; };
+		A2E218D517E687A400B81D4E /* UUID.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = UUID.m.o; sourceTree = "<group>"; };
+		A2E218D617E687A400B81D4E /* UUID.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UUID.pch; sourceTree = "<group>"; };
+		A2E218D717E687A400B81D4E /* UUID.bridgesupport */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = UUID.bridgesupport; sourceTree = "<group>"; };
+		A2E218D817E687A400B81D4E /* UUID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UUID.h; sourceTree = "<group>"; };
+		A2E218D917E687A400B81D4E /* UUID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UUID.m; sourceTree = "<group>"; };
+		A2E2192D17E687AE00B81D4E /* account-old.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "account-old.png"; sourceTree = "<group>"; };
+		A2E2192E17E687AE00B81D4E /* account.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = account.png; sourceTree = "<group>"; };
+		A2E2192F17E687AE00B81D4E /* app.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = app.entitlements; sourceTree = "<group>"; };
+		A2E2193017E687AE00B81D4E /* closelogin-down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "closelogin-down.png"; sourceTree = "<group>"; };
+		A2E2193117E687AE00B81D4E /* closelogin-down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "closelogin-down@2x.png"; sourceTree = "<group>"; };
+		A2E2193217E687AE00B81D4E /* closelogin-hover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "closelogin-hover.png"; sourceTree = "<group>"; };
+		A2E2193317E687AE00B81D4E /* closelogin-hover@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "closelogin-hover@2x.png"; sourceTree = "<group>"; };
+		A2E2193417E687AF00B81D4E /* closelogin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = closelogin.png; sourceTree = "<group>"; };
+		A2E2193517E687AF00B81D4E /* closelogin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "closelogin@2x.png"; sourceTree = "<group>"; };
+		A2E2193617E687AF00B81D4E /* ConnectionBasicView.nib */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = ConnectionBasicView.nib; sourceTree = "<group>"; };
+		A2E2193717E687AF00B81D4E /* ConnectionBasicView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConnectionBasicView.xib; sourceTree = "<group>"; };
+		A2E2193817E687AF00B81D4E /* ConnectionListItem.nib */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = ConnectionListItem.nib; sourceTree = "<group>"; };
+		A2E2193917E687AF00B81D4E /* ConnectionListItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConnectionListItem.xib; sourceTree = "<group>"; };
+		A2E2193A17E687AF00B81D4E /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
+		A2E2193B17E687AF00B81D4E /* disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = disabled.png; sourceTree = "<group>"; };
+		A2E2193C17E687AF00B81D4E /* disabled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "disabled@2x.png"; sourceTree = "<group>"; };
+		A2E2193D17E687AF00B81D4E /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
+		A2E2193E17E687AF00B81D4E /* forgot-down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "forgot-down.png"; sourceTree = "<group>"; };
+		A2E2193F17E687AF00B81D4E /* forgot-down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "forgot-down@2x.png"; sourceTree = "<group>"; };
+		A2E2194017E687AF00B81D4E /* forgot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = forgot.png; sourceTree = "<group>"; };
+		A2E2194117E687AF00B81D4E /* forgot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "forgot@2x.png"; sourceTree = "<group>"; };
+		A2E2194217E687AF00B81D4E /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear.png; sourceTree = "<group>"; };
+		A2E2194317E687AF00B81D4E /* gear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gear@2x.png"; sourceTree = "<group>"; };
+		A2E2194417E687AF00B81D4E /* general-old.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "general-old.png"; sourceTree = "<group>"; };
+		A2E2194517E687AF00B81D4E /* general.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = general.png; sourceTree = "<group>"; };
+		A2E2194617E687AF00B81D4E /* icon-connected-on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-connected-on.png"; sourceTree = "<group>"; };
+		A2E2194717E687AF00B81D4E /* icon-connected-on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-connected-on@2x.png"; sourceTree = "<group>"; };
+		A2E2194817E687AF00B81D4E /* icon-connected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-connected.png"; sourceTree = "<group>"; };
+		A2E2194917E687AF00B81D4E /* icon-connected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-connected@2x.png"; sourceTree = "<group>"; };
+		A2E2194A17E687AF00B81D4E /* icon-disconnected-on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-disconnected-on.png"; sourceTree = "<group>"; };
+		A2E2194B17E687AF00B81D4E /* icon-disconnected-on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-disconnected-on@2x.png"; sourceTree = "<group>"; };
+		A2E2194C17E687AF00B81D4E /* icon-disconnected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-disconnected.png"; sourceTree = "<group>"; };
+		A2E2194D17E687AF00B81D4E /* icon-disconnected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-disconnected@2x.png"; sourceTree = "<group>"; };
+		A2E2194E17E687AF00B81D4E /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
+		A2E2194F17E687AF00B81D4E /* link.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = link.png; sourceTree = "<group>"; };
+		A2E2195017E687AF00B81D4E /* LoginScreen.nib */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = LoginScreen.nib; sourceTree = "<group>"; };
+		A2E2195117E687AF00B81D4E /* LoginScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginScreen.xib; sourceTree = "<group>"; };
+		A2E2195217E687AF00B81D4E /* offline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = offline.png; sourceTree = "<group>"; };
+		A2E2195317E687AF00B81D4E /* offline@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "offline@2x.png"; sourceTree = "<group>"; };
+		A2E2195417E687AF00B81D4E /* online.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = online.png; sourceTree = "<group>"; };
+		A2E2195517E687AF00B81D4E /* online@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "online@2x.png"; sourceTree = "<group>"; };
+		A2E2195617E687AF00B81D4E /* Panel.nib */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = Panel.nib; sourceTree = "<group>"; };
+		A2E2195717E687AF00B81D4E /* Panel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Panel.xib; sourceTree = "<group>"; };
+		A2E2195817E687AF00B81D4E /* portly-login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "portly-login.png"; sourceTree = "<group>"; };
+		A2E2195917E687AF00B81D4E /* portly-login@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "portly-login@2x.png"; sourceTree = "<group>"; };
+		A2E2195B17E687AF00B81D4E /* LocalPort.mom */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = LocalPort.mom; sourceTree = "<group>"; };
+		A2E2195C17E687AF00B81D4E /* Portly.mom */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = Portly.mom; sourceTree = "<group>"; };
+		A2E2195D17E687AF00B81D4E /* Portly.omo */ = {isa = PBXFileReference; lastKnownFileType = file; path = Portly.omo; sourceTree = "<group>"; };
+		A2E2195E17E687AF00B81D4E /* VersionInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = VersionInfo.plist; sourceTree = "<group>"; };
+		A2E2196017E687AF00B81D4E /* LocalPort.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LocalPort.xcdatamodel; sourceTree = "<group>"; };
+		A2E2196117E687AF00B81D4E /* Portly.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Portly.xcdatamodel; sourceTree = "<group>"; };
+		A2E2196217E687AF00B81D4E /* PreferencesAccount.nib */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = PreferencesAccount.nib; sourceTree = "<group>"; };
+		A2E2196317E687AF00B81D4E /* PreferencesAccount.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferencesAccount.xib; sourceTree = "<group>"; };
+		A2E2196417E687AF00B81D4E /* PreferencesConnectors.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferencesConnectors.xib; sourceTree = "<group>"; };
+		A2E2196517E687AF00B81D4E /* PreferencesGeneral.nib */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = PreferencesGeneral.nib; sourceTree = "<group>"; };
+		A2E2196617E687AF00B81D4E /* PreferencesGeneral.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferencesGeneral.xib; sourceTree = "<group>"; };
+		A2E2196717E687AF00B81D4E /* PreferencesUsers.nib */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = PreferencesUsers.nib; sourceTree = "<group>"; };
+		A2E2196817E687AF00B81D4E /* PreferencesUsers.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferencesUsers.xib; sourceTree = "<group>"; };
+		A2E2196917E687AF00B81D4E /* sign-in-down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sign-in-down.png"; sourceTree = "<group>"; };
+		A2E2196A17E687AF00B81D4E /* sign-in-down@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sign-in-down@2x.png"; sourceTree = "<group>"; };
+		A2E2196B17E687AF00B81D4E /* sign-in-hover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sign-in-hover.png"; sourceTree = "<group>"; };
+		A2E2196C17E687AF00B81D4E /* sign-in-hover@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sign-in-hover@2x.png"; sourceTree = "<group>"; };
+		A2E2196D17E687AF00B81D4E /* sign-in.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sign-in.png"; sourceTree = "<group>"; };
+		A2E2196E17E687AF00B81D4E /* sign-in@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sign-in@2x.png"; sourceTree = "<group>"; };
+		A2E2196F17E687AF00B81D4E /* tunnels-old.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tunnels-old.png"; sourceTree = "<group>"; };
+		A2E2197017E687AF00B81D4E /* tunnels.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tunnels.png; sourceTree = "<group>"; };
+		A2E219B217E687F300B81D4E /* ConnectorsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectorsViewController.h; sourceTree = "<group>"; };
+		A2E219B317E687F300B81D4E /* ConnectorsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectorsViewController.m; sourceTree = "<group>"; };
+		A2E219B517E6A7D000B81D4E /* UrlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UrlView.h; sourceTree = "<group>"; };
+		A2E219B617E6A7D000B81D4E /* UrlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UrlView.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A2E2181F17E6870A00B81D4E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A2E218DA17E687A400B81D4E /* Cocoa.framework in Frameworks */,
+				A2E218DB17E687A400B81D4E /* Computer.m.o in Frameworks */,
+				A2E218DC17E687A400B81D4E /* libComputer (Avocado's conflicted copy 2013-07-04).a in Frameworks */,
+				A2E218DD17E687A500B81D4E /* libComputer.a in Frameworks */,
+				A2E218E017E687A500B81D4E /* Connector.m.o in Frameworks */,
+				A2E218E117E687A500B81D4E /* libConnector (Avocado's conflicted copy 2013-07-04).a in Frameworks */,
+				A2E218E217E687A500B81D4E /* libConnector.a in Frameworks */,
+				A2E218E517E687A500B81D4E /* CoreFoundation.framework in Frameworks */,
+				A2E218E617E687A500B81D4E /* HoverButton.m.o in Frameworks */,
+				A2E218E717E687A500B81D4E /* libHoverButton (Avocado's conflicted copy 2013-07-04).a in Frameworks */,
+				A2E218E817E687A500B81D4E /* libHoverButton.a in Frameworks */,
+				A2E218EB17E687A500B81D4E /* LaunchAtLoginController.m.o in Frameworks */,
+				A2E218EC17E687A500B81D4E /* libLaunchAtLoginController (Avocado's conflicted copy 2013-07-04).a in Frameworks */,
+				A2E218ED17E687A500B81D4E /* libLaunchAtLoginController.a in Frameworks */,
+				A2E218F017E687A500B81D4E /* libLoginView (Avocado's conflicted copy 2013-07-04).a in Frameworks */,
+				A2E218F117E687A500B81D4E /* libLoginView.a in Frameworks */,
+				A2E218F217E687A500B81D4E /* LoginView.m.o in Frameworks */,
+				A2E218F517E687A500B81D4E /* libLoginWindow (Avocado's conflicted copy 2013-07-04).a in Frameworks */,
+				A2E218F617E687A500B81D4E /* libLoginWindow.a in Frameworks */,
+				A2E218F717E687A500B81D4E /* LoginWindow.m.o in Frameworks */,
+				A2E218FB17E687A500B81D4E /* BackgroundView.m.o in Frameworks */,
+				A2E218FC17E687A500B81D4E /* Button.m.o in Frameworks */,
+				A2E218FD17E687A500B81D4E /* ColorGradientView.m.o in Frameworks */,
+				A2E218FE17E687A500B81D4E /* libPanel.a in Frameworks */,
+				A2E218FF17E687A500B81D4E /* Panel.m.o in Frameworks */,
+				A2E2190017E687A500B81D4E /* PanelController.m.o in Frameworks */,
+				A2E2190117E687A500B81D4E /* Row.m.o in Frameworks */,
+				A2E2190217E687A500B81D4E /* RowStatus.m.o in Frameworks */,
+				A2E2190317E687A500B81D4E /* SettingsView.m.o in Frameworks */,
+				A2E2190417E687A500B81D4E /* StatusItemView.m.o in Frameworks */,
+				A2E2190F17E687A500B81D4E /* Security.framework in Frameworks */,
+				A2E2191017E687A500B81D4E /* libSock (Avocado's conflicted copy 2013-07-04).a in Frameworks */,
+				A2E2191117E687A500B81D4E /* libSock.a in Frameworks */,
+				A2E2191217E687A500B81D4E /* Sock.m.o in Frameworks */,
+				A2E2191517E687A500B81D4E /* libSocketStream (Avocado's conflicted copy 2013-07-04).a in Frameworks */,
+				A2E2191617E687A500B81D4E /* libSocketStream.a in Frameworks */,
+				A2E2191717E687A500B81D4E /* SocketStream.m.o in Frameworks */,
+				A2E2191A17E687A500B81D4E /* Sparkle.framework in Frameworks */,
+				A2E2191C17E687A500B81D4E /* libStayAwake.a in Frameworks */,
+				A2E2191D17E687A500B81D4E /* StayAwake.m.o in Frameworks */,
+				A2E2192017E687A500B81D4E /* libToken (Avocado's conflicted copy 2013-07-04).a in Frameworks */,
+				A2E2192117E687A500B81D4E /* libToken.a in Frameworks */,
+				A2E2192217E687A500B81D4E /* Token.m.o in Frameworks */,
+				A2E2192717E687A500B81D4E /* libUUID (Avocado's conflicted copy 2013-07-04).a in Frameworks */,
+				A2E2192817E687A500B81D4E /* libUUID.a in Frameworks */,
+				A2E2192917E687A500B81D4E /* UUID.m.o in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A2E2181917E6870A00B81D4E = {
+			isa = PBXGroup;
+			children = (
+				A2E2192C17E687AE00B81D4E /* resources */,
+				A2E2184317E687A400B81D4E /* vendor */,
+				A2E2184217E6878F00B81D4E /* Portly.app */,
+			);
+			sourceTree = "<group>";
+		};
+		A2E2184317E687A400B81D4E /* vendor */ = {
+			isa = PBXGroup;
+			children = (
+				A2E2184417E687A400B81D4E /* Cocoa.framework */,
+				A2E2184517E687A400B81D4E /* Computer */,
+				A2E2184E17E687A400B81D4E /* Connector */,
+				A2E2185717E687A400B81D4E /* CoreFoundation.framework */,
+				A2E2185817E687A400B81D4E /* HoverButton */,
+				A2E2186117E687A400B81D4E /* LaunchAtLoginController */,
+				A2E2186A17E687A400B81D4E /* LoginView */,
+				A2E2187317E687A400B81D4E /* LoginWindow */,
+				A2E2187C17E687A400B81D4E /* Panel */,
+				A2E2189D17E687A400B81D4E /* Security.framework */,
+				A2E2189E17E687A400B81D4E /* Sock */,
+				A2E218A717E687A400B81D4E /* SocketStream */,
+				A2E218B017E687A400B81D4E /* Sparkle.framework */,
+				A2E218B117E687A400B81D4E /* StatusItemView */,
+				A2E218B617E687A400B81D4E /* StayAwake */,
+				A2E218BE17E687A400B81D4E /* StayAwake-liba */,
+				A2E218C217E687A400B81D4E /* Token */,
+				A2E218CB17E687A400B81D4E /* unused */,
+				A2E218D117E687A400B81D4E /* UUID */,
+			);
+			path = vendor;
+			sourceTree = "<group>";
+		};
+		A2E2184517E687A400B81D4E /* Computer */ = {
+			isa = PBXGroup;
+			children = (
+				A2E2184617E687A400B81D4E /* build-MacOSX */,
+				A2E2184B17E687A400B81D4E /* Computer.bridgesupport */,
+				A2E2184C17E687A400B81D4E /* Computer.h */,
+				A2E2184D17E687A400B81D4E /* Computer.m */,
+			);
+			path = Computer;
+			sourceTree = "<group>";
+		};
+		A2E2184617E687A400B81D4E /* build-MacOSX */ = {
+			isa = PBXGroup;
+			children = (
+				A2E2184717E687A400B81D4E /* Computer.m.o */,
+				A2E2184817E687A400B81D4E /* Computer.pch */,
+				A2E2184917E687A400B81D4E /* libComputer (Avocado's conflicted copy 2013-07-04).a */,
+				A2E2184A17E687A400B81D4E /* libComputer.a */,
+			);
+			path = "build-MacOSX";
+			sourceTree = "<group>";
+		};
+		A2E2184E17E687A400B81D4E /* Connector */ = {
+			isa = PBXGroup;
+			children = (
+				A2E2184F17E687A400B81D4E /* build-MacOSX */,
+				A2E2185417E687A400B81D4E /* Connector.bridgesupport */,
+				A2E2185517E687A400B81D4E /* Connector.h */,
+				A2E2185617E687A400B81D4E /* Connector.m */,
+			);
+			path = Connector;
+			sourceTree = "<group>";
+		};
+		A2E2184F17E687A400B81D4E /* build-MacOSX */ = {
+			isa = PBXGroup;
+			children = (
+				A2E2185017E687A400B81D4E /* Connector.m.o */,
+				A2E2185117E687A400B81D4E /* Connector.pch */,
+				A2E2185217E687A400B81D4E /* libConnector (Avocado's conflicted copy 2013-07-04).a */,
+				A2E2185317E687A400B81D4E /* libConnector.a */,
+			);
+			path = "build-MacOSX";
+			sourceTree = "<group>";
+		};
+		A2E2185817E687A400B81D4E /* HoverButton */ = {
+			isa = PBXGroup;
+			children = (
+				A2E2185917E687A400B81D4E /* build-MacOSX */,
+				A2E2185E17E687A400B81D4E /* HoverButton.bridgesupport */,
+				A2E2185F17E687A400B81D4E /* HoverButton.h */,
+				A2E2186017E687A400B81D4E /* HoverButton.m */,
+			);
+			path = HoverButton;
+			sourceTree = "<group>";
+		};
+		A2E2185917E687A400B81D4E /* build-MacOSX */ = {
+			isa = PBXGroup;
+			children = (
+				A2E2185A17E687A400B81D4E /* HoverButton.m.o */,
+				A2E2185B17E687A400B81D4E /* HoverButton.pch */,
+				A2E2185C17E687A400B81D4E /* libHoverButton (Avocado's conflicted copy 2013-07-04).a */,
+				A2E2185D17E687A400B81D4E /* libHoverButton.a */,
+			);
+			path = "build-MacOSX";
+			sourceTree = "<group>";
+		};
+		A2E2186117E687A400B81D4E /* LaunchAtLoginController */ = {
+			isa = PBXGroup;
+			children = (
+				A2E2186217E687A400B81D4E /* build-MacOSX */,
+				A2E2186717E687A400B81D4E /* LaunchAtLoginController.bridgesupport */,
+				A2E2186817E687A400B81D4E /* LaunchAtLoginController.h */,
+				A2E2186917E687A400B81D4E /* LaunchAtLoginController.m */,
+			);
+			path = LaunchAtLoginController;
+			sourceTree = "<group>";
+		};
+		A2E2186217E687A400B81D4E /* build-MacOSX */ = {
+			isa = PBXGroup;
+			children = (
+				A2E2186317E687A400B81D4E /* LaunchAtLoginController.m.o */,
+				A2E2186417E687A400B81D4E /* LaunchAtLoginController.pch */,
+				A2E2186517E687A400B81D4E /* libLaunchAtLoginController (Avocado's conflicted copy 2013-07-04).a */,
+				A2E2186617E687A400B81D4E /* libLaunchAtLoginController.a */,
+			);
+			path = "build-MacOSX";
+			sourceTree = "<group>";
+		};
+		A2E2186A17E687A400B81D4E /* LoginView */ = {
+			isa = PBXGroup;
+			children = (
+				A2E2186B17E687A400B81D4E /* build-MacOSX */,
+				A2E2187017E687A400B81D4E /* LoginView.bridgesupport */,
+				A2E2187117E687A400B81D4E /* LoginView.h */,
+				A2E2187217E687A400B81D4E /* LoginView.m */,
+			);
+			path = LoginView;
+			sourceTree = "<group>";
+		};
+		A2E2186B17E687A400B81D4E /* build-MacOSX */ = {
+			isa = PBXGroup;
+			children = (
+				A2E2186C17E687A400B81D4E /* libLoginView (Avocado's conflicted copy 2013-07-04).a */,
+				A2E2186D17E687A400B81D4E /* libLoginView.a */,
+				A2E2186E17E687A400B81D4E /* LoginView.m.o */,
+				A2E2186F17E687A400B81D4E /* LoginView.pch */,
+			);
+			path = "build-MacOSX";
+			sourceTree = "<group>";
+		};
+		A2E2187317E687A400B81D4E /* LoginWindow */ = {
+			isa = PBXGroup;
+			children = (
+				A2E2187417E687A400B81D4E /* build-MacOSX */,
+				A2E2187917E687A400B81D4E /* LoginWindow.bridgesupport */,
+				A2E2187A17E687A400B81D4E /* LoginWindow.h */,
+				A2E2187B17E687A400B81D4E /* LoginWindow.m */,
+			);
+			path = LoginWindow;
+			sourceTree = "<group>";
+		};
+		A2E2187417E687A400B81D4E /* build-MacOSX */ = {
+			isa = PBXGroup;
+			children = (
+				A2E2187517E687A400B81D4E /* libLoginWindow (Avocado's conflicted copy 2013-07-04).a */,
+				A2E2187617E687A400B81D4E /* libLoginWindow.a */,
+				A2E2187717E687A400B81D4E /* LoginWindow.m.o */,
+				A2E2187817E687A400B81D4E /* LoginWindow.pch */,
+			);
+			path = "build-MacOSX";
+			sourceTree = "<group>";
+		};
+		A2E2187C17E687A400B81D4E /* Panel */ = {
+			isa = PBXGroup;
+			children = (
+				A2E2187D17E687A400B81D4E /* BackgroundView.h */,
+				A2E2187E17E687A400B81D4E /* BackgroundView.m */,
+				A2E2187F17E687A400B81D4E /* build-MacOSX */,
+				A2E2188B17E687A400B81D4E /* Button.h */,
+				A2E2188C17E687A400B81D4E /* Button.m */,
+				A2E2188D17E687A400B81D4E /* ColorGradientView.h */,
+				A2E2188E17E687A400B81D4E /* ColorGradientView.m */,
+				A2E2189017E687A400B81D4E /* Panel.bridgesupport */,
+				A2E2189117E687A400B81D4E /* Panel.h */,
+				A2E2189217E687A400B81D4E /* Panel.m */,
+				A2E2189317E687A400B81D4E /* PanelController.h */,
+				A2E2189417E687A400B81D4E /* PanelController.m */,
+				A2E2189517E687A400B81D4E /* Row.h */,
+				A2E2189617E687A400B81D4E /* Row.m */,
+				A2E2189717E687A400B81D4E /* RowStatus.h */,
+				A2E2189817E687A400B81D4E /* RowStatus.m */,
+				A2E2189917E687A400B81D4E /* SettingsView.h */,
+				A2E2189A17E687A400B81D4E /* SettingsView.m */,
+				A2E2189B17E687A400B81D4E /* StatusItemView.h */,
+				A2E2189C17E687A400B81D4E /* StatusItemView.m */,
+				A2E219B217E687F300B81D4E /* ConnectorsViewController.h */,
+				A2E219B317E687F300B81D4E /* ConnectorsViewController.m */,
+				A2E219B517E6A7D000B81D4E /* UrlView.h */,
+				A2E219B617E6A7D000B81D4E /* UrlView.m */,
+			);
+			path = Panel;
+			sourceTree = "<group>";
+		};
+		A2E2187F17E687A400B81D4E /* build-MacOSX */ = {
+			isa = PBXGroup;
+			children = (
+				A2E2188017E687A400B81D4E /* BackgroundView.m.o */,
+				A2E2188117E687A400B81D4E /* Button.m.o */,
+				A2E2188217E687A400B81D4E /* ColorGradientView.m.o */,
+				A2E2188317E687A400B81D4E /* libPanel.a */,
+				A2E2188417E687A400B81D4E /* Panel.m.o */,
+				A2E2188517E687A400B81D4E /* Panel.pch */,
+				A2E2188617E687A400B81D4E /* PanelController.m.o */,
+				A2E2188717E687A400B81D4E /* Row.m.o */,
+				A2E2188817E687A400B81D4E /* RowStatus.m.o */,
+				A2E2188917E687A400B81D4E /* SettingsView.m.o */,
+				A2E2188A17E687A400B81D4E /* StatusItemView.m.o */,
+			);
+			path = "build-MacOSX";
+			sourceTree = "<group>";
+		};
+		A2E2189E17E687A400B81D4E /* Sock */ = {
+			isa = PBXGroup;
+			children = (
+				A2E2189F17E687A400B81D4E /* build-MacOSX */,
+				A2E218A417E687A400B81D4E /* Sock.bridgesupport */,
+				A2E218A517E687A400B81D4E /* Sock.h */,
+				A2E218A617E687A400B81D4E /* Sock.m */,
+			);
+			path = Sock;
+			sourceTree = "<group>";
+		};
+		A2E2189F17E687A400B81D4E /* build-MacOSX */ = {
+			isa = PBXGroup;
+			children = (
+				A2E218A017E687A400B81D4E /* libSock (Avocado's conflicted copy 2013-07-04).a */,
+				A2E218A117E687A400B81D4E /* libSock.a */,
+				A2E218A217E687A400B81D4E /* Sock.m.o */,
+				A2E218A317E687A400B81D4E /* Sock.pch */,
+			);
+			path = "build-MacOSX";
+			sourceTree = "<group>";
+		};
+		A2E218A717E687A400B81D4E /* SocketStream */ = {
+			isa = PBXGroup;
+			children = (
+				A2E218A817E687A400B81D4E /* build-MacOSX */,
+				A2E218AD17E687A400B81D4E /* SocketStream.bridgesupport */,
+				A2E218AE17E687A400B81D4E /* SocketStream.h */,
+				A2E218AF17E687A400B81D4E /* SocketStream.m */,
+			);
+			path = SocketStream;
+			sourceTree = "<group>";
+		};
+		A2E218A817E687A400B81D4E /* build-MacOSX */ = {
+			isa = PBXGroup;
+			children = (
+				A2E218A917E687A400B81D4E /* libSocketStream (Avocado's conflicted copy 2013-07-04).a */,
+				A2E218AA17E687A400B81D4E /* libSocketStream.a */,
+				A2E218AB17E687A400B81D4E /* SocketStream.m.o */,
+				A2E218AC17E687A400B81D4E /* SocketStream.pch */,
+			);
+			path = "build-MacOSX";
+			sourceTree = "<group>";
+		};
+		A2E218B117E687A400B81D4E /* StatusItemView */ = {
+			isa = PBXGroup;
+			children = (
+				A2E218B217E687A400B81D4E /* build-MacOSX */,
+				A2E218B417E687A400B81D4E /* StatusItemView.h */,
+				A2E218B517E687A400B81D4E /* StatusItemView.m */,
+			);
+			path = StatusItemView;
+			sourceTree = "<group>";
+		};
+		A2E218B217E687A400B81D4E /* build-MacOSX */ = {
+			isa = PBXGroup;
+			children = (
+				A2E218B317E687A400B81D4E /* StatusItemView.pch */,
+			);
+			path = "build-MacOSX";
+			sourceTree = "<group>";
+		};
+		A2E218B617E687A400B81D4E /* StayAwake */ = {
+			isa = PBXGroup;
+			children = (
+				A2E218B717E687A400B81D4E /* build-MacOSX */,
+				A2E218BB17E687A400B81D4E /* StayAwake.bridgesupport */,
+				A2E218BC17E687A400B81D4E /* StayAwake.h */,
+				A2E218BD17E687A400B81D4E /* StayAwake.m */,
+			);
+			path = StayAwake;
+			sourceTree = "<group>";
+		};
+		A2E218B717E687A400B81D4E /* build-MacOSX */ = {
+			isa = PBXGroup;
+			children = (
+				A2E218B817E687A400B81D4E /* libStayAwake.a */,
+				A2E218B917E687A400B81D4E /* StayAwake.m.o */,
+				A2E218BA17E687A400B81D4E /* StayAwake.pch */,
+			);
+			path = "build-MacOSX";
+			sourceTree = "<group>";
+		};
+		A2E218BE17E687A400B81D4E /* StayAwake-liba */ = {
+			isa = PBXGroup;
+			children = (
+				A2E218BF17E687A400B81D4E /* DerivedData */,
+			);
+			path = "StayAwake-liba";
+			sourceTree = "<group>";
+		};
+		A2E218BF17E687A400B81D4E /* DerivedData */ = {
+			isa = PBXGroup;
+			children = (
+				A2E218C017E687A400B81D4E /* StayAwake */,
+			);
+			path = DerivedData;
+			sourceTree = "<group>";
+		};
+		A2E218C017E687A400B81D4E /* StayAwake */ = {
+			isa = PBXGroup;
+			children = (
+				A2E218C117E687A400B81D4E /* TextIndex */,
+			);
+			path = StayAwake;
+			sourceTree = "<group>";
+		};
+		A2E218C117E687A400B81D4E /* TextIndex */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = TextIndex;
+			sourceTree = "<group>";
+		};
+		A2E218C217E687A400B81D4E /* Token */ = {
+			isa = PBXGroup;
+			children = (
+				A2E218C317E687A400B81D4E /* build-MacOSX */,
+				A2E218C817E687A400B81D4E /* Token.bridgesupport */,
+				A2E218C917E687A400B81D4E /* Token.h */,
+				A2E218CA17E687A400B81D4E /* Token.m */,
+			);
+			path = Token;
+			sourceTree = "<group>";
+		};
+		A2E218C317E687A400B81D4E /* build-MacOSX */ = {
+			isa = PBXGroup;
+			children = (
+				A2E218C417E687A400B81D4E /* libToken (Avocado's conflicted copy 2013-07-04).a */,
+				A2E218C517E687A400B81D4E /* libToken.a */,
+				A2E218C617E687A400B81D4E /* Token.m.o */,
+				A2E218C717E687A400B81D4E /* Token.pch */,
+			);
+			path = "build-MacOSX";
+			sourceTree = "<group>";
+		};
+		A2E218CB17E687A400B81D4E /* unused */ = {
+			isa = PBXGroup;
+			children = (
+				A2E218CC17E687A400B81D4E /* ApplicationController.h */,
+				A2E218CD17E687A400B81D4E /* ApplicationDelegate.h */,
+				A2E218CE17E687A400B81D4E /* ApplicationDelegate.m */,
+				A2E218CF17E687A400B81D4E /* MenubarController.h */,
+				A2E218D017E687A400B81D4E /* MenubarController.m */,
+			);
+			path = unused;
+			sourceTree = "<group>";
+		};
+		A2E218D117E687A400B81D4E /* UUID */ = {
+			isa = PBXGroup;
+			children = (
+				A2E218D217E687A400B81D4E /* build-MacOSX */,
+				A2E218D717E687A400B81D4E /* UUID.bridgesupport */,
+				A2E218D817E687A400B81D4E /* UUID.h */,
+				A2E218D917E687A400B81D4E /* UUID.m */,
+			);
+			path = UUID;
+			sourceTree = "<group>";
+		};
+		A2E218D217E687A400B81D4E /* build-MacOSX */ = {
+			isa = PBXGroup;
+			children = (
+				A2E218D317E687A400B81D4E /* libUUID (Avocado's conflicted copy 2013-07-04).a */,
+				A2E218D417E687A400B81D4E /* libUUID.a */,
+				A2E218D517E687A400B81D4E /* UUID.m.o */,
+				A2E218D617E687A400B81D4E /* UUID.pch */,
+			);
+			path = "build-MacOSX";
+			sourceTree = "<group>";
+		};
+		A2E2192C17E687AE00B81D4E /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				A2E2192D17E687AE00B81D4E /* account-old.png */,
+				A2E2192E17E687AE00B81D4E /* account.png */,
+				A2E2192F17E687AE00B81D4E /* app.entitlements */,
+				A2E2193017E687AE00B81D4E /* closelogin-down.png */,
+				A2E2193117E687AE00B81D4E /* closelogin-down@2x.png */,
+				A2E2193217E687AE00B81D4E /* closelogin-hover.png */,
+				A2E2193317E687AE00B81D4E /* closelogin-hover@2x.png */,
+				A2E2193417E687AF00B81D4E /* closelogin.png */,
+				A2E2193517E687AF00B81D4E /* closelogin@2x.png */,
+				A2E2193617E687AF00B81D4E /* ConnectionBasicView.nib */,
+				A2E2193717E687AF00B81D4E /* ConnectionBasicView.xib */,
+				A2E2193817E687AF00B81D4E /* ConnectionListItem.nib */,
+				A2E2193917E687AF00B81D4E /* ConnectionListItem.xib */,
+				A2E2193A17E687AF00B81D4E /* Credits.rtf */,
+				A2E2193B17E687AF00B81D4E /* disabled.png */,
+				A2E2193C17E687AF00B81D4E /* disabled@2x.png */,
+				A2E2193D17E687AF00B81D4E /* dsa_pub.pem */,
+				A2E2193E17E687AF00B81D4E /* forgot-down.png */,
+				A2E2193F17E687AF00B81D4E /* forgot-down@2x.png */,
+				A2E2194017E687AF00B81D4E /* forgot.png */,
+				A2E2194117E687AF00B81D4E /* forgot@2x.png */,
+				A2E2194217E687AF00B81D4E /* gear.png */,
+				A2E2194317E687AF00B81D4E /* gear@2x.png */,
+				A2E2194417E687AF00B81D4E /* general-old.png */,
+				A2E2194517E687AF00B81D4E /* general.png */,
+				A2E2194617E687AF00B81D4E /* icon-connected-on.png */,
+				A2E2194717E687AF00B81D4E /* icon-connected-on@2x.png */,
+				A2E2194817E687AF00B81D4E /* icon-connected.png */,
+				A2E2194917E687AF00B81D4E /* icon-connected@2x.png */,
+				A2E2194A17E687AF00B81D4E /* icon-disconnected-on.png */,
+				A2E2194B17E687AF00B81D4E /* icon-disconnected-on@2x.png */,
+				A2E2194C17E687AF00B81D4E /* icon-disconnected.png */,
+				A2E2194D17E687AF00B81D4E /* icon-disconnected@2x.png */,
+				A2E2194E17E687AF00B81D4E /* icon.icns */,
+				A2E2194F17E687AF00B81D4E /* link.png */,
+				A2E2195017E687AF00B81D4E /* LoginScreen.nib */,
+				A2E2195117E687AF00B81D4E /* LoginScreen.xib */,
+				A2E2195217E687AF00B81D4E /* offline.png */,
+				A2E2195317E687AF00B81D4E /* offline@2x.png */,
+				A2E2195417E687AF00B81D4E /* online.png */,
+				A2E2195517E687AF00B81D4E /* online@2x.png */,
+				A2E2195617E687AF00B81D4E /* Panel.nib */,
+				A2E2195717E687AF00B81D4E /* Panel.xib */,
+				A2E2195817E687AF00B81D4E /* portly-login.png */,
+				A2E2195917E687AF00B81D4E /* portly-login@2x.png */,
+				A2E2195A17E687AF00B81D4E /* Portly.momd */,
+				A2E2195F17E687AF00B81D4E /* Portly.xcdatamodeld */,
+				A2E2196217E687AF00B81D4E /* PreferencesAccount.nib */,
+				A2E2196317E687AF00B81D4E /* PreferencesAccount.xib */,
+				A2E2196417E687AF00B81D4E /* PreferencesConnectors.xib */,
+				A2E2196517E687AF00B81D4E /* PreferencesGeneral.nib */,
+				A2E2196617E687AF00B81D4E /* PreferencesGeneral.xib */,
+				A2E2196717E687AF00B81D4E /* PreferencesUsers.nib */,
+				A2E2196817E687AF00B81D4E /* PreferencesUsers.xib */,
+				A2E2196917E687AF00B81D4E /* sign-in-down.png */,
+				A2E2196A17E687AF00B81D4E /* sign-in-down@2x.png */,
+				A2E2196B17E687AF00B81D4E /* sign-in-hover.png */,
+				A2E2196C17E687AF00B81D4E /* sign-in-hover@2x.png */,
+				A2E2196D17E687AF00B81D4E /* sign-in.png */,
+				A2E2196E17E687AF00B81D4E /* sign-in@2x.png */,
+				A2E2196F17E687AF00B81D4E /* tunnels-old.png */,
+				A2E2197017E687AF00B81D4E /* tunnels.png */,
+			);
+			path = resources;
+			sourceTree = "<group>";
+		};
+		A2E2195A17E687AF00B81D4E /* Portly.momd */ = {
+			isa = PBXGroup;
+			children = (
+				A2E2195B17E687AF00B81D4E /* LocalPort.mom */,
+				A2E2195C17E687AF00B81D4E /* Portly.mom */,
+				A2E2195D17E687AF00B81D4E /* Portly.omo */,
+				A2E2195E17E687AF00B81D4E /* VersionInfo.plist */,
+			);
+			path = Portly.momd;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A2E2182117E6870A00B81D4E /* Portly */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A2E2183F17E6870A00B81D4E /* Build configuration list for PBXNativeTarget "Portly" */;
+			buildPhases = (
+				A2E2181E17E6870A00B81D4E /* Sources */,
+				A2E2181F17E6870A00B81D4E /* Frameworks */,
+				A2E2182017E6870A00B81D4E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Portly;
+			productName = Portly;
+			productReference = A2E2184217E6878F00B81D4E /* Portly.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A2E2181A17E6870A00B81D4E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = "Kelly Martin";
+			};
+			buildConfigurationList = A2E2181D17E6870A00B81D4E /* Build configuration list for PBXProject "Portly" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = A2E2181917E6870A00B81D4E;
+			productRefGroup = A2E2181917E6870A00B81D4E;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A2E2182117E6870A00B81D4E /* Portly */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A2E2182017E6870A00B81D4E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A2E218DE17E687A500B81D4E /* Computer.bridgesupport in Resources */,
+				A2E218E317E687A500B81D4E /* Connector.bridgesupport in Resources */,
+				A2E218E917E687A500B81D4E /* HoverButton.bridgesupport in Resources */,
+				A2E218EE17E687A500B81D4E /* LaunchAtLoginController.bridgesupport in Resources */,
+				A2E218F317E687A500B81D4E /* LoginView.bridgesupport in Resources */,
+				A2E218F817E687A500B81D4E /* LoginWindow.bridgesupport in Resources */,
+				A2E2190817E687A500B81D4E /* Panel.bridgesupport in Resources */,
+				A2E2191317E687A500B81D4E /* Sock.bridgesupport in Resources */,
+				A2E2191817E687A500B81D4E /* SocketStream.bridgesupport in Resources */,
+				A2E2191E17E687A500B81D4E /* StayAwake.bridgesupport in Resources */,
+				A2E2192317E687A500B81D4E /* Token.bridgesupport in Resources */,
+				A2E2192A17E687A500B81D4E /* UUID.bridgesupport in Resources */,
+				A2E2197117E687AF00B81D4E /* account-old.png in Resources */,
+				A2E2197217E687AF00B81D4E /* account.png in Resources */,
+				A2E2197317E687AF00B81D4E /* app.entitlements in Resources */,
+				A2E2197417E687AF00B81D4E /* closelogin-down.png in Resources */,
+				A2E2197517E687AF00B81D4E /* closelogin-down@2x.png in Resources */,
+				A2E2197617E687AF00B81D4E /* closelogin-hover.png in Resources */,
+				A2E2197717E687AF00B81D4E /* closelogin-hover@2x.png in Resources */,
+				A2E2197817E687AF00B81D4E /* closelogin.png in Resources */,
+				A2E2197917E687AF00B81D4E /* closelogin@2x.png in Resources */,
+				A2E2197A17E687AF00B81D4E /* ConnectionBasicView.nib in Resources */,
+				A2E2197B17E687AF00B81D4E /* ConnectionBasicView.xib in Resources */,
+				A2E2197C17E687AF00B81D4E /* ConnectionListItem.nib in Resources */,
+				A2E2197D17E687AF00B81D4E /* ConnectionListItem.xib in Resources */,
+				A2E2197E17E687AF00B81D4E /* Credits.rtf in Resources */,
+				A2E2197F17E687AF00B81D4E /* disabled.png in Resources */,
+				A2E2198017E687AF00B81D4E /* disabled@2x.png in Resources */,
+				A2E2198117E687AF00B81D4E /* dsa_pub.pem in Resources */,
+				A2E2198217E687AF00B81D4E /* forgot-down.png in Resources */,
+				A2E2198317E687AF00B81D4E /* forgot-down@2x.png in Resources */,
+				A2E2198417E687AF00B81D4E /* forgot.png in Resources */,
+				A2E2198517E687AF00B81D4E /* forgot@2x.png in Resources */,
+				A2E2198617E687AF00B81D4E /* gear.png in Resources */,
+				A2E2198717E687AF00B81D4E /* gear@2x.png in Resources */,
+				A2E2198817E687AF00B81D4E /* general-old.png in Resources */,
+				A2E2198917E687AF00B81D4E /* general.png in Resources */,
+				A2E2198A17E687AF00B81D4E /* icon-connected-on.png in Resources */,
+				A2E2198B17E687AF00B81D4E /* icon-connected-on@2x.png in Resources */,
+				A2E2198C17E687AF00B81D4E /* icon-connected.png in Resources */,
+				A2E2198D17E687AF00B81D4E /* icon-connected@2x.png in Resources */,
+				A2E2198E17E687AF00B81D4E /* icon-disconnected-on.png in Resources */,
+				A2E2198F17E687AF00B81D4E /* icon-disconnected-on@2x.png in Resources */,
+				A2E2199017E687AF00B81D4E /* icon-disconnected.png in Resources */,
+				A2E2199117E687AF00B81D4E /* icon-disconnected@2x.png in Resources */,
+				A2E2199217E687AF00B81D4E /* icon.icns in Resources */,
+				A2E2199317E687AF00B81D4E /* link.png in Resources */,
+				A2E2199417E687AF00B81D4E /* LoginScreen.nib in Resources */,
+				A2E2199517E687AF00B81D4E /* LoginScreen.xib in Resources */,
+				A2E2199617E687AF00B81D4E /* offline.png in Resources */,
+				A2E2199717E687AF00B81D4E /* offline@2x.png in Resources */,
+				A2E2199817E687AF00B81D4E /* online.png in Resources */,
+				A2E2199917E687AF00B81D4E /* online@2x.png in Resources */,
+				A2E2199A17E687AF00B81D4E /* Panel.nib in Resources */,
+				A2E2199B17E687AF00B81D4E /* Panel.xib in Resources */,
+				A2E2199C17E687AF00B81D4E /* portly-login.png in Resources */,
+				A2E2199D17E687AF00B81D4E /* portly-login@2x.png in Resources */,
+				A2E2199E17E687AF00B81D4E /* LocalPort.mom in Resources */,
+				A2E2199F17E687AF00B81D4E /* Portly.mom in Resources */,
+				A2E219A017E687AF00B81D4E /* Portly.omo in Resources */,
+				A2E219A117E687AF00B81D4E /* VersionInfo.plist in Resources */,
+				A2E219A317E687AF00B81D4E /* PreferencesAccount.nib in Resources */,
+				A2E219A417E687AF00B81D4E /* PreferencesAccount.xib in Resources */,
+				A2E219A517E687AF00B81D4E /* PreferencesConnectors.xib in Resources */,
+				A2E219A617E687AF00B81D4E /* PreferencesGeneral.nib in Resources */,
+				A2E219A717E687AF00B81D4E /* PreferencesGeneral.xib in Resources */,
+				A2E219A817E687AF00B81D4E /* PreferencesUsers.nib in Resources */,
+				A2E219A917E687AF00B81D4E /* PreferencesUsers.xib in Resources */,
+				A2E219AA17E687AF00B81D4E /* sign-in-down.png in Resources */,
+				A2E219AB17E687AF00B81D4E /* sign-in-down@2x.png in Resources */,
+				A2E219AC17E687AF00B81D4E /* sign-in-hover.png in Resources */,
+				A2E219AD17E687AF00B81D4E /* sign-in-hover@2x.png in Resources */,
+				A2E219AE17E687AF00B81D4E /* sign-in.png in Resources */,
+				A2E219AF17E687AF00B81D4E /* sign-in@2x.png in Resources */,
+				A2E219B017E687AF00B81D4E /* tunnels-old.png in Resources */,
+				A2E219B117E687AF00B81D4E /* tunnels.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A2E2181E17E6870A00B81D4E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A2E218DF17E687A500B81D4E /* Computer.m in Sources */,
+				A2E218E417E687A500B81D4E /* Connector.m in Sources */,
+				A2E218EA17E687A500B81D4E /* HoverButton.m in Sources */,
+				A2E218EF17E687A500B81D4E /* LaunchAtLoginController.m in Sources */,
+				A2E218F417E687A500B81D4E /* LoginView.m in Sources */,
+				A2E218F917E687A500B81D4E /* LoginWindow.m in Sources */,
+				A2E218FA17E687A500B81D4E /* BackgroundView.m in Sources */,
+				A2E2190517E687A500B81D4E /* Button.m in Sources */,
+				A2E2190617E687A500B81D4E /* ColorGradientView.m in Sources */,
+				A2E2190917E687A500B81D4E /* Panel.m in Sources */,
+				A2E2190A17E687A500B81D4E /* PanelController.m in Sources */,
+				A2E2190B17E687A500B81D4E /* Row.m in Sources */,
+				A2E2190C17E687A500B81D4E /* RowStatus.m in Sources */,
+				A2E2190D17E687A500B81D4E /* SettingsView.m in Sources */,
+				A2E2190E17E687A500B81D4E /* StatusItemView.m in Sources */,
+				A2E2191417E687A500B81D4E /* Sock.m in Sources */,
+				A2E2191917E687A500B81D4E /* SocketStream.m in Sources */,
+				A2E2191B17E687A500B81D4E /* StatusItemView.m in Sources */,
+				A2E2191F17E687A500B81D4E /* StayAwake.m in Sources */,
+				A2E2192417E687A500B81D4E /* Token.m in Sources */,
+				A2E2192517E687A500B81D4E /* ApplicationDelegate.m in Sources */,
+				A2E2192617E687A500B81D4E /* MenubarController.m in Sources */,
+				A2E2192B17E687A500B81D4E /* UUID.m in Sources */,
+				A2E219A217E687AF00B81D4E /* Portly.xcdatamodeld in Sources */,
+				A2E219B417E687F300B81D4E /* ConnectorsViewController.m in Sources */,
+				A2E219B717E6A7D000B81D4E /* UrlView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A2E2183D17E6870A00B81D4E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		A2E2183E17E6870A00B81D4E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		A2E2184017E6870A00B81D4E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/vendor\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Portly/Portly-Prefix.pch";
+				INFOPLIST_FILE = "Portly/Portly-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/vendor/Computer/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/Connector/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/HoverButton/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/LaunchAtLoginController/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/LoginView/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/LoginWindow/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/Panel/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/Sock/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/SocketStream/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/StayAwake/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/Token/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/UUID/build-MacOSX\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		A2E2184117E6870A00B81D4E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/vendor\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Portly/Portly-Prefix.pch";
+				INFOPLIST_FILE = "Portly/Portly-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/vendor/Computer/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/Connector/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/HoverButton/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/LaunchAtLoginController/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/LoginView/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/LoginWindow/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/Panel/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/Sock/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/SocketStream/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/StayAwake/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/Token/build-MacOSX\"",
+					"\"$(SRCROOT)/vendor/UUID/build-MacOSX\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A2E2181D17E6870A00B81D4E /* Build configuration list for PBXProject "Portly" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A2E2183D17E6870A00B81D4E /* Debug */,
+				A2E2183E17E6870A00B81D4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A2E2183F17E6870A00B81D4E /* Build configuration list for PBXNativeTarget "Portly" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A2E2184017E6870A00B81D4E /* Debug */,
+				A2E2184117E6870A00B81D4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		A2E2195F17E687AF00B81D4E /* Portly.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				A2E2196017E687AF00B81D4E /* LocalPort.xcdatamodel */,
+				A2E2196117E687AF00B81D4E /* Portly.xcdatamodel */,
+			);
+			currentVersion = A2E2196117E687AF00B81D4E /* Portly.xcdatamodel */;
+			path = Portly.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = A2E2181A17E6870A00B81D4E /* Project object */;
+}

@@ -6,13 +6,11 @@
 #  Copyright 2013 Kelly Martin. All rights reserved.
 #
 
-
-
-
 class PreferencesController < NSWindowController
 
     attr_accessor :connectorsPane
     attr_accessor :settingsPane
+    attr_accessor :generalPane
     attr_reader :modules
 
     def self.sharedController
@@ -20,7 +18,8 @@ class PreferencesController < NSWindowController
             @sharedInstance = self.alloc.init
             connectors = ConnectorsViewController.sharedController
             account = AccountViewController.sharedController
-            @sharedInstance.modules = [connectors, account]
+            general = GeneralViewController.sharedController
+            @sharedInstance.modules = [connectors, general, account]
         end
 
         @sharedInstance
@@ -34,6 +33,7 @@ class PreferencesController < NSWindowController
                                                          backing:NSBackingStoreBuffered,
                                                          defer:true
                                                          )
+            prefsWindow.setReleasedWhenClosed true
             prefsWindow.setShowsToolbarButton(false)
             self.window = prefsWindow
 
@@ -45,14 +45,30 @@ class PreferencesController < NSWindowController
 
   def toolbar(toolbar, itemForItemIdentifier:itemIdentifier, willBeInsertedIntoToolbar:flag)
     mod = moduleForIdentifier(itemIdentifier)
-    item = NSToolbarItem.alloc.initWithItemIdentifier(itemIdentifier).tap do |item|
+    NSToolbarItem.alloc.initWithItemIdentifier(itemIdentifier).tap do |item|
       if mod
-        item.label = mod.title
-        item.image = mod.image
-        item.target = self
-        item.action = "selectModule:"
+        view = ToolbarItem.new
+        image = ToolbarImage.new
+        image.sender = item
+        image.image = mod.image
+        image.setFrameSize NSMakeSize(55, 32)
+        image.target = self
+        image.action = "selectModule:"
+        image.setFrameOrigin NSMakePoint(0,18)
+        view.addSubview image
+        view.title = mod.title
+        view.setFrameSize NSMakeSize(55, 55)
+        view.target = self
+        view.action = "selectModule:"
+        view.sender = item
+
+        item.setView view
       end
     end
+  end
+
+  def selectMenu(menu)
+    Logger.debug 'menu selected'
   end
 
   def toolbarAllowedItemIdentifiers(toolbar)
@@ -82,7 +98,6 @@ class PreferencesController < NSWindowController
     toolbar = self.window.toolbar
     return unless toolbar && toolbar.items.count == 0
 
-    Logger.debug toolbar.inspect
     @modules.each do |mod|
       toolbar.insertItemWithItemIdentifier(mod.identifier, atIndex:toolbar.items.count)
     end
@@ -95,6 +110,7 @@ class PreferencesController < NSWindowController
   def setupToolbar
     toolbar = NSToolbar.alloc.initWithIdentifier("preferencesToolbar")
     toolbar.delegate = self
+    toolbar.setDisplayMode NSToolbarDisplayModeIconOnly
     toolbar.setAllowsUserCustomization(false)
     self.window.setToolbar(toolbar)
   end

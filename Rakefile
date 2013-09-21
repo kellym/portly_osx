@@ -1,23 +1,27 @@
 # -*- coding: utf-8 -*-
-$:.unshift("/Library/RubyMotion/lib")
+$:.unshift("/Library/RubyMotion2.7/lib")
 require 'motion/project/template/osx'
 
 Motion::Project::App.setup do |app|
   # Use `rake config' to see complete project settings.
   app.name = 'Portly'
-  app.version = '34'
-  app.short_version = '0.7.5'
+  app.version = '37'
+  app.short_version = '1.0.0'
   app.deployment_target = '10.7'
   app.sdk_version = '10.8'
   app.codesign_certificate = "Developer ID Application: Fully Brand LLC (DENUL24P9C)"
   app.icon = 'icon.icns'
   app.entitlements['com.apple.security.app-sandbox'] = false
 
-  app.frameworks += ['IOKit', 'CoreFoundation', 'Cocoa', 'Security']
+  app.frameworks += ['CoreFoundation', 'Cocoa', 'Security']
+  app.frameworks_dependencies << 'IOKit'
   app.embedded_frameworks = ['vendor/Sparkle.framework']
+
+  app.vendor_project('vendor/Panel', :static)
   app.vendor_project('vendor/SocketStream', :static)
   app.vendor_project('vendor/Sock', :static)
   app.vendor_project('vendor/Computer', :static)
+  app.vendor_project('vendor/StayAwake', :static)
   app.vendor_project('vendor/HoverButton', :static)
   app.vendor_project('vendor/LoginView', :static)
   app.vendor_project('vendor/LoginWindow', :static)
@@ -35,5 +39,6 @@ Motion::Project::App.setup do |app|
   app.info_plist['LSUIElement'] = true
   app.info_plist['CFBundleIdentifier'] = 'com.fully.portly'
   app.info_plist['LSApplicationCategoryType'] = 'public.app-category.developer-tools'
-
+  #app.info_plist['NSAppleScriptEnabled'] = true
+  #app.info_plist['OSAScriptingDefinition'] = 'Portly.sdef'
 end

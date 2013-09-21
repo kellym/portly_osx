@@ -15,6 +15,9 @@ class ConnectorMonitor
     attr_accessor :cname
     attr_accessor :start_on_boot
     attr_accessor :auth_type
+    attr_accessor :socket_type
+    attr_accessor :server_port
+    attr_accessor :server_host
 
     attr_accessor :model
     attr_accessor :entity
@@ -29,14 +32,18 @@ class ConnectorMonitor
         @connector_id = data.connector_id
         @subdomain = data.subdomain
         @cname = data.cname
-        @start_on_boot = false #data.start_on_boot == 1
+        @start_on_boot = (data.start_on_boot == 1) && !App.free?
         @_init = @start_on_boot
         @auth_type = data.auth_type
+        @nickname = data.nickname
+        @socket_type = data.socket_type || 'http'
+        @server_port = data.server_port
+        @server_host = data.server_host
         @pref = nil
         @model = data
         @online = false
         @retry_seconds = 5
-        @timeout = 0
+        @timeout = Time.now
         @reference = data.connector_id
         @auth_users = []
         @awaiting_reconnect = false
@@ -46,16 +53,19 @@ class ConnectorMonitor
 
         #@main_queue = "#{App.queue_prefix}.connector.#{@connector_id}"
 
-        current_index = App.global.index + App.global.connectors.size
-
-        ApplicationController.singleton.status_menu.insertItem menu_item, atIndex: current_index
+        Dispatch::Queue.main.async do
+          while(ApplicationController.singleton.panel.isAnimating) do
+          end
+          @row = ApplicationController.singleton.panel.addRowWithDelegate self
+          start_thread
+        end
+        menu_item
         App.global.connectors << self
-        ApplicationController.singleton.handleMenuDivider
+        #ApplicationController.singleton.handleMenuDivider
 
         @published_state = nil
         publish_state
 
-        start_thread
         self
     end
 
@@ -76,73 +86,84 @@ class ConnectorMonitor
     end
 
     def publish_state(force = false)
-        current_state = port_open?
-        if (current_state != @published_state) || force
+      current_state = port_open?
+      if (current_state != @published_state) || force
+        @publish_state_queue ||= Dispatch::Queue.new("publish_state:#{@connector_id}")
+        @publish_state_queue.async do
+          while !ApplicationController.singleton.socket do
+          end
+          Dispatch::Queue.main.async do
             ApplicationController.singleton.socket.send("STATE:#{@connector_id}:#{current_state ? 'on' : 'off'}")
-            @published_state = current_state
+          end
         end
+        @published_state = current_state
+      end
     end
 
     def set_port_online
         connect if @_init
-        @timeout += @retry_seconds if online?
         Logger.debug "timeout: #{@timeout}"
-        reconnect if running? && @timeout > @retry_seconds * 2
+        reconnect if running? && (Time.now - @timeout) > @retry_seconds * 2
         return if @current_port_status == true
         @current_port_status = true
-            # port is online
-        #if port_open
-                #App.global.ssh["#{@port.to_s}#{@host}"].monitorSession if running?
-        #Dispatch::Queue.main.async {
-                    publish_state
-                    Logger.debug "port is running: #{@port}"
-                    update_menu_item( online: running? )
-                    @menu_item.image = running? ? App.online : App.offline
-                    @pref.imageView.image = (running? ? App.online : App.offline) if @pref
-                    @menu_item.setEnabled true
-                    @submenu_toggle.setEnabled true
-                    @submenu_copy.setEnabled true
 
-                    ### Logger.debug "TIMEOUT AT: #{@timeout} (#{@host}:#{@port})"
-
-        #}
-
+        publish_state
+        Logger.debug "port is running: #{@port}"
+        update_menu_item( online: running? )
+        Dispatch::Queue.main.async do
+          @row.setActive if @row
+        end
+        @pref.imageView.image = (running? ? App.online : App.offline) if @pref
     end
-    def set_port_offline
 
+
+    def set_port_offline
         return if @current_port_status == false
         @current_port_status = false
-        #Dispatch::Queue.main.async {
-                    publish_state
-                    @menu_item.image = App.disabled
-                    @pref.imageView.image = App.disabled if @pref
-                    if running? || @hide_reconnect
-                        Logger.debug 'Port is closed but it is still running.'
-                        disconnect(true)
-                        queue_reconnect
-                    elsif !@awaiting_reconnect
-                        @menu_item.setEnabled false
-                    end
-        #}
 
-        #end
+        publish_state
+
+        Dispatch::Queue.main.async do
+          @row.setInactive if @row
+        end
+        @pref.imageView.image = App.disabled if @pref
+        if running? || @hide_reconnect
+            Logger.debug 'Port is closed but it is still running.'
+            disconnect(true)
+            queue_reconnect
+        elsif !@awaiting_reconnect
+          #@menu_item.setEnabled false
+        end
+
+    end
+
+    def connection_string_with_nickname
+      @nickname ? "#{@connection_string} (#{@nickname})" : @connection_string
     end
 
     def connection_string=(connection_string)
         data = ConnectorMonitor.parse_connection_string(connection_string)
         @host = data[:host]
         @port = data[:port]
+        @nickname = data[:nickname]
     end
 
     def self.parse_connection_string(connection_string)
         data = {}
+        if connection_string.index('(')
+          first = connection_string.index('(')
+          last = connection_string.rindex(')') || connection_string.length
+          data[:nickname] = connection_string[first+1..last-1]
+          connection_string = connection_string[0..first]
+        end
         if connection_string =~ /^[0-9]*$/
             Logger.debug 'only port'
             data[:host] = 'localhost'
             data[:port] = connection_string.to_i
         elsif connection_string =~ /\:/
             Logger.debug 'both'
-            data[:host], data[:port] = connection_string.split(':')
+            pos = connection_string.rindex(':')
+            data[:host], data[:port] =  connection_string[0...pos], connection_string[pos+1..-1]
             data[:port] = data[:port].to_i
         else
             Logger.debug 'only host'
@@ -152,12 +173,24 @@ class ConnectorMonitor
         data
     end
 
+    def self.parse_socket_type(type)
+      case type
+      when 'Raw TCP Socket'
+        @socket_type = 'tcp'
+      else
+        @socket_type = 'http'
+      end
+      @socket_type
+    end
+
     # TODO: on creation, it autoboots but acts a bit funky and keeps disconnecting
     def self.create(opts={})
+        opts[:socket_type] = self.parse_socket_type(opts[:socket_type])
 
         data = self.parse_connection_string(opts[:connection_string]).merge({
             'subdomain' => opts[:subdomain],
             'cname' => opts[:cname],
+            'socket_type' => opts[:socket_type],
             'auth_type' => opts[:auth_type],
             'computer_name' => NSHost.currentHost.localizedName,
             'publish' => 'false'
@@ -170,13 +203,16 @@ class ConnectorMonitor
             opts.delete :connection_string
             opts[:host] = data[:host]
             opts[:port] = data[:port]
+            opts[:nickname] = data[:nickname]
+            opts[:server_port] = result['server_port']
+            opts[:server_host] = result['server_host']
             ConnectorMonitor.create_model(opts)
         end
     end
 
     def self.create_model(data)
-        puts 'model:'
-        puts data.inspect
+        Logger.debug  'model:'
+        Logger.debug data.inspect
         model = NSEntityDescription.insertNewObjectForEntityForName "Connector", inManagedObjectContext:ApplicationController.singleton.managedObjectContext
         model.connector_id = data['id'].to_i
         data.each do |k,v|
@@ -195,7 +231,7 @@ class ConnectorMonitor
 
     def save
         @reconnect_after_save = false
-        if online? && ((@model.host != @host) || @model.port != @port)
+        if online? && ((@model.host != @host) || @model.port != @port.to_i)
             @reconnect_after_save = true
             set_port_offline
             event_disconnect(true)
@@ -205,20 +241,28 @@ class ConnectorMonitor
         set_connection_string
         set_menu_item_title
         set_pref_title
-        @menu_item.image = port_open? ? (online? ? App.online : App.offline) : App.disabled
+        Dispatch::Queue.main.async do
+          if port_open?
+            @row.setActive if @row
+          else
+            @row.setInactive if @row
+          end
+        end
         ConnectorsViewController.sharedController.connectors_list.reloadData() if ConnectorsViewController.sharedController.connectors_list
         @save_connector_queue.async do
             data = {
                 'host' => @model.host,
                 'port' => @model.port,
                 'subdomain' => @model.subdomain,
+                'nickname' => @model.nickname,
                 'cname' => @model.cname,
                 'auth_type' => @model.auth_type,
+                'socket_type' => @model.socket_type,
                 'computer_name' => NSHost.currentHost.localizedName,
                 'publish' => 'false'
             }
             App.api_put("/connectors/#{@connector_id}", data)
-            if @reconnect_after_save && port_open?
+            if !online? && @reconnect_after_save && port_open?
                 event_connect(@event_connection_string, @event_tunnel_string)
             end
             @reconnect_after_save = false
@@ -226,14 +270,18 @@ class ConnectorMonitor
     end
 
     def save_model
+      if @model
         @model.start_on_boot = @start_on_boot
         @model.host = @host
         @model.port = @port
         @model.auth_type = @auth_type
         @model.cname = @cname
+        @model.nickname = @nickname
+        @model.socket_type = @socket_type
         @model.connector_id = @connector_id
         @model.subdomain = @subdomain
-        ApplicationController.singleton.save
+      end
+      ApplicationController.singleton.save
     end
 
     def self.all
@@ -244,6 +292,7 @@ class ConnectorMonitor
 
     def self.load_all
         if App.global.connectors.size == 0
+          Logger.debug "LOADING THIS MANY CONNECTORS: #{self.all.size}"
             self.all.each do |connector|
                 ConnectorMonitor.new(connector)
             end
@@ -286,7 +335,7 @@ class ConnectorMonitor
       @connector_id = data['id']
       @auth_users = data['auths'] if data.has_key?('auths')
       should_reconnect = false
-      if online? && (data.has_key?('host') || data.has_key?('port'))
+      if online? && ( (data.has_key?('host') && @host!=data['host']) || (data.has_key?('port') && @port.to_i != data['port'].to_i) )
         should_reconnect = true
         event_disconnect(true) # hide the updated status
       end
@@ -304,30 +353,27 @@ class ConnectorMonitor
     end
 
     def update_menu_item(state={})
-      if state[:online]
-        @menu_item.image = App.online
-        @pref.imageView.image = App.online if @pref
-      else
-        @menu_item.image = App.offline
-        @pref.imageView.image = App.offline if @pref
+
+      Dispatch::Queue.main.async do
+        if state[:online]
+          if @row
+            @row.activityButton.title = "Stop"
+            @row.setOnline
+          end
+          @pref.imageView.image = App.online if @pref
+        else
+          if @row
+            @row.setOffline
+          end
+          @pref.imageView.image = App.offline if @pref
+        end
       end
     end
 
     def menu_item
       return @menu_item if @menu_item
       @menu_item = NSMenuItem.new
-      @menu_item.image = App.offline
       set_menu_item_title
-      @menu_item.action = 'toggleState:'
-      @menu_item.target = self
-      @submenu = NSMenu.new
-      @submenu_toggle = NSMenuItem.alloc.initWithTitle("Start", action: 'toggleStateFromSubmenu:', keyEquivalent: '')
-      @submenu_toggle.setTarget self
-      @submenu.addItem @submenu_toggle
-      @submenu_copy = NSMenuItem.alloc.initWithTitle("Copy Link", action: 'copyLink:', keyEquivalent: '')
-      @submenu_copy.setTarget self
-      @submenu.addItem @submenu_copy
-      @menu_item.setSubmenu @submenu
       @menu_item
     end
 
@@ -336,22 +382,35 @@ class ConnectorMonitor
     end
 
     def set_menu_item_title
-      @menu_item.title = "#{@connection_string} → " + domain_string
+      Dispatch::Queue.main.async do
+        if @row
+          @row.setTitle @model.nickname ? @model.nickname : @connection_string
+          @row.subtitle = domain_string
+        end
+      end
     end
 
     def http
-      App.free? || @cname.to_s != '' ? 'http://' : 'https://'
+      if @socket_type == 'http' || @socket_type == ''
+        App.free? || @cname.to_s != '' ? 'http://' : 'https://'
+      else
+        ''
+      end
     end
 
     def domain_string
-      if @cname.to_s == ''
-        if @subdomain.to_s == ''
-          App.global.suffix
+      if @socket_type == 'http' || @socket_type == ''
+        if @cname.to_s == ''
+          if @subdomain.to_s == ''
+            App.global.suffix
+          else
+            "#{@subdomain}-#{App.global.suffix}"
+          end
         else
-          "#{@subdomain}-#{App.global.suffix}"
+          @cname
         end
       else
-        @cname
+        "#{@server_host}:#{@server_port}"
       end
     end
 
@@ -360,25 +419,40 @@ class ConnectorMonitor
       @pref = tableView.makeViewWithIdentifier "ConnectorPref", owner:self
       set_pref_title
       @pref.imageView.image = port_open? ? (running? ? App.online : App.offline) : App.disabled
+      #Dispatch::Queue.main.async do
+      #  if running?
+      #    @row.activityButton.title = "Stop"
+      #    @row.setOnline
+      #  else
+      #    @row.setOffline
+      #  end
+      #  if port_open?
+      #    @row.setActive
+      #  else
+      #    @row.setInactive
+      #  end
+      #end
       @pref
     end
     def set_pref_title
       @pref.textField.stringValue = @connection_string if @pref
     end
 
-    def copyLink(menu_item)
+    def copyLink(from)
       pasteboard = NSPasteboard.generalPasteboard
       pasteboard.clearContents
       pasteboard.writeObjects ["#{http}#{domain_string}"]
+      ApplicationController.singleton.panel.setHasActivePanel false
     end
 
-    def toggleStateFromSubmenu(menu_item)
-      menu_item.title == 'Start' ? connect : disconnect
-    end
-
-    def toggleState(menu_item)
+    def toggleState(row)
       Logger.debug 'Toggling state.'
-      menu_item.state == NSOnState ? disconnect : connect
+      if @awaiting_reconnect
+        @awaiting_reconnect = false
+        disconnect
+      else
+        online? ? disconnect : connect
+      end
     end
 
     def get_reconnect_default
@@ -392,7 +466,7 @@ class ConnectorMonitor
       @hide_reconnect = false
       @awaiting_reconnect = false
       @reconnect = get_reconnect_default
-      @timeout = 0
+      @timeout = Time.now
       @connector_queue ||= Dispatch::Queue.new("#{App.queue_prefix}.ssh_start.#{@reference}")
       @connector_queue.async do
         Logger.debug 'Sending connection data.'
@@ -417,10 +491,11 @@ class ConnectorMonitor
       return disconnect if connection_string.to_s == '' || tunnel_string.to_s == ''
       Dispatch::Queue.main.async do
         Logger.debug "STARTING TUNNEL!"
-        @menu_item.state = NSOnState
-        @submenu_toggle.title = "Stop"
         @event_connection_string = connection_string
         @event_tunnel_string = tunnel_string
+        if @socket_type == 'tcp'
+          tunnel_string = @server_port
+        end
         # create a new task
         Logger.debug "REFERENCE: #{@reference}"
         @task = NSTask.new
@@ -431,6 +506,9 @@ class ConnectorMonitor
         Logger.debug "Private Key Path: #{App.private_key_path}"
         Logger.debug "Public Key Path: #{App.public_key_path}"
         arr = ["-C", "-2", connection_string, "-o UserKnownHostsFile=\"#{App.public_key_path.gsub('"', '\"')}\"", "-o SendEnv=CID", "-o SendEnv=TOKEN", "-R #{tunnel_string}:#{@host}:#{@port}", "-i", App.private_key_path]
+        if @socket_type == 'tcp'
+          arr.unshift '-g'
+        end
         @task.setArguments(arr)
 
         Logger.debug "EVENT CONNECT"
@@ -456,14 +534,20 @@ class ConnectorMonitor
 
         Logger.debug 'Connecting to port.'
         @online = true
-        @menu_item.image = App.online
+        Dispatch::Queue.main.async do
+          if @row
+            @row.activityButton.title = "Stop"
+            @row.setOnline
+          end
+        end
         @pref.imageView.image = App.online if @pref
         ApplicationController.singleton.setConnectorState
+
       end
     end
 
     def monitor_port(seconds=0)
-      seconds = seconds.to_f
+      @monitor_seconds = seconds.to_f
       loop do
         catch(:done) do
           Logger.debug "monitoring port status of #{@port}"
@@ -479,8 +563,10 @@ class ConnectorMonitor
             if @check_port_status
               @check_port_status = false
               throw :done
+            elsif @row.nil? || @monitor_seconds.nil?
+              return
             else
-              sleep seconds / 100.0
+              sleep @monitor_seconds / 100.0
             end
           end
         end
@@ -532,32 +618,39 @@ class ConnectorMonitor
     end
 
     def receivedError(notif)
-        fh = notif.object
-        data = fh.availableData.to_s
-        Logger.debug data
-        return unless running?
+      fh = notif.object
+      data = fh.availableData.to_s
+      Logger.debug data
+      return unless running?
 
-        data = data.lines.first
-        if data && data.match(/closed|Killed by signal/)
-            Logger.debug "Reconnecting."
-        elsif data && data.match(/failed/) && !port_open?
-            Logger.debug "Port isn't open."
-            disconnect(true)
-            queue_reconnect
-        elsif data && data.match(/No route to host/i)
-            Logger.debug "No internet."
-            disconnect(true)
-            queue_reconnect
-        else
-            Logger.debug "Going to reconnect anyway."
-            #disconnect
-        end
+      data = data.lines.first || ''
+      if data.match(/closed|Killed by signal/)
+        Logger.debug "Reconnecting."
+      elsif data.match(/Warning/i)
+        Logger.debug data
+        # just a warning, so continue as usual
+      elsif data.match(/failed/) && !port_open?
+        Logger.debug "Port isn't open."
+        disconnect(true)
+        queue_reconnect
+      elsif data.match(/No route to host/i)
+        Logger.debug "No internet."
+        disconnect(true)
+        queue_reconnect
+      elsif data.match(/Permission|Identity|key/i)
+        # the identity/key file has gone bad. redownload
+        App.get_keys!
+        @reconnect_immediately = true
+      else
+        Logger.debug "Going to reconnect anyway."
+        #disconnect
+      end
     end
 
     def receivedPing(notif)
         fh = notif.object
         data = fh.availableData.to_s
-        @timeout=0
+        @timeout=Time.now
         Logger.debug data
         if data['TIMEOUT']
           @reconnect = false
@@ -569,28 +662,34 @@ class ConnectorMonitor
     def taskTerminated(notif)
        Logger.debug "Task was terminated."
        disconnect(true)
-       queue_reconnect
+       if @reconnect_immediately
+         @reconnect_immediately = false
+         queue_reconnect 0
+       else
+         queue_reconnect
+       end
     end
 
-    def disconnect(awaiting_reconnect=false)
+    def disconnect(awaiting_reconnect=false, async=true)
       if @awaiting_reconnect && (awaiting_reconnect == false)
         @awaiting_reconnect = false
-        event_disconnect(false)
+        event_disconnect(false, async)
       else
         @awaiting_reconnect = awaiting_reconnect
-        publish_disconnect
-        event_disconnect(false)
+        publish_disconnect(async)
+        event_disconnect(false, async)
       end
     end
 
-    def publish_disconnect
-      @disconnect_port_queue ||= Dispatch::Queue.new("#{App.queue_prefix}.disconnect.#{@reference}")
-      @disconnect_port_queue.async do
-        data = {
-          'publish' => 'false'
-        }
-        Logger.debug 'publishing disconnect'
-        res = App.api_delete("/tunnels/#{@connector_id}", data)
+    def publish_disconnect(async=true)
+      Logger.debug 'publishing disconnect'
+      if async
+        @disconnect_port_queue ||= Dispatch::Queue.new("#{App.queue_prefix}.disconnect.#{@reference}")
+        @disconnect_port_queue.async do
+          App.api_delete("/tunnels/#{@connector_id}", { 'publish' => false })
+        end
+      else
+        App.api_delete("/tunnels/#{@connector_id}", { 'publish' => false })
       end
     end
 
@@ -599,23 +698,31 @@ class ConnectorMonitor
       event_disconnect
     end
 
-    def event_disconnect(hide_updates = false)
+    def event_disconnect(hide_updates = false, async = true)
       Logger.debug 'Disconnecting task.'
-      unless @awaiting_reconnect
-        @menu_item.state = NSOffState
-        @submenu_toggle.title = "Start"
-        unless port_open?
-          @menu_item.setEnabled(false)
-        end
-      end
+      #unless @awaiting_reconnect
+      #  unless port_open?
+      #    Dispatch::Queue.main.async do
+      #      @row.setInactive
+      #    end
+      #  end
+      #end
 
       NSNotificationCenter.defaultCenter.removeObserver(self, name:NSFileHandleDataAvailableNotification, object: @error_handle)
       NSNotificationCenter.defaultCenter.removeObserver(self, name:NSFileHandleDataAvailableNotification, object: @fh)
       NSNotificationCenter.defaultCenter.removeObserver(self, name:NSTaskDidTerminateNotification, object: @task)
 
       @task.terminate if running?
+
+      if async
+        Dispatch::Queue.main.async do
+          set_row_state
+        end
+      else
+        set_row_state
+      end
+
       @pref.imageView.image = port_open? ? App.offline : App.disabled if @pref
-      @menu_item.image = port_open? ? App.offline : App.disabled
       @online = false
       @hide_reconnect = hide_updates
       @reconnect = false
@@ -627,10 +734,29 @@ class ConnectorMonitor
       Logger.debug 'done disconnecting'
     end
 
-    def destroy
+    def set_row_state
+      if @row
+        @row.setOffline unless running? || @awaiting_reconnect
+        if port_open?
+          @row.setActive
+        else
+          @row.setInactive
+        end
+      end
+    end
+
+    def destroyRecordAndSelect(id=nil, sender=nil)
         disconnect if running?
 
-        destroy_model
+        Dispatch::Queue.main.async do
+          destroy_model
+          if id && ConnectorsViewController.sharedController.connectors_list
+            ConnectorsViewController.sharedController.connectors_list.selectRowIndexes NSIndexSet.indexSetWithIndex(id), byExtendingSelection:true
+            if sender
+              ConnectorsViewController.sharedController.tableViewSelectionDidChange(sender)
+            end
+          end
+        end
         @disconnect_port_queue ||= Dispatch::Queue.new("#{App.queue_prefix}.disconnect.#{@reference}")
         @disconnect_port_queue.async do
             data = {
@@ -642,13 +768,26 @@ class ConnectorMonitor
             end
         end
     end
+
+    def destroy
+      destroyRecordAndSelect nil
+    end
+
+    def remove_row
+      if @row
+        Logger.debug @row.inspect
+        #ApplicationController.singleton.panel.removeRowView @row
+        @row.remove
+        @row = nil
+      end
+    end
+
     def destroy_model
         ApplicationController.singleton.managedObjectContext.deleteObject self.model
         App.save!
-        #@port_monitor.connector = nil
-        ApplicationController.singleton.status_menu.removeItem(@menu_item) if @menu_item # && @menu_item.menu
-        App.global.connectors = App.global.connectors.keep_if { |c| c != self }
-        ApplicationController.singleton.handleMenuDivider
+        remove_row
+        App.global.connectors.delete(self)
+        ConnectorsViewController.sharedController.connectors_list.reloadData if ConnectorsViewController.sharedController.connectors_list
         ApplicationController.singleton.setConnectorState
     end
 

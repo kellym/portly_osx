@@ -2,20 +2,20 @@
 <signatures version='1.0'>
 <class name='LaunchAtLoginController'>
 <method selector='launchAtLogin'>
-<retval declared_type='BOOL' type='B'/>
+<retval type='B' declared_type='BOOL'/>
 </method>
 <method selector='setLaunchAtLogin:'>
-<arg declared_type='BOOL' index='0' name='launchAtLogin' type='B'/>
-<retval declared_type='void' type='v'/>
+<arg name='launchAtLogin' type='B' index='0' declared_type='BOOL'/>
+<retval type='v' declared_type='void'/>
 </method>
 <method selector='setLaunchAtLogin:forURL:'>
-<arg declared_type='BOOL' index='0' name='enabled' type='B'/>
-<arg declared_type='NSURL*' index='1' name='itemURL' type='@'/>
-<retval declared_type='void' type='v'/>
+<arg name='enabled' type='B' index='0' declared_type='BOOL'/>
+<arg name='itemURL' type='@' index='1' declared_type='NSURL*'/>
+<retval type='v' declared_type='void'/>
 </method>
 <method selector='willLaunchAtLogin:'>
-<arg declared_type='NSURL*' index='0' name='itemURL' type='@'/>
-<retval declared_type='BOOL' type='B'/>
+<arg name='itemURL' type='@' index='0' declared_type='NSURL*'/>
+<retval type='B' declared_type='BOOL'/>
 </method>
 </class>
 </signatures>

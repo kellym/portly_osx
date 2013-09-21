@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model name="" userDefinedModelVersionIdentifier="Portly 2" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2061" systemVersion="12E55" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Connector" representedClassName="Connector" syncable="YES">
+        <attribute name="auth_type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="connector_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="host" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nickname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="port" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="reference" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="server_host" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="server_port" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="socket_type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="start_on_boot" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="subdomain" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Token" representedClassName="Token" syncable="YES">
+        <attribute name="active" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="allow_remote" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="key" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="suffix" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Connector" positionX="160" positionY="192" width="128" height="225"/>
+        <element name="Token" positionX="423" positionY="198" width="128" height="105"/>
+    </elements>
+</model>
