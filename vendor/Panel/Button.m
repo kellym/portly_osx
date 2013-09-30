@@ -84,6 +84,7 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
+    NSAutoreleasePool *innerPool = [NSAutoreleasePool new];
     NSRect rect = NSMakeRect([self bounds].origin.x+3, [self bounds].origin.y+3, [self bounds].size.width-6, [self bounds].size.height-6);
     if (isMouseDown) {
 
@@ -101,35 +102,37 @@
         [shadow2 setShadowOffset:NSMakeSize(0.f, -0.5f)];
         [shadow2 set];
         [path fill];
-        NSShadow *shadow = [[[NSShadow alloc] init] autorelease];
+        NSShadow *shadow = [[NSShadow alloc] init];
         [shadow setShadowColor:[NSColor colorWithCalibratedWhite:0.0f
                                                            alpha:0.5f]];
         [shadow setShadowBlurRadius:3.0f];
         [shadow set];
         [path addClip];
         [path stroke];
+        [shadow release];
         //NSBezierPath *path2 = [NSBezierPath bezierPathWithRoundedRect:rect xRadius:4.0 yRadius:4.0];
 
         //[path2 addClip];
 
 
-        NSGradient* aGradient = [[[NSGradient alloc]
+        NSGradient* aGradient = [[NSGradient alloc]
                                  initWithStartingColor:[NSColor colorWithCalibratedRed:228/255.0f green:228/255.0f blue:228/255.0f alpha:1.0f]
-                                 endingColor:[NSColor whiteColor]] autorelease];
+                                 endingColor:[NSColor whiteColor]];
         [aGradient drawInRect:rect angle:90];
+        [aGradient release];
         [path stroke];
 
     } else {
     // Drawing code here.
 
-    NSGradient* aGradient = [[[NSGradient alloc]
+    NSGradient* aGradient = [[NSGradient alloc]
                              initWithStartingColor:[NSColor colorWithCalibratedRed:228/255.0f green:228/255.0f blue:228/255.0f alpha:1.0f]
-                             endingColor:[NSColor whiteColor]] autorelease];
+                             endingColor:[NSColor whiteColor]];
     //[aGradient drawInRect:dirtyRect angle:90];
 
     NSBezierPath *path2 = [NSBezierPath bezierPathWithRoundedRect:rect xRadius:4.0 yRadius:4.0];
     //[path2 addClip];
-    NSShadow *shadow = [[[NSShadow alloc] init] autorelease];
+    NSShadow *shadow = [[NSShadow alloc] init];
     [shadow setShadowColor:[NSColor blackColor]];
     [shadow setShadowBlurRadius:2.0f];
     [shadow setShadowOffset:NSMakeSize(0.f, -0.5f)];
@@ -141,10 +144,13 @@
     NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:rect xRadius:4.0 yRadius:4.0];
     [path addClip];
     [aGradient drawInRect:dirtyRect angle:90];
+    [aGradient release];
+    [shadow release];
     //[path2 fill];
     }
 
     [super drawRect:dirtyRect];
+    [innerPool release];
 }
 
 @end

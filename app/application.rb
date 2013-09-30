@@ -68,7 +68,7 @@ class App
     end
 
     def self.free?
-      self.global.plan_type.downcase == 'free'
+      !self.global.plan_type || self.global.plan_type.downcase == 'free'
     end
 
     def self.api_endpoint
@@ -289,7 +289,7 @@ class App
         conn = NSURLConnection.sendSynchronousRequest request, returningResponse: resp, error: err
         if err.value
             err = err.value.code
-            Logger.debug "Error with connection: #{err}"
+            Logger.debug "Error with connection: #{err} for #{method} #{url}"
             if err == -1012
                 nil #TODO: handle this 401 later
             else

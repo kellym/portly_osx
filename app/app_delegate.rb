@@ -10,7 +10,7 @@ class AppDelegate < NSObject
 
   def buildWindow
     @applicationController ||= ApplicationController.new
-    @applicationController.panel = self.panelController
+    @applicationController.panel = WeakRef.new(self.panelController)
     @applicationController.awakeFromNib
   end
 
@@ -29,7 +29,6 @@ class AppDelegate < NSObject
   end
 
   def togglePanel(sender)
-    Logger.debug 'button clicked'
     @applicationController.hasActiveIcon = !@applicationController.hasActiveIcon
     self.panelController.triggerActivePanel @applicationController.hasActiveIcon
   end

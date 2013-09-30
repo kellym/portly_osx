@@ -36,8 +36,8 @@
 -(void)buttonClicked:(id)sender;
 -(void) showActivityButtonIfMouseEntered;
 @property(nonatomic, retain) Button * activityButton;
-@property(nonatomic, retain) NSObject *parent;
-@property(nonatomic, retain) NSResponder *delegate;
+@property(nonatomic, weak) NSObject *parent;
+@property(nonatomic, weak) NSResponder *delegate;
 @property(nonatomic, retain) NSString *subtitle;
 @property(nonatomic, retain) NSString *title;
 @property(nonatomic, retain) RowStatus * currentState;

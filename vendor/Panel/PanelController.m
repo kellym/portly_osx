@@ -19,7 +19,6 @@
 
 @synthesize backgroundView = _backgroundView;
 @synthesize delegate = _delegate;
-@synthesize textField = _textField;
 @synthesize title;
 @synthesize statusMenu;
 @synthesize settingsView;
@@ -367,6 +366,7 @@
 
 - (void)openPanel
 {
+    NSAutoreleasePool *innerPool = [NSAutoreleasePool new];
     NSWindow *panel = [self window];
 
     NSRect screenRect = [[[NSScreen screens] objectAtIndex:0] frame];
@@ -404,10 +404,12 @@
     [NSAnimationContext endGrouping];
 
     [self.window.contentView setNeedsDisplay: YES];
+    [innerPool release];
 }
 
 - (void)closePanel
 {
+    NSAutoreleasePool *innerPool = [NSAutoreleasePool new];
     [NSAnimationContext beginGrouping];
     [[NSAnimationContext currentContext] setDuration:CLOSE_DURATION];
     [[[self window] animator] setAlphaValue:0];
@@ -417,6 +419,7 @@
 
         [self.window orderOut:nil];
     });
+    [innerPool release];
 }
 
 @end

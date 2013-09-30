@@ -12,10 +12,27 @@ class Stream
 
     def initialize
         @socket_queue = Dispatch::Queue.new('socket.connection')
-        @socket_action = Dispatch::Queue.new('socket.action')
+        #@socket_action = Dispatch::Queue.new('socket.action')
+
+        @action = [
+          'plan',
+          'signout',
+          'connect',
+          'kill',
+          'update',
+          'create',
+          'destroy',
+          'auths'
+        ]
 
         @timeout_max = 15
+
+        #@socket_action.async do
+        @sock = Sock.alloc.initWithHost App.socket[:host], port: App.socket[:port]
+        #end
+
         startSocket
+        #self.performSelectorInBackground("queuePing", withObject:nil)
         queuePing
         @data_queue = []
     end
@@ -25,7 +42,7 @@ class Stream
     end
 
     def startSocket
-        Logger.debug "Starting Secure Socket on #{App.socket[:host]}:#{App.socket[:port]} with connection: #{@initConnector}"
+        Logger.debug "Starting Secure Socket on #{App.socket[:host]}:#{App.socket[:port]} with connection"
         @socket = SocketStream.alloc.initWithHost App.socket[:host], port:App.socket[:port]
         if @socket.open(self, output:self)
           @socket_online = true
@@ -46,10 +63,10 @@ class Stream
 
     def stream(theStream, handleEvent:streamEvent)
       if theStream == @socket.inputStream
-        Logger.debug 'input data'
+        #Logger.debug 'input data'
         handleInput(streamEvent)
       else
-        Logger.debug 'output data'
+        #Logger.debug 'output data'
         handleOutput(streamEvent)
       end
     end
@@ -57,68 +74,59 @@ class Stream
     def retrySocket
       return unless @socket_online
       @socket_online = false
-      @socket_retry = Dispatch::Queue.new('socket.connection.retry')
-      @socket_retry.async do
+      self.performSelectorInBackground("retrySocketQueue", withObject:nil).release
+      #retrySocketQueue
+    end
+
+    def retrySocketQueue
         Logger.debug "Retrying Secure Socket"
         closeSocket
-        while(!Sock.connect(App.socket[:host], port:App.socket[:port]))
+        #@sock.port = App.socket[:port]
+        #@sock.host = App.socket[:host]
+        while !@sock.connect
           sleep 1
         end
-        Dispatch::Queue.main.async { startSocket }
-      end
+        #Dispatch::Queue.main.async do
+          startSocket
+        #end
     end
 
     def handleInput(streamEvent)
-      Logger.debug '#handleInput'
-        case streamEvent
-        when NSStreamEventOpenCompleted
-            Logger.debug "we're loaded"
-            if @initInput
-                Logger.debug 'doing keepalive-input'
-                if @socket.keepInputAlive
-                  Logger.debug 'done with keepalive-input'
-                  @initInput = nil
-                else
-                  Logger.debug 'could not perform keepalive-input'
-                  retrySocket
-                end
-            end
-        when NSStreamEventEndEncountered
-            Logger.debug "we're done, but we need to reconnect."
-            Logger.debug "SOCKETSTREAM OFFLINE (A)"
-            retrySocket
-        when NSStreamEventErrorOccurred
-            Logger.debug @socket.inputStream.streamError.localizedDescription
-            Logger.debug "something happened, so let's start over."
-            Logger.debug "SOCKETSTREAM OFFLINE (B)"
-            retrySocket
-        when NSStreamEventHasBytesAvailable
-            Logger.debug 'data available'
-            handle_input
-        end
-    end
-
-    def handle_input
-      Logger.debug 'Handling input.'
-      @timeout = 0
-      buf = Pointer.new('c', 1024)
-      data = ''
-      while @socket.inputStream.hasBytesAvailable do
-          len = @socket.inputStream.read(buf, maxLength:1024)
-          if len > 0
-              (0..len-1).each { |i| data << buf[i].chr }
+      case streamEvent
+      when NSStreamEventOpenCompleted
+          Logger.debug "we're loaded"
+          if @initInput
+              Logger.debug 'doing keepalive-input'
+              if @socket.keepInputAlive
+                Logger.debug 'done with keepalive-input'
+                @initInput = nil
+              else
+                Logger.debug 'could not perform keepalive-input'
+                retrySocket
+              end
           end
+      when NSStreamEventEndEncountered
+        Logger.debug "we're done, but we need to reconnect."
+        Logger.debug "SOCKETSTREAM OFFLINE (A)"
+        retrySocket
+      when NSStreamEventErrorOccurred
+        #Logger.debug @socket.inputStream.streamError.localizedDescription
+        Logger.debug "something happened, so let's start over."
+        Logger.debug "SOCKETSTREAM OFFLINE (B)"
+        retrySocket
+      when NSStreamEventHasBytesAvailable
+        @timeout = 0
+        @socket.handleInputAndTriggerAction
       end
-      triggerAction(data)
     end
 
     def publish_as_online
       if @initConnector
         Logger.debug 'send initial connector data'
-        sendData @initConnector
+        @socket.sendData @initConnector
         @initConnector = nil
         @data_queue.each { |msg|
-            sendData msg
+            @socket.sendData msg
         }
         @data_queue = []
         App.global.connectors.each { |c| c.publish_state(true) }
@@ -142,19 +150,23 @@ class Stream
 
     def queuePing
       @socket_queue.async do
-        loop do
-          if !@initOutput && @socket_online
-              if @timeout >= @timeout_max
-                retrySocket
-              else
-                sendData "\n"
-                Logger.debug 'Ping'
-              end
+        while(true) do
+          if @socket_online
+            if @timeout >= @timeout_max
+              Logger.debug "retry socket"
+              retrySocket
+            elsif @socket
+              #string = "\n"
+              #Logger.debug "PING"
+              @socket.sendPing
+            else
+              #@socket = SocketStream.alloc.initWithHost App.socket[:host], port:App.socket[:port]
+              retrySocket
+            end
           elsif !@socket_online
             Logger.debug "PING: Something is wrong."
             retrySocket
           end
-          @timeout += 5
           sleep 5
         end
       end
@@ -167,75 +179,47 @@ class Stream
         when NSStreamEventHasSpaceAvailable
           publish_as_online
         when NSStreamEventErrorOccurred
-            Logger.debug @socket.outputStream.streamError.localizedDescription
+            #Logger.debug @socket.outputStream.streamError.localizedDescription
             Logger.debug "something happened, so let's start over."
             retrySocket
         end
     end
 
-    def triggerAction(data)
-      Logger.debug 'triggering action'
-        @data = data.to_s
-        Logger.debug "--------------\n"
-        #Logger.debug @data
-        Logger.debug "--------------\n"
-        @socket_action.async do
-            case @data
-            when /^plan:(.*)$/
-              App.global.plan_type = $1
-            when /^signout$/
-              ApplicationController.singleton.signOut
-            when /^connect:(.*)$/
-              return unless App.global.token_model.allow_remote
-              id, connection_string, tunnel_string = $1.split "|"
-              m = App.global.connectors.select { |c| c.connector_id == id.to_i }.first
-              m.event_connect(connection_string, tunnel_string) if m
-            when /^kill:(.*)$/
-              return unless App.global.token_model.allow_remote
-              m = App.global.connectors.select { |c| c.connector_id == $1.to_i }.first
-              m.force_disconnect if m
-            when /^update:(.*)$/
-              return unless App.global.token_model.allow_remote
-              m = App.global.connectors.select { |c| c.connector_id == $1.to_i }.first
-              m.update if m
-            when /^create:(.*)$/
-              return unless App.global.token_model.allow_remote
-              Logger.debug 'loading all'
-              ConnectorMonitor.load_all
-            when /^destroy:(.*)$/
-              return unless App.global.token_model.allow_remote
-              m = App.global.connectors.select { |c| c.connector_id == $1.to_i }.first
-              if m
-                  m.force_disconnect if m.running?
-                  m.destroy_model
-              end
-            when /^auths:(.*)$/
-              return unless App.global.token_model.allow_remote
-              m = App.global.connectors.select { |c| c.connector_id == $1.to_i }.first
-              m.getAuthUsers if m
-            end
+    def triggerAction(parts)
+      case parts[0]
+      when @action[0]
+        App.global.plan_type = parts[1]
+      when @action[1]
+        ApplicationController.singleton.signOut
+      when @action[2]
+        return unless App.global.token_model.allow_remote
+        id, connection_string, tunnel_string = parts[1].split "|"
+        m = App.global.connectors.select { |c| c.connector_id == id.to_i }.first
+        m.event_connect(connection_string, tunnel_string) if m
+      when @action[3]
+        return unless App.global.token_model.allow_remote
+        m = App.global.connectors.select { |c| c.connector_id == parts[1].to_i }.first
+        m.force_disconnect if m
+      when @action[4]
+        return unless App.global.token_model.allow_remote
+        m = App.global.connectors.select { |c| c.connector_id == parts[1].to_i }.first
+        m.update if m
+      when @action[5]
+        return unless App.global.token_model.allow_remote
+        Logger.debug 'loading all'
+        ConnectorMonitor.load_all
+      when @action[6]
+        return unless App.global.token_model.allow_remote
+        m = App.global.connectors.select { |c| c.connector_id == parts[1].to_i }.first
+        if m
+            m.force_disconnect if m.running?
+            m.destroy_model
         end
-
-        #Logger.debug data
-        #sleep 2
-        #sendData data
-    end
-
-    def sendData(data)
-        #Logger.debug "writing data"
-        return unless @socket.outputStream && data
-        max_bytes = 1024
-        data = data.dataUsingEncoding(NSUTF8StringEncoding)
-        readBytes = data.mutableBytes
-        byteIndex = 0
-        data_len = data.length
-        while (byteIndex < data_len) do
-            len = (data_len - byteIndex >= max_bytes) ? max_bytes : (data_len-byteIndex)
-            buf = Pointer.new('c', len)
-            bytesRead = @socket.outputStream.write(data, maxLength:len)
-            byteIndex += len
-        end
-        #Logger.debug 'done writing ^'
+      when @action[7]
+        return unless App.global.token_model.allow_remote
+        m = App.global.connectors.select { |c| c.connector_id == parts[1].to_i }.first
+        m.getAuthUsers if m
+      end
     end
 
     def send(msg)
@@ -243,7 +227,7 @@ class Stream
             # we are waiting to send data, so queue it for now.
             @data_queue << msg
         else
-            sendData(msg)
+            @socket.sendData(msg)
         end
     end
 

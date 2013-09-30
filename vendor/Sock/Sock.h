@@ -1,4 +1,19 @@
-@interface Sock : NSObject
+@interface ConnectorMonitor
+
+-(BOOL) isRunning;
+@end
+
+@interface Sock : NSObject {
+  NSString *host;
+  int port;
+  ConnectorMonitor *delegate;
+}
 -(id)init;
-+(bool)connect:(const char *)hostname port:(int)port;
+-(id)initWithHost:(NSString *)hostname port:(int)portnum;
+-(bool)connect;
++(bool)connect:(NSString *)hostname port:(int)port;
+-(void)receivedPing:(NSNotification *)notif;
+//@property (nonatomic, retain) NSString *host;
+@property (nonatomic, assign) int port;
+@property (nonatomic, weak) ConnectorMonitor *delegate;
 @end

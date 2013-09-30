@@ -122,9 +122,9 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
+    NSAutoreleasePool *innerPool = [NSAutoreleasePool new];
     // Drawing code here.
     NSRect rect = NSMakeRect([self bounds].origin.x+3, [self bounds].origin.y+3, [self bounds].size.width-6, [self bounds].size.height-6);
-
     NSGradient* aGradient;
 
     if (isOnline) {
@@ -173,6 +173,7 @@
     [aGradient release];
     [shadow release];
     [super drawRect:self.bounds];
+    [innerPool release];
 }
 
 @end

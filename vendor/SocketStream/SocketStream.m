@@ -11,6 +11,8 @@
 
 @implementation SocketStream
 
+@synthesize delegate;
+
 - (id)init
 {
     self = [super init];
@@ -41,11 +43,12 @@
     CFReadStreamRef readStream = NULL;
     CFWriteStreamRef writeStream = NULL;
 
-    NSLog(self.host.name);
     CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)self.host.name, self.port, &readStream, &writeStream);
 
     self.inputStream = (NSInputStream *)readStream;
     self.outputStream = (NSOutputStream *)writeStream;
+
+    delegate = inputDelegate;
 
     [self.inputStream setDelegate: inputDelegate];
     [self.outputStream setDelegate: outputDelegate];
@@ -75,14 +78,53 @@
     CFReadStreamSetProperty((CFReadStreamRef)self.inputStream, kCFStreamPropertySSLSettings, (CFTypeRef)settings);
     CFWriteStreamSetProperty((CFWriteStreamRef)self.outputStream, kCFStreamPropertySSLSettings, (CFTypeRef)settings);
 
+    //CFRelease(readStream);
+    //CFRelease(readStream);
     [settings release];
-    NSLog(@"SSL Settings enabled.");
     if(self.inputStream.streamStatus == NSStreamStatusOpening ) {
       NSLog(@"Opening connection.");
       return true;
     } else {
       return false;
     }
+}
+- (void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode {
+  if(aStream == [self inputStream]) {
+    [delegate handleInput: eventCode];
+  } else {
+    [delegate handleOutput: eventCode];
+  }
+}
+- (void) handleInputAndTriggerAction
+{
+  if ([[self inputStream] hasBytesAvailable]) {
+    int len;
+    uint8_t buf[2048];
+    len = [[self inputStream] read: buf maxLength: 2048];
+    if (len > 0) {
+      NSAutoreleasePool *innerPool = [NSAutoreleasePool new];
+      NSString *data = [[NSString alloc] initWithBytes: buf length:len encoding:NSUTF8StringEncoding];
+      NSArray *parts = [data componentsSeparatedByString: @":"];
+      [delegate triggerAction: parts];
+      [data release];
+      [innerPool release];
+    }
+  }
+  //return @"";
+
+}
+- (void) sendPing {
+  [self sendData: @"\n" ];
+}
+- (void) sendData: (NSString *)data
+{
+  if ([self outputStream]) {
+      NSAutoreleasePool *innerPool = [NSAutoreleasePool new];
+      unsigned char *cdata;
+      cdata = [data cStringUsingEncoding:NSASCIIStringEncoding];
+    [[self outputStream] write: cdata maxLength:[data length]];
+      [innerPool release];
+  }
 }
 
 - (bool)keepInputAlive {

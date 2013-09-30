@@ -9,7 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <sys/socket.h>
 
-@interface SocketStream : NSStream <NSStreamDelegate>
+@interface SocketStream : NSStream <NSStreamDelegate> {
+  NSResponder *delegate;
+}
 -(id) init;
 -(id) initWithHost:(NSString *)hostString port:(int)port;
 -(id) initWithAddress:(NSString *)addressString port:(int)port;
@@ -17,9 +19,12 @@
 -(void) close;
 - (bool)keepOutputAlive;
 - (bool)keepInputAlive;
+- (NSString *)handleInput;
+- (void) sendData: (NSString *)data;
 
-@property (retain) NSInputStream * inputStream;
-@property (retain) NSOutputStream * outputStream;
+@property (nonatomic, retain) NSInputStream * inputStream;
+@property (nonatomic, retain) NSOutputStream * outputStream;
+@property (nonatomic, weak) NSResponder *delegate;
 @property (retain)   NSHost * host;
 @property int port;
 @property (nonatomic, retain) NSDictionary * settings;

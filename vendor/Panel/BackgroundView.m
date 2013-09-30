@@ -21,6 +21,7 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
 
+    NSAutoreleasePool *innerPool = [NSAutoreleasePool new];
     isAnimating = true;
     NSRect contentRect = NSInsetRect([self bounds], LINE_THICKNESS, LINE_THICKNESS);
     NSBezierPath *path = [NSBezierPath bezierPath];
@@ -87,6 +88,7 @@
     [NSBezierPath strokeLineFromPoint:point1 toPoint:point2];
     [NSBezierPath strokeLineFromPoint:point3 toPoint:point4];
     isAnimating = false;
+    [innerPool release];
 }
 
 #pragma mark -

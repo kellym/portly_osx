@@ -217,9 +217,9 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    NSPoint point1 = NSMakePoint(NSMinX([self bounds]), NSMaxY([self bounds]));
-    NSPoint point2 = NSMakePoint(NSMaxX([self bounds]), NSMaxY([self bounds]));
-    [[self lineColor] set];
+    //NSPoint point1 = NSMakePoint(NSMinX([self bounds]), NSMaxY([self bounds]));
+    //NSPoint point2 = NSMakePoint(NSMaxX([self bounds]), NSMaxY([self bounds]));
+    //[[self lineColor] set];
     [[NSColor whiteColor] setFill];
         NSRectFill(dirtyRect);
     //[NSBezierPath strokeLineFromPoint:point1 toPoint:point2];
@@ -251,8 +251,8 @@
 {
     isMouseEntered = false;
     self.layer.backgroundColor = [[NSColor whiteColor] CGColor];
-    [currentState setHidden: NO];
     [copyButton setHidden: YES];
+    [currentState setHidden: NO];
     [gradientView setHidden:YES];
     //[otherWhiteGradientView setHidden:NO];
     [hoverBackgroundView setHidden:YES];
@@ -262,6 +262,7 @@
 
 -(void)updateTrackingAreas
 {
+
     if(trackingArea != nil) {
         [self removeTrackingArea:trackingArea];
     }

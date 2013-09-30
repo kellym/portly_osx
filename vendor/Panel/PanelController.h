@@ -24,7 +24,6 @@
     BOOL _hasActivePanel;
     __unsafe_unretained BackgroundView *_backgroundView;
     __unsafe_unretained id<PanelControllerDelegate> _delegate;
-    __unsafe_unretained NSTextField *_textField;
     NSString *title;
     NSTextField *titleField;
     NSTextField *headerField;
@@ -44,12 +43,11 @@
 }
 
 @property (nonatomic, unsafe_unretained) IBOutlet BackgroundView *backgroundView;
-@property (nonatomic, unsafe_unretained) IBOutlet NSTextField *textField;
 
 @property (nonatomic, retain) SettingsView *settingsView;
 @property (nonatomic, retain) NSString *title;
 @property (nonatomic, retain) NSString *header;
-@property (nonatomic, retain) NSMutableArray *rows;
+@property (nonatomic, unsafe_unretained) NSMutableArray *rows;
 @property (nonatomic, retain) NSMenu *statusMenu;
 @property (nonatomic) BOOL hasActivePanel;
 @property (nonatomic) BOOL isAnimating;

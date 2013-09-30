@@ -24,10 +24,14 @@ class ConnectorMonitor
     attr_accessor :auth_users
     attr_accessor :thread
 
+    attr_accessor :timeout
+    attr_accessor :reconnect
+
     def initialize(data)
         @host = data.host
         @port = data.port
 
+        @modes = [NSEventTrackingRunLoopMode, NSDefaultRunLoopMode]
         set_connection_string
         @connector_id = data.connector_id
         @subdomain = data.subdomain
@@ -43,7 +47,7 @@ class ConnectorMonitor
         @model = data
         @online = false
         @retry_seconds = 5
-        @timeout = Time.now
+        @timeout = 0
         @reference = data.connector_id
         @auth_users = []
         @awaiting_reconnect = false
@@ -51,64 +55,73 @@ class ConnectorMonitor
         @check_port_status = false
         #getAuthUsers
 
-        #@main_queue = "#{App.queue_prefix}.connector.#{@connector_id}"
+        @sock = Sock.alloc.initWithHost @host, port: @port
+        @sock.delegate = self
 
+        #self.performSelectorOnMainThread("create_row_and_monitor", withObject: nil, waitUntilDone: false)
         Dispatch::Queue.main.async do
-          while(ApplicationController.singleton.panel.isAnimating) do
-          end
-          @row = ApplicationController.singleton.panel.addRowWithDelegate self
-          start_thread
+          create_row_and_monitor
         end
         menu_item
+
         App.global.connectors << self
-        #ApplicationController.singleton.handleMenuDivider
 
         @published_state = nil
-        publish_state
+        #publish_state
+        self.performSelectorInBackground("publish_state", withObject: nil)
 
         self
+    end
+
+    def create_row_and_monitor
+      while(ApplicationController.singleton.panel.isAnimating) do
+      end
+      @row = ApplicationController.singleton.panel.addRowWithDelegate self
+      begin
+        self.performSelectorInBackground("monitor_port:", withObject: @retry_seconds)
+      rescue
+        Logger.debug "ERROR ON THE MONITOR_PORT THREAD"
+        retry
+      end
     end
 
     def online?
         @online
     end
 
-    def start_thread
-        begin
-        #    @thread = Thread.new do
-                self.performSelectorInBackground('monitor_port:', withObject: @retry_seconds)
-        #    end
-        rescue
-            Logger.debug "RESCUE FROM THREAD FAILURE"
-            #@thread = nil
-            start_thread
-        end
+    def resetTimeout
+      @timeout = 0
+    end
+
+    def disableReconnect
+      @reconnect = false
     end
 
     def publish_state(force = false)
       current_state = port_open?
       if (current_state != @published_state) || force
-        @publish_state_queue ||= Dispatch::Queue.new("publish_state:#{@connector_id}")
-        @publish_state_queue.async do
+        #@publish_state_queue ||= Dispatch::Queue.new("publish_state:#{@connector_id}")
+        #@publish_state_queue.async do
           while !ApplicationController.singleton.socket do
+          #  sleep 1
           end
           Dispatch::Queue.main.async do
             ApplicationController.singleton.socket.send("STATE:#{@connector_id}:#{current_state ? 'on' : 'off'}")
           end
-        end
+        #end
         @published_state = current_state
       end
     end
 
     def set_port_online
         connect if @_init
-        Logger.debug "timeout: #{@timeout}"
-        reconnect if running? && (Time.now - @timeout) > @retry_seconds * 2
+        ##Logger.debug "timeout: #{@timeout}"
+        reconnect if running? && @timeout > @retry_seconds * 2
         return if @current_port_status == true
         @current_port_status = true
 
-        publish_state
-        Logger.debug "port is running: #{@port}"
+        self.performSelectorInBackground("publish_state", withObject: nil)
+        #Logger.debug "port is running: #{@port}"
         update_menu_item( online: running? )
         Dispatch::Queue.main.async do
           @row.setActive if @row
@@ -121,14 +134,15 @@ class ConnectorMonitor
         return if @current_port_status == false
         @current_port_status = false
 
-        publish_state
+        #publish_state
+        self.performSelectorInBackground("publish_state", withObject: nil)
 
         Dispatch::Queue.main.async do
           @row.setInactive if @row
         end
         @pref.imageView.image = App.disabled if @pref
         if running? || @hide_reconnect
-            Logger.debug 'Port is closed but it is still running.'
+            #Logger.debug 'Port is closed but it is still running.'
             disconnect(true)
             queue_reconnect
         elsif !@awaiting_reconnect
@@ -138,7 +152,7 @@ class ConnectorMonitor
     end
 
     def connection_string_with_nickname
-      @nickname ? "#{@connection_string} (#{@nickname})" : @connection_string
+      (@nickname && @nickname != "") ? "#{@connection_string} (#{@nickname})" : @connection_string
     end
 
     def connection_string=(connection_string)
@@ -384,7 +398,7 @@ class ConnectorMonitor
     def set_menu_item_title
       Dispatch::Queue.main.async do
         if @row
-          @row.setTitle @model.nickname ? @model.nickname : @connection_string
+          @row.setTitle((@model.nickname && @model.nickname != '') ? @model.nickname : @connection_string)
           @row.subtitle = domain_string
         end
       end
@@ -450,8 +464,14 @@ class ConnectorMonitor
       if @awaiting_reconnect
         @awaiting_reconnect = false
         disconnect
+        ApplicationController.singleton.panel.setHasActivePanel false
       else
-        online? ? disconnect : connect
+        if online?
+          disconnect
+          ApplicationController.singleton.panel.setHasActivePanel false
+        else
+          connect
+        end
       end
     end
 
@@ -462,11 +482,12 @@ class ConnectorMonitor
     def connect
       Logger.debug 'Boot.'
       @_init = false
+      @attempting_reconnect = false
       return if running?
       @hide_reconnect = false
       @awaiting_reconnect = false
       @reconnect = get_reconnect_default
-      @timeout = Time.now
+      @timeout = 0
       @connector_queue ||= Dispatch::Queue.new("#{App.queue_prefix}.ssh_start.#{@reference}")
       @connector_queue.async do
         Logger.debug 'Sending connection data.'
@@ -529,7 +550,7 @@ class ConnectorMonitor
         NSNotificationCenter.defaultCenter.addObserver(self, selector:'receivedError:', name:NSFileHandleDataAvailableNotification, object: @error_handle)
 
         # regular handling
-        NSNotificationCenter.defaultCenter.addObserver(self, selector:'receivedPing:', name:    NSFileHandleDataAvailableNotification, object: @fh)
+        NSNotificationCenter.defaultCenter.addObserver(@sock, selector:'receivedPing:', name:    NSFileHandleDataAvailableNotification, object: @fh)
         NSNotificationCenter.defaultCenter.addObserver(self, selector:'taskTerminated:', name: NSTaskDidTerminateNotification, object: @task)
 
         Logger.debug 'Connecting to port.'
@@ -547,38 +568,42 @@ class ConnectorMonitor
     end
 
     def monitor_port(seconds=0)
-      @monitor_seconds = seconds.to_f
-      loop do
-        catch(:done) do
-          Logger.debug "monitoring port status of #{@port}"
+      @monitor_seconds = seconds
+      while(true) do
+        #catch(:done) do
+          #Logger.debug "monitoring port status of #{@port}"
           if connect_to(@host, @port, 1)
-            Logger.debug 'set online'
+            ##Logger.debug 'set online'
             set_port_online
           else
-            Logger.debug 'set offline'
+            #Logger.debug 'set offline'
             set_port_offline
           end
-          Logger.debug "----"
-          100.times do
-            if @check_port_status
-              @check_port_status = false
-              throw :done
-            elsif @row.nil? || @monitor_seconds.nil?
-              return
-            else
-              sleep @monitor_seconds / 100.0
-            end
+          #Logger.debug "[monitor]"
+          #if @check_port_status
+          ##  Logger.debug "check port status"
+          #  @check_port_status = false
+          #  #throw :done
+          if @row.nil? || @monitor_seconds.nil?
+            #Logger.debug "row or monitor is nil"
+            return
+          else
+            sleep @monitor_seconds # / 100
           end
-        end
+          @timeout += @monitor_seconds
+        #end
       end
     end
 
     def connect_to(host, port, timeout)
       begin
-        Logger.debug "trying to connect locally to #{host}:#{port}"
-        return Sock.connect(host, port:port)
-      rescue Exception => e
-        Logger.debug e.inspect
+        #Logger.debug "trying to connect locally to #{host}:#{port}"
+        @sock.host = host
+        @sock.port = port
+        response = @sock.connect #Sock.connect(host, port:port)
+        return response
+      rescue Exception
+        #Logger.debug "ERROR ON THE SOCKET CONNECT"
         false
       end
     end
@@ -595,33 +620,50 @@ class ConnectorMonitor
     end
 
     def running?
-        @online
+      @online
+    end
+
+    def isRunning
+      if @online && !@attempting_reconnect
+        1
+      else
+        nil
+      end
     end
 
     def queue_reconnect(seconds=nil)
+      return if @attempting_reconnect
       unless App.free?
-        self.performSelectorInBackground('queue_reconnect_in_background:', withObject:seconds)
+        @attempting_reconnect = true
+        #self.performSelectorInBackground('queue_reconnect_in_background:', withObject:seconds)
+        @queue_reconnect_queue ||= Dispatch::Queue.new("queue:#{@connector_id}")
+        @queue_reconnect_queue.async do
+          queue_reconnect_in_background(seconds || @retry_seconds)
+        end
       end
     end
 
     def queue_reconnect_in_background(seconds=nil)
       seconds ||= @retry_seconds
-      Logger.debug "Retrying in #{seconds} seconds."
-      sleep seconds
-      if port_open? && @awaiting_reconnect && !online? && ApplicationController.singleton.socket.online?
-        Logger.debug "Port is open again."
-        connect
-      elsif @awaiting_reconnect && !online?
-        Logger.debug "Requeueing connection."
-        queue_reconnect_in_background seconds
+      while(true) do
+        #Logger.debug "Retrying in #{seconds} seconds."
+        sleep seconds
+        if port_open? && @awaiting_reconnect && !online? && ApplicationController.singleton.socket.online?
+          #Logger.debug "Port is open again."
+          break
+        elsif @awaiting_reconnect && !online?
+          #Logger.debug "Requeueing connection."
+        end
       end
+      connect
     end
 
     def receivedError(notif)
       fh = notif.object
       data = fh.availableData.to_s
-      Logger.debug data
+      #Logger.debug data
       return unless running?
+      Logger.debug "continuing on anyway"
 
       data = data.lines.first || ''
       if data.match(/closed|Killed by signal/)
@@ -648,15 +690,18 @@ class ConnectorMonitor
     end
 
     def receivedPing(notif)
+
         fh = notif.object
-        data = fh.availableData.to_s
-        @timeout=Time.now
-        Logger.debug data
-        if data['TIMEOUT']
+        #data = fh.availableData.to_s
+        data = NSString.alloc.initWithData fh.availableData, encoding: NSUTF8StringEncoding
+        @timeout = 0
+        #if data['TIMEOUT']
+        if data.rangeOfString("TIMEOUT").location == 0
           @reconnect = false
           disconnect(false)
         end
-        fh.waitForDataInBackgroundAndNotifyForModes([NSEventTrackingRunLoopMode, NSDefaultRunLoopMode]) if running?
+        data.release
+        fh.waitForDataInBackgroundAndNotifyForModes(@modes) if running?
     end
 
     def taskTerminated(notif)

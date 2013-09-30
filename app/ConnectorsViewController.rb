@@ -87,6 +87,9 @@ class ConnectorsViewController < NSViewController
 
     hide = title != 'Web Server'
     self.connection_type_view.setHidden hide
+    connector = App.global.connectors[@selectedRow]
+    connector.socket_type = ConnectorMonitor.parse_socket_type(self.connection_type.title)
+    connector.save
   end
 
 
@@ -101,8 +104,10 @@ class ConnectorsViewController < NSViewController
 
   def setup
     @connectors_list.selectRowIndexes NSIndexSet.indexSetWithIndex(0), byExtendingSelection:true
-    @suffix.stringValue = "-#{App.global.token_model.suffix}"
-    @new_suffix.stringValue = "-#{App.global.token_model.suffix}"
+    if App.global.token_model
+      @suffix.stringValue = "-#{App.global.token_model.suffix}"
+      @new_suffix.stringValue = "-#{App.global.token_model.suffix}"
+    end
     @formatter = AlphaNumericFormatter.new
     @subdomain.formatter = @formatter
     @new_subdomain.formatter = @formatter
@@ -175,6 +180,8 @@ class ConnectorsViewController < NSViewController
                 'Web Server'
               when 'tcp'
                 'Raw TCP Socket'
+              else
+                'Web Server'
               end
       @connection_type.setTitle title
       @connection_type_view.setHidden(connector.socket_type == 'tcp')

@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 @interface Button : NSView {
-    NSTrackingArea *trackingArea;    
+    NSTrackingArea *trackingArea;
     NSString *title;
     NSTextField *titleField;
     BOOL isMouseDown;
@@ -17,6 +17,6 @@
 }
 - (id)initWithFrame:(NSRect)frame;
 
-@property(nonatomic, retain) NSResponder *delegate;
+@property(nonatomic, weak) NSResponder *delegate;
 @property(nonatomic, retain) NSString *title;
 @end
