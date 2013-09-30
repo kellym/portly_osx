@@ -17,13 +17,13 @@
 <retval type='@' declared_type='id'/>
 </method>
 <method selector='initWithAddress:port:'>
-<arg name='addressString' type='@' index='0' declared_type='NSString*'/>
-<arg name='port' type='i' index='1' declared_type='int'/>
+<arg type='@' index='0' name='addressString' declared_type='NSString*'/>
+<arg type='i' index='1' name='port' declared_type='int'/>
 <retval type='@' declared_type='id'/>
 </method>
 <method selector='initWithHost:port:'>
-<arg name='hostString' type='@' index='0' declared_type='NSString*'/>
-<arg name='port' type='i' index='1' declared_type='int'/>
+<arg type='@' index='0' name='hostString' declared_type='NSString*'/>
+<arg type='i' index='1' name='port' declared_type='int'/>
 <retval type='@' declared_type='id'/>
 </method>
 <method selector='inputStream'>
@@ -36,8 +36,8 @@
 <retval type='B' declared_type='_Bool'/>
 </method>
 <method selector='open:output:'>
-<arg name='inputDelegate' type='@' index='0' declared_type='NSStream*'/>
-<arg name='outputDelegate' type='@' index='1' declared_type='NSStream*'/>
+<arg type='@' index='0' name='inputDelegate' declared_type='NSStream*'/>
+<arg type='@' index='1' name='outputDelegate' declared_type='NSStream*'/>
 <retval type='B' declared_type='_Bool'/>
 </method>
 <method selector='outputStream'>
@@ -47,31 +47,31 @@
 <retval type='i' declared_type='int'/>
 </method>
 <method selector='sendData:'>
-<arg name='data' type='@' index='0' declared_type='NSString*'/>
+<arg type='@' index='0' name='data' declared_type='NSString*'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setDelegate:'>
-<arg name='delegate' type='^i' index='0' declared_type='int*'/>
+<arg type='^i' index='0' name='delegate' declared_type='int*'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setHost:'>
-<arg name='host' type='@' index='0' declared_type='NSHost*'/>
+<arg type='@' index='0' name='host' declared_type='NSHost*'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setInputStream:'>
-<arg name='inputStream' type='@' index='0' declared_type='NSInputStream*'/>
+<arg type='@' index='0' name='inputStream' declared_type='NSInputStream*'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setOutputStream:'>
-<arg name='outputStream' type='@' index='0' declared_type='NSOutputStream*'/>
+<arg type='@' index='0' name='outputStream' declared_type='NSOutputStream*'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setPort:'>
-<arg name='port' type='i' index='0' declared_type='int'/>
+<arg type='i' index='0' name='port' declared_type='int'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='setSettings:'>
-<arg name='settings' type='@' index='0' declared_type='NSDictionary*'/>
+<arg type='@' index='0' name='settings' declared_type='NSDictionary*'/>
 <retval type='v' declared_type='void'/>
 </method>
 <method selector='settings'>

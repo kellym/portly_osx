@@ -9,9 +9,9 @@
 <method selector='connect'>
 <retval declared_type='_Bool' type='B'/>
 </method>
-<method selector='connect:port:' class_method='true'>
-<arg declared_type='NSString*' index='0' name='hostname' type='@'/>
-<arg declared_type='int' index='1' name='port' type='i'/>
+<method class_method='true' selector='connect:port:'>
+<arg declared_type='NSString*' type='@' index='0' name='hostname'/>
+<arg declared_type='int' type='i' index='1' name='port'/>
 <retval declared_type='_Bool' type='B'/>
 </method>
 <method selector='delegate'>
@@ -21,23 +21,23 @@
 <retval declared_type='id' type='@'/>
 </method>
 <method selector='initWithHost:port:'>
-<arg declared_type='NSString*' index='0' name='hostname' type='@'/>
-<arg declared_type='int' index='1' name='portnum' type='i'/>
+<arg declared_type='NSString*' type='@' index='0' name='hostname'/>
+<arg declared_type='int' type='i' index='1' name='portnum'/>
 <retval declared_type='id' type='@'/>
 </method>
 <method selector='port'>
 <retval declared_type='int' type='i'/>
 </method>
 <method selector='receivedPing:'>
-<arg declared_type='NSNotification*' index='0' name='notif' type='@'/>
+<arg declared_type='NSNotification*' type='@' index='0' name='notif'/>
 <retval declared_type='void' type='v'/>
 </method>
 <method selector='setDelegate:'>
-<arg declared_type='ConnectorMonitor*' index='0' name='delegate' type='@'/>
+<arg declared_type='ConnectorMonitor*' type='@' index='0' name='delegate'/>
 <retval declared_type='void' type='v'/>
 </method>
 <method selector='setPort:'>
-<arg declared_type='int' index='0' name='port' type='i'/>
+<arg declared_type='int' type='i' index='0' name='port'/>
 <retval declared_type='void' type='v'/>
 </method>
 </class>
