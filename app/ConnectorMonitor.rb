@@ -105,9 +105,10 @@ class ConnectorMonitor
           while !ApplicationController.singleton.socket do
           #  sleep 1
           end
-          Dispatch::Queue.main.async do
+          #Dispatch::Queue.main.async do
+            Logger.debug "STATE:#{@connector_id}:#{current_state ? 'on' : 'off'}"
             ApplicationController.singleton.socket.send("STATE:#{@connector_id}:#{current_state ? 'on' : 'off'}")
-          end
+          #end
         #end
         @published_state = current_state
       end
@@ -550,16 +551,14 @@ class ConnectorMonitor
         NSNotificationCenter.defaultCenter.addObserver(self, selector:'receivedError:', name:NSFileHandleDataAvailableNotification, object: @error_handle)
 
         # regular handling
-        NSNotificationCenter.defaultCenter.addObserver(@sock, selector:'receivedPing:', name:    NSFileHandleDataAvailableNotification, object: @fh)
+        NSNotificationCenter.defaultCenter.addObserver(@sock, selector:'receivedPing:', name: NSFileHandleDataAvailableNotification, object: @fh)
         NSNotificationCenter.defaultCenter.addObserver(self, selector:'taskTerminated:', name: NSTaskDidTerminateNotification, object: @task)
 
         Logger.debug 'Connecting to port.'
         @online = true
-        Dispatch::Queue.main.async do
-          if @row
-            @row.activityButton.title = "Stop"
-            @row.setOnline
-          end
+        if @row
+          @row.activityButton.title = "Stop"
+          @row.setOnline
         end
         @pref.imageView.image = App.online if @pref
         ApplicationController.singleton.setConnectorState
@@ -661,7 +660,7 @@ class ConnectorMonitor
     def receivedError(notif)
       fh = notif.object
       data = fh.availableData.to_s
-      #Logger.debug data
+      Logger.debug data
       return unless running?
       Logger.debug "continuing on anyway"
 
@@ -697,6 +696,8 @@ class ConnectorMonitor
         @timeout = 0
         #if data['TIMEOUT']
         if data.rangeOfString("TIMEOUT").location == 0
+
+
           @reconnect = false
           disconnect(false)
         end
@@ -713,6 +714,11 @@ class ConnectorMonitor
        else
          queue_reconnect
        end
+    end
+
+    def disconnectTimeout
+      disconnect(false, false)
+      @row.setOffline
     end
 
     def disconnect(awaiting_reconnect=false, async=true)
@@ -783,9 +789,9 @@ class ConnectorMonitor
       if @row
         @row.setOffline unless running? || @awaiting_reconnect
         if port_open?
-          @row.setActive
+          @row.setActive if @row
         else
-          @row.setInactive
+          @row.setInactive if @row
         end
       end
     end

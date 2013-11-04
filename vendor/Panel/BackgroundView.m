@@ -60,9 +60,9 @@
     float amount = 0.1f * ((float)376 / (float)panel.frame.size.height);
     [[[[NSGradient alloc]
       initWithColorsAndLocations:
-      [NSColor colorWithDeviceWhite:1.f alpha:FILL_OPACITY], 0.f,
+      [NSColor colorWithDeviceWhite:.96f alpha:FILL_OPACITY], 0.f,
       [NSColor colorWithDeviceWhite:0.92f alpha:FILL_OPACITY], amount,
-      [NSColor colorWithDeviceWhite:1.f alpha:FILL_OPACITY], 1.0f - amount,
+      [NSColor colorWithDeviceWhite:.96f alpha:FILL_OPACITY], 1.0f - amount,
       [NSColor colorWithDeviceWhite:.92f alpha:FILL_OPACITY], 1.f,
       nil] autorelease] drawInBezierPath: path angle: 270];
     //[path fill];
@@ -80,8 +80,8 @@
 
     [NSGraphicsContext restoreGraphicsState];
     NSColor *lineColor = [NSColor colorWithCalibratedRed:185/255.0f green:185/255.0f blue:185/255.0f alpha:1.0f];
-    NSPoint point1 = NSMakePoint(NSMinX([self bounds]), 29);
-    NSPoint point2 = NSMakePoint(NSMaxX([self bounds]), 29);
+    NSPoint point1 = NSMakePoint(NSMinX([self bounds]), 35);
+    NSPoint point2 = NSMakePoint(NSMaxX([self bounds]), 35);
     NSPoint point3 = NSMakePoint(NSMinX([self bounds]), NSMaxY([self bounds]) - 46);
     NSPoint point4 = NSMakePoint(NSMaxX([self bounds]), NSMaxY([self bounds]) - 46);
     [lineColor set];

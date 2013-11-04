@@ -53,6 +53,7 @@ class ApplicationController
     end
 
     def drawLoginScreen
+       self.panel.hideAddButton
         NSApplication.sharedApplication.activateIgnoringOtherApps(true)
         LoginController.sharedController.showWindow nil
     end
@@ -82,6 +83,7 @@ class ApplicationController
     def startApp
       Dispatch::Queue.main.async do
         self.panel.showBlankSlate
+        self.panel.showAddButton
       end
       startAppInBackground(nil)
       #self.performSelectorInBackground('startAppInBackground:', withObject: nil)
@@ -115,7 +117,8 @@ class ApplicationController
         loadConnectors
         ConnectorsViewController.setup
         @preferences_menu.setEnabled(true)
-        @add_tunnel_menu.setEnabled(true)
+        self.panel.showAddButton
+        #@add_tunnel_menu.setEnabled(true)
       else
         # we need to close out this joint, yo!
         Logger.debug "Putting token failed. Signing out."
@@ -208,10 +211,10 @@ class ApplicationController
       @updater = SUUpdater.new
       @status_menu = self.panel.statusMenu
 
-      @add_tunnel_menu =  NSMenuItem.alloc.initWithTitle("Add a port...", action: 'addTunnel:', keyEquivalent: '')
-      @add_tunnel_menu.setTarget self
-      @add_tunnel_menu.setEnabled(false)
-      @status_menu.addItem @add_tunnel_menu
+      #@add_tunnel_menu =  NSMenuItem.alloc.initWithTitle("Add a port...", action: 'addTunnel:', keyEquivalent: '')
+      #@add_tunnel_menu.setTarget self
+      #@add_tunnel_menu.setEnabled(false)
+      #@status_menu.addItem @add_tunnel_menu
 
       Logger.debug '- prefs menu'
       @preferences_menu =  NSMenuItem.alloc.initWithTitle("Preferences", action: 'showPreferences:', keyEquivalent: ',')
@@ -219,8 +222,8 @@ class ApplicationController
       @preferences_menu.setEnabled(false)
       @status_menu.addItem @preferences_menu
 
-      @status_menu.addItem(NSMenuItem.separatorItem)
-      Logger.debug '- updater'
+      #@status_menu.addItem(NSMenuItem.separatorItem)
+      #Logger.debug '- updater'
       updater = NSMenuItem.alloc.initWithTitle("Check for update...", action: 'checkForUpdates:', keyEquivalent: 'u')
       updater.setTarget @updater
       @status_menu.addItem updater
@@ -284,6 +287,7 @@ class ApplicationController
     def loadConnectors
       App.global.connectors = []
       ConnectorMonitor.load_all
+      self.panel.showAddButton
       if App.global.connectors.size == 0
         self.panel.showBlankSlate
       end
@@ -378,7 +382,8 @@ class ApplicationController
     def signOut
       self.panel.header = ""
       @preferences_menu.setEnabled(false)
-      @add_tunnel_menu.setEnabled(false)
+      #@add_tunnel_menu.setEnabled(false)
+      self.panel.hideAddButton
       File.delete(App.private_key_path) if File.exists?(App.private_key_path)
       File.delete(App.public_key_path) if File.exists?(App.public_key_path)
       ApplicationController.singleton.drawLoginScreen

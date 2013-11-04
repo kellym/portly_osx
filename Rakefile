@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-$:.unshift("/Library/RubyMotion2.7/lib")
+#$:.unshift("/Library/RubyMotion2.11/lib")
+$:.unshift("/Library/RubyMotion/lib")
 require 'motion/project/template/osx'
 
 Motion::Project::App.setup do |app|
   # Use `rake config' to see complete project settings.
   app.name = 'Portly'
-  app.version = '40'
-  app.short_version = '1.0.3'
+  app.version = '43'
+  app.short_version = '1.1.0'
   app.deployment_target = '10.7'
   app.sdk_version = '10.8'
   app.codesign_certificate = "Developer ID Application: Fully Brand LLC (DENUL24P9C)"
@@ -19,7 +20,6 @@ Motion::Project::App.setup do |app|
 
   app.vendor_project('vendor/Panel', :static)
   app.vendor_project('vendor/SocketStream', :static)
-  app.vendor_project('vendor/Sock', :static)
   app.vendor_project('vendor/Computer', :static)
   app.vendor_project('vendor/StayAwake', :static)
   app.vendor_project('vendor/HoverButton', :static)

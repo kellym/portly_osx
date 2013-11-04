@@ -1,12 +1,12 @@
-#import "SettingsView.h"
+#import "AddPortView.h"
 
-@implementation SettingsView
+@implementation AddPortView
 
 - (id)initWithFrame:(NSRect)frameRect delegate:(NSResponder *)delegateObject
 {
   self = [super initWithFrame:frameRect];
   if (self) {
-      NSImage *newImage = [NSImage imageNamed: @"gear"];
+      NSImage *newImage = [NSImage imageNamed: @"add"];
       [newImage setTemplate: NO];
       [self setImage:newImage];
       delegate = delegateObject;
@@ -16,8 +16,8 @@
 }
 
 -(void)mouseDown:(NSEvent *)theEvent {
-    if (delegate && [ delegate respondsToSelector:@selector(showSettings:)]){
-        [delegate tryToPerform:@selector(showSettings:) with: theEvent];
+    if (delegate && [ delegate respondsToSelector:@selector(addTunnel:)]){
+        [delegate tryToPerform:@selector(addTunnel:) with: theEvent];
     }
 }
 

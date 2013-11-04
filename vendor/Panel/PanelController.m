@@ -8,10 +8,11 @@
 #define CONTENT_HEIGHT_TOP 40
 #define CONTENT_HEIGHT_BOTTOM 46
 #define POPUP_HEIGHT 320
-#define PANEL_WIDTH 280
+#define PANEL_WIDTH 300
 #define MENU_ANIMATION_DURATION .1
-#define BASE_HEIGHT 76
+#define BASE_HEIGHT 82
 #define ROW_HEIGHT 60
+#define ADD_PORT_PADDING 9
 
 #pragma mark -
 
@@ -74,16 +75,21 @@
     [self.window.contentView addSubview: logo];
 
     headerField = NSTextField.alloc.init;
-    headerField.frame = NSMakeRect(130,height - CONTENT_HEIGHT_BOTTOM + 3,140,23);
+    //headerField.frame = NSMakeRect(130,height - CONTENT_HEIGHT_BOTTOM + 3,140,23);
+    headerField.frame = NSMakeRect(10,4,150,20);
     headerField.stringValue = header;
-    [headerField setAlignment: NSRightTextAlignment];
-    [headerField setTextColor:[NSColor colorWithDeviceWhite:0.15f alpha:1.0f]];
+    //[headerField setAlignment: NSRightTextAlignment];
+    [headerField setTextColor:[NSColor colorWithDeviceWhite:0.4f alpha:1.0f]];
     [headerField setBezeled:NO];
     [headerField setDrawsBackground:NO];
     [headerField setEditable:NO];
     [headerField setSelectable:NO];
     [headerField setFont:[NSFont fontWithName:@"Lucida Grande" size:11]]; //[NSFont boldSystemFontOfSize:11]];
     [self.window.contentView addSubview: headerField];
+
+    addPortView = [ [ AddPortView alloc] initWithFrame: NSMakeRect(PANEL_WIDTH - 20 - ADD_PORT_PADDING, height - CONTENT_HEIGHT_BOTTOM + ADD_PORT_PADDING, 20, 20) delegate:self];
+    [self.window.contentView addSubview: addPortView];
+    [addPortView setHidden:YES];
 
     // link to getportly
     getportly = [[ UrlView alloc ] initWithFrame: NSMakeRect(35,height - CONTENT_HEIGHT_BOTTOM + 3, 90, 23) title: @"getportly.com" url: @"https://getportly.com" delegate: self];
@@ -104,12 +110,12 @@
     [titleField setEditable:NO];
     [titleField setSelectable:NO];
     [titleField setFont:[NSFont fontWithName:@"Lucida Grande" size:11]];
-    [self.window.contentView addSubview: titleField];
+    //[self.window.contentView addSubview: titleField];
 
-    settingsView = [ [ SettingsView alloc] initWithFrame: NSMakeRect(PANEL_WIDTH - 18 - 5, 5, 18, 18) delegate:self];
+    settingsView = [ [ SettingsView alloc] initWithFrame: NSMakeRect(PANEL_WIDTH - 24 - 5, 5, 24, 24) delegate:self];
     [self.window.contentView addSubview: settingsView];
 
-    blankSlateView = [[ColorGradientView alloc] initWithFrame: NSMakeRect(0, CONTENT_HEIGHT_TOP - 10, PANEL_WIDTH, 60)];
+    blankSlateView = [[ColorGradientView alloc] initWithFrame: NSMakeRect(0, CONTENT_HEIGHT_TOP - 4, PANEL_WIDTH, 60)];
 
         baseBackgroundView = ColorGradientView.alloc.init;
         baseBackgroundView.frame = [blankSlateView bounds];
@@ -118,7 +124,7 @@
         [baseBackgroundView setAngle: 270];
         [baseBackgroundView setLocation: 0.1];
         whiteGradientView = ColorGradientView.alloc.init;
-        whiteGradientView.frame = NSMakeRect(190, 0, 90, ROW_HEIGHT-1);
+        whiteGradientView.frame = NSMakeRect(PANEL_WIDTH-90, 0, 90, ROW_HEIGHT-1);
         [whiteGradientView setStartingColor:[NSColor colorWithCalibratedWhite:1.0f alpha:0.0f]];
         [whiteGradientView setEndingColor:[NSColor colorWithCalibratedWhite:1.0f alpha:1.0f]];
 
@@ -128,15 +134,33 @@
         [otherWhiteGradientView setEndingColor:[NSColor colorWithCalibratedWhite:1.0f alpha:1.0f]];
         [otherWhiteGradientView setAngle: 180];
 
-    blankSlate = [[Button alloc] initWithFrame:NSMakeRect(65, 15, 150, 28)];
-    blankSlate.title = @"Add a Port";
+    blankSlate = [[Button alloc] initWithFrame:NSMakeRect(PANEL_WIDTH - 170, 15, 150, 28)];
+    blankSlate.title = @"Add your first port";
     [blankSlate setDelegate: self];
     [blankSlate setHidden: YES];
+    arrowView = [[NSImageView alloc] initWithFrame:NSMakeRect( PANEL_WIDTH - 37, 20, 24, 24)];
+    [arrowView setImage:[NSImage imageNamed: @"arrow"]];
+    [arrowView setHidden: YES];
+
+    arrowTextField = NSTextField.alloc.init;
+    arrowTextField.frame = NSMakeRect(PANEL_WIDTH - 237, 16, 200, 20);
+    arrowTextField.stringValue = @"Add your first port";
+    [arrowTextField setHidden: YES];
+    [arrowTextField setAlignment: NSRightTextAlignment];
+    [arrowTextField setTextColor:[NSColor colorWithDeviceWhite:0.4f alpha:1.0f]];
+    [arrowTextField setBezeled:NO];
+    [arrowTextField setDrawsBackground:NO];
+    [arrowTextField setEditable:NO];
+    [arrowTextField setSelectable:NO];
+    [arrowTextField setFont:[NSFont fontWithName:@"Lucida Grande" size:13]];
+
     blankSlateView.subviews = [NSArray arrayWithObjects:
       baseBackgroundView,
       whiteGradientView,
       otherWhiteGradientView,
-      blankSlate,
+      arrowView,
+      arrowTextField,
+      //blankSlate,
       nil];
 
     shouldShowBlankSlate = true;
@@ -153,8 +177,22 @@
                   context: NULL];
 }
 
+- (void) showAddButton
+{
+  [addPortView setHidden: NO];
+  [arrowView setHidden: NO];
+  [arrowTextField setHidden: NO];
+}
+
+- (void) hideAddButton
+{
+  [addPortView setHidden: YES];
+  [arrowView setHidden: YES];
+  [arrowTextField setHidden: YES];
+}
 - (void) showBlankSlate
 {
+  [self showAddButton];
   if ([rows count] == 0) {
     [blankSlate setHidden: NO];
      [self.window.contentView setNeedsDisplay: YES];
@@ -164,6 +202,7 @@
 
 - (void) hideBlankSlate
 {
+  [self hideAddButton];
   [blankSlate setHidden: YES];
 }
 
@@ -182,22 +221,22 @@
     // Resize panel
     NSRect statusRect = [self statusRectForWindow:[self window]];
     NSRect panelRect = [[self window] frame];
-    NSRect headerRect = [headerField frame];
+    NSRect headerRect = [addPortView frame];
     NSRect logoRect = [logo frame];
     NSRect urlRect = [getportly frame];
     //panelRect.origin.y = panelRect.origin.y - 60;
     if ([rows count] > 0) {
       panelRect.size.height = BASE_HEIGHT + (60 * ([rows count]+1));
       panelRect.origin.y = NSMaxY(statusRect) - NSHeight(panelRect);
-      headerRect.origin.y = panelRect.size.height - CONTENT_HEIGHT_BOTTOM + 3; //headerRect.origin.y + 60;
+      headerRect.origin.y = panelRect.size.height - CONTENT_HEIGHT_BOTTOM + ADD_PORT_PADDING; //headerRect.origin.y + 60;
       logoRect.origin.y = panelRect.size.height - CONTENT_HEIGHT_BOTTOM + 7; //logoRect.origin.y + 60;
       urlRect.origin.y = panelRect.size.height - CONTENT_HEIGHT_BOTTOM + 3; // urlRect.origin.y + 60;
     }
    // else {
    //   [blankSlate setHidden:YES];
    // }
-    [ headerField setFrame:headerRect ];
-    [ headerField setNeedsDisplay: YES];
+    [ addPortView setFrame:headerRect ];
+    [ addPortView setNeedsDisplay: YES];
     [ logo setFrame: logoRect ];
     [ logo setNeedsDisplay: YES];
     [ getportly setFrame:urlRect ];
@@ -216,7 +255,7 @@
    [rows removeObject:sender];
     NSRect statusRect = [self statusRectForWindow:[self window]];
     NSRect panelRect = [[self window] frame];
-    NSRect headerRect = [headerField frame];
+    NSRect headerRect = [addPortView frame];
     NSRect logoRect = [logo frame];
     NSRect urlRect = [getportly frame];
 
@@ -234,15 +273,16 @@
       }
       panelRect.origin.y = NSMaxY(statusRect) - NSHeight(panelRect);
     }
-    headerRect.origin.y = panelRect.size.height - CONTENT_HEIGHT_BOTTOM + 3; //headerRect.origin.y + 60;
+    //headerRect.origin.y = panelRect.size.height - CONTENT_HEIGHT_BOTTOM + 3; //headerRect.origin.y + 60;
     logoRect.origin.y = panelRect.size.height - CONTENT_HEIGHT_BOTTOM + 7; //logoRect.origin.y + 60;
     urlRect.origin.y = panelRect.size.height - CONTENT_HEIGHT_BOTTOM + 3; // urlRect.origin.y + 60;
     //headerRect.origin.y = headerRect.origin.y - 60;
+    headerRect.origin.y = panelRect.size.height - CONTENT_HEIGHT_BOTTOM + ADD_PORT_PADDING; //headerRect.origin.y + 60;
     //urlRect.origin.y = urlRect.origin.y - 60;
     //logoRect.origin.y = logoRect.origin.y - 60;
     [[self window] setFrame:panelRect display:YES];
-    [ headerField setFrame:headerRect ];
-    [ headerField setNeedsDisplay: YES];
+    [ addPortView setFrame:headerRect ];
+    [ addPortView setNeedsDisplay: YES];
     [ logo setFrame: logoRect ];
     [ logo setNeedsDisplay: YES];
     [ getportly setFrame:urlRect ];
@@ -295,6 +335,13 @@
 }
 - (void)showSettings:(NSEvent *)theEvent {
   [NSMenu popUpContextMenu:statusMenu withEvent:theEvent forView:[[self window] contentView]];
+}
+
+- (void)addTunnel:(NSEvent *)theEvent {
+  [self setHasActivePanel: NO];
+  dispatch_after(dispatch_walltime(NULL, NSEC_PER_SEC * CLOSE_DURATION * 2), dispatch_get_main_queue(), ^{
+    [[self delegate] addTunnel: (id)theEvent];
+  });
 }
 
 - (void)triggerActivePanel:(BOOL)flag

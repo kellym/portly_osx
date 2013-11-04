@@ -1,6 +1,7 @@
 #import "BackgroundView.h"
 #import "ColorGradientView.h"
 #import "Row.h"
+#import "AddPortView.h"
 #import "SettingsView.h"
 #import "StatusItemView.h"
 #import "UrlView.h"
@@ -30,9 +31,12 @@
     NSImageView *logo;
     UrlView *getportly;
     SettingsView *settingsView;
+    AddPortView *addPortView;
     NSMenu *statusMenu;
     NSMutableArray *rows;
     NSString * header;
+    NSTextField *arrowTextField;
+    NSImageView * arrowView;
     ColorGradientView * blankSlateView;
     ColorGradientView *baseBackgroundView;
     ColorGradientView *whiteGradientView;
@@ -45,6 +49,7 @@
 @property (nonatomic, unsafe_unretained) IBOutlet BackgroundView *backgroundView;
 
 @property (nonatomic, retain) SettingsView *settingsView;
+@property (nonatomic, retain) AddPortView *addPortView;
 @property (nonatomic, retain) NSString *title;
 @property (nonatomic, retain) NSString *header;
 @property (nonatomic, unsafe_unretained) NSMutableArray *rows;
@@ -53,11 +58,14 @@
 @property (nonatomic) BOOL isAnimating;
 @property (nonatomic, unsafe_unretained, readonly) id<PanelControllerDelegate> delegate;
 
+- (void) showAddButton;
+- (void) hideAddButton;
 - (void) showBlankSlate;
 - (void) hideBlankSlate;
 - (void) linkClicked: (id) sender;
 - (void)removeRowView:(id)sender;
 - (void)showSettings:(id)sender;
+- (void)addTunnel:(id)sender;
 - (BOOL) isAnimating;
 - (void)defineStatusMenu:(NSMenu *)menu;
 - (void)triggerActivePanel:(BOOL)flag;

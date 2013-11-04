@@ -1,81 +1,138 @@
 <?xml version='1.0'?>
 <signatures version='1.0'>
-<class name='SocketStream'>
-<method selector='close'>
-<retval type='v' declared_type='void'/>
+<class name='ConnectorMonitor'>
+<method selector='isRunning'>
+<retval declared_type='BOOL' type='B'/>
+</method>
+</class>
+<class name='Sock'>
+<method selector='connect'>
+<retval declared_type='_Bool' type='B'/>
+</method>
+<method class_method='true' selector='connect:port:'>
+<arg declared_type='NSString*' index='0' name='hostname' type='@'/>
+<arg declared_type='int' index='1' name='port' type='i'/>
+<retval declared_type='_Bool' type='B'/>
 </method>
 <method selector='delegate'>
-<retval type='^i' declared_type='int*'/>
-</method>
-<method selector='handleInput'>
-<retval type='@' declared_type='NSString*'/>
-</method>
-<method selector='host'>
-<retval type='@' declared_type='NSHost*'/>
+<retval declared_type='ConnectorMonitor*' type='@'/>
 </method>
 <method selector='init'>
-<retval type='@' declared_type='id'/>
-</method>
-<method selector='initWithAddress:port:'>
-<arg type='@' index='0' name='addressString' declared_type='NSString*'/>
-<arg type='i' index='1' name='port' declared_type='int'/>
-<retval type='@' declared_type='id'/>
+<retval declared_type='id' type='@'/>
 </method>
 <method selector='initWithHost:port:'>
-<arg type='@' index='0' name='hostString' declared_type='NSString*'/>
-<arg type='i' index='1' name='port' declared_type='int'/>
-<retval type='@' declared_type='id'/>
-</method>
-<method selector='inputStream'>
-<retval type='@' declared_type='NSInputStream*'/>
-</method>
-<method selector='keepInputAlive'>
-<retval type='B' declared_type='_Bool'/>
-</method>
-<method selector='keepOutputAlive'>
-<retval type='B' declared_type='_Bool'/>
-</method>
-<method selector='open:output:'>
-<arg type='@' index='0' name='inputDelegate' declared_type='NSStream*'/>
-<arg type='@' index='1' name='outputDelegate' declared_type='NSStream*'/>
-<retval type='B' declared_type='_Bool'/>
-</method>
-<method selector='outputStream'>
-<retval type='@' declared_type='NSOutputStream*'/>
+<arg declared_type='NSString*' index='0' name='hostname' type='@'/>
+<arg declared_type='int' index='1' name='portnum' type='i'/>
+<retval declared_type='id' type='@'/>
 </method>
 <method selector='port'>
-<retval type='i' declared_type='int'/>
+<retval declared_type='int' type='i'/>
 </method>
-<method selector='sendData:'>
-<arg type='@' index='0' name='data' declared_type='NSString*'/>
-<retval type='v' declared_type='void'/>
+<method selector='receivedPing:'>
+<arg declared_type='NSNotification*' index='0' name='notif' type='@'/>
+<retval declared_type='void' type='v'/>
 </method>
 <method selector='setDelegate:'>
-<arg type='^i' index='0' name='delegate' declared_type='int*'/>
-<retval type='v' declared_type='void'/>
-</method>
-<method selector='setHost:'>
-<arg type='@' index='0' name='host' declared_type='NSHost*'/>
-<retval type='v' declared_type='void'/>
-</method>
-<method selector='setInputStream:'>
-<arg type='@' index='0' name='inputStream' declared_type='NSInputStream*'/>
-<retval type='v' declared_type='void'/>
-</method>
-<method selector='setOutputStream:'>
-<arg type='@' index='0' name='outputStream' declared_type='NSOutputStream*'/>
-<retval type='v' declared_type='void'/>
+<arg declared_type='ConnectorMonitor*' index='0' name='delegate' type='@'/>
+<retval declared_type='void' type='v'/>
 </method>
 <method selector='setPort:'>
-<arg type='i' index='0' name='port' declared_type='int'/>
-<retval type='v' declared_type='void'/>
+<arg declared_type='int' index='0' name='port' type='i'/>
+<retval declared_type='void' type='v'/>
+</method>
+</class>
+<class name='SocketStream'>
+<method selector='close'>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='delegate'>
+<retval declared_type='Stream*' type='@'/>
+</method>
+<method selector='handleInput'>
+<retval declared_type='NSString*' type='@'/>
+</method>
+<method selector='host'>
+<retval declared_type='NSHost*' type='@'/>
+</method>
+<method selector='init'>
+<retval declared_type='id' type='@'/>
+</method>
+<method selector='initWithAddress:port:'>
+<arg declared_type='NSString*' index='0' name='addressString' type='@'/>
+<arg declared_type='int' index='1' name='port' type='i'/>
+<retval declared_type='id' type='@'/>
+</method>
+<method selector='initWithHost:port:delegate:'>
+<arg declared_type='NSString*' index='0' name='hostString' type='@'/>
+<arg declared_type='int' index='1' name='port' type='i'/>
+<arg declared_type='Stream*' index='2' name='aDelegate' type='@'/>
+<retval declared_type='id' type='@'/>
+</method>
+<method selector='inputStream'>
+<retval declared_type='NSInputStream*' type='@'/>
+</method>
+<method selector='keepInputAlive'>
+<retval declared_type='_Bool' type='B'/>
+</method>
+<method selector='keepOutputAlive'>
+<retval declared_type='_Bool' type='B'/>
+</method>
+<method selector='open'>
+<retval declared_type='_Bool' type='B'/>
+</method>
+<method selector='outputStream'>
+<retval declared_type='NSOutputStream*' type='@'/>
+</method>
+<method selector='port'>
+<retval declared_type='int' type='i'/>
+</method>
+<method selector='sendData:'>
+<arg declared_type='NSString*' index='0' name='data' type='@'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setDelegate:'>
+<arg declared_type='Stream*' index='0' name='delegate' type='@'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setHost:'>
+<arg declared_type='NSHost*' index='0' name='host' type='@'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setInputStream:'>
+<arg declared_type='NSInputStream*' index='0' name='inputStream' type='@'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setOutputStream:'>
+<arg declared_type='NSOutputStream*' index='0' name='outputStream' type='@'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setPort:'>
+<arg declared_type='int' index='0' name='port' type='i'/>
+<retval declared_type='void' type='v'/>
 </method>
 <method selector='setSettings:'>
-<arg type='@' index='0' name='settings' declared_type='NSDictionary*'/>
-<retval type='v' declared_type='void'/>
+<arg declared_type='NSDictionary*' index='0' name='settings' type='@'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setSock:'>
+<arg declared_type='Sock*' index='0' name='sock' type='@'/>
+<retval declared_type='void' type='v'/>
 </method>
 <method selector='settings'>
-<retval type='@' declared_type='NSDictionary*'/>
+<retval declared_type='NSDictionary*' type='@'/>
+</method>
+<method selector='sock'>
+<retval declared_type='Sock*' type='@'/>
+</method>
+</class>
+<class name='Stream'>
+<method selector='handleInput:'>
+<arg declared_type='NSStreamEvent' index='0' name='aStream' type='I' type64='Q'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='handleOutput:'>
+<arg declared_type='NSStreamEvent' index='0' name='aStream' type='I' type64='Q'/>
+<retval declared_type='void' type='v'/>
 </method>
 </class>
 </signatures>

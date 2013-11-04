@@ -7,18 +7,24 @@
 //
 
 #import "Row.h"
+#define ROW_WIDTH 300
 #define ROW_HEIGHT 60
 
 @implementation Row
 
 @synthesize backgroundColor;
+@synthesize inactiveColor;
 @synthesize lineColor;
+@synthesize hoverColor;
+@synthesize disabledHoverColor;
 @synthesize title;
 @synthesize subtitle;
 @synthesize delegate;
 @synthesize parent;
 @synthesize currentState;
 @synthesize activityButton;
+@synthesize gradientView;
+@synthesize fillGradientView;
 
 - (id)initWithFrame:(NSRect)frame delegate:(NSResponder *)delegateObject parent: (NSObject *)parentObject
 {
@@ -28,54 +34,38 @@
         parent = parentObject;
 
         self.backgroundColor = [NSColor whiteColor];
-        hoverColor =[NSColor colorWithCalibratedRed:187/255.0f green:242/255.0f blue:245/255.0f alpha:1.0f]; // [NSColor colorWithCalibratedRed:220/255.0f green:237/255.0f blue:255/255.0f alpha:1.0f];
+        self.hoverColor = [ NSColor colorWithCalibratedRed:207/255.0f green:242/255.0f blue:249/255.0f alpha:1.0f]; // [NSColor colorWithCalibratedRed:220/255.0f green:237/255.0f blue:255/255.0f alpha:1.0f];
+        self.disabledHoverColor = [NSColor colorWithCalibratedRed:255/255.0f green:255/255.0f blue:255/255.0f alpha:1.0f]; // [NSColor colorWithCalibratedRed:220/255.0f green:237/255.0f blue:255/255.0f alpha:1.0f];
 
-        copyButton = [[Button alloc] initWithFrame:NSMakeRect(190, 14, 80, 32)];
+        self.inactiveColor =[NSColor colorWithCalibratedRed:205/255.0f green:205/255.0f blue:205/255.0f alpha:1.0f]; // [NSColor colorWithCalibratedRed:220/255.0f green:237/255.0f blue:255/255.0f alpha:1.0f];
+
+        copyButton = [[Button alloc] initWithFrame:NSMakeRect(ROW_WIDTH - 90, 12, 80, 35)];
         copyButton.title = @"Copy Link";
 
-        NSRect location = NSMakeRect(8, 12, 59, 32);
+        NSRect location = NSMakeRect(10, 12, 62, 35);
         activityButton = [[Button alloc] initWithFrame:location];
         currentState = [[RowStatus alloc] initWithFrame:location];
 
-        [self setLineColor: [NSColor colorWithCalibratedRed:150/255.0f green:167/255.0f blue:185/255.0f alpha:1.0f]];
+        [self setLineColor: [NSColor colorWithCalibratedRed:226/255.0f green:226/255.0f blue:226/255.0f alpha:1.0f]];
         //[self setBackgroundColor: [NSColor colorWithCalibratedRed:220/255.0f green:237/255.0f blue:255/255.0f alpha:1.0f]];
-        [self setBackgroundColor: hoverColor];
-
-        baseBackgroundView = ColorGradientView.alloc.init;
-        baseBackgroundView.frame = [self bounds];
-        [baseBackgroundView setStartingColor: [NSColor colorWithCalibratedWhite: 0.f alpha: 0.05f]];
-        [baseBackgroundView setEndingColor: [NSColor colorWithCalibratedWhite: 0.f alpha: 0.0f]];
-        [baseBackgroundView setAngle: 270];
-        [baseBackgroundView setLocation: 0.1];
+        [self setBackgroundColor: [self hoverColor]];
 
         hoverBackgroundView = ColorGradientView.alloc.init;
-        hoverBackgroundView.frame = [self bounds];
+        hoverBackgroundView.frame = NSMakeRect(0,0,ROW_WIDTH,ROW_HEIGHT-1);
         [hoverBackgroundView setStartingColor: [self backgroundColor]];
-        [hoverBackgroundView setEndingColor: [self backgroundColor]];
 
-        fillGradientView = ColorGradientView.alloc.init;
-        fillGradientView.frame = NSMakeRect(170, 0, 110, ROW_HEIGHT-1);
-        [fillGradientView setStartingColor:hoverColor];
+        self.fillGradientView = ColorGradientView.alloc.init;
+        self.fillGradientView.frame = NSMakeRect(ROW_WIDTH-130, 0, 130, ROW_HEIGHT-1);
+        [self.fillGradientView setStartingColor:[self hoverColor]];
 
-        whiteGradientView = ColorGradientView.alloc.init;
-        whiteGradientView.frame = NSMakeRect(190, 0, 90, ROW_HEIGHT-1);
-        [whiteGradientView setStartingColor:[NSColor colorWithCalibratedWhite:1.0f alpha:0.0f]];
-        [whiteGradientView setEndingColor:[NSColor colorWithCalibratedWhite:1.0f alpha:1.0f]];
-
-        otherWhiteGradientView = ColorGradientView.alloc.init;
-        otherWhiteGradientView.frame = NSMakeRect(0, 0, 90, ROW_HEIGHT-1);
-        [otherWhiteGradientView setStartingColor:[NSColor colorWithCalibratedWhite:1.0f alpha:0.0f]];
-        [otherWhiteGradientView setEndingColor:[NSColor colorWithCalibratedWhite:1.0f alpha:1.0f]];
-        [otherWhiteGradientView setAngle: 180];
-
-        gradientView = ColorGradientView.alloc.init;
-        gradientView.frame = NSMakeRect(100, 0, 70, ROW_HEIGHT-1);
-        [gradientView setStartingColor:[NSColor colorWithCalibratedRed:187/255.0f green:242/255.0f blue:245/255.0f alpha:0.0f]];
-        [gradientView setEndingColor:hoverColor];
+        self.gradientView = ColorGradientView.alloc.init;
+        self.gradientView.frame = NSMakeRect(100, 0, 70, ROW_HEIGHT-1);
+        [self.gradientView setStartingColor:[NSColor colorWithCalibratedRed:207/255.0f green:242/255.0f blue:249/255.0f alpha:0.0f]];
+        [self.gradientView setEndingColor:[self hoverColor]];
 
         titleField = NSTextField.alloc.init;
         titleField.stringValue = @"";
-        titleField.frame = NSMakeRect(76, 24, 200, 20);
+        titleField.frame = NSMakeRect(78, 25, 200, 20);
         [titleField setBezeled:NO];
         [titleField setDrawsBackground:NO];
         [titleField setEditable:NO];
@@ -87,7 +77,7 @@
 
         subtitleField = NSTextField.alloc.init;
         subtitleField.stringValue = @"";
-        subtitleField.frame = NSMakeRect(76, 8, 200, 20);
+        subtitleField.frame = NSMakeRect(76, 9, 200, 20);
         [subtitleField setTextColor:[NSColor grayColor]];
         [subtitleField setBezeled:NO];
         [subtitleField setDrawsBackground:NO];
@@ -97,22 +87,19 @@
         [[subtitleField cell] setLineBreakMode:NSLineBreakByTruncatingTail];
 
         [copyButton setHidden: YES];
-        [gradientView setHidden:YES];
+        [self.gradientView setHidden:YES];
         [hoverBackgroundView setHidden:YES];
-        [fillGradientView setHidden:YES];
+        [self.fillGradientView setHidden:YES];
         [activityButton setHidden:YES];
 
         self.subviews = [NSArray arrayWithObjects:
-            baseBackgroundView,
-            otherWhiteGradientView,
             hoverBackgroundView,
             currentState,
             activityButton,
             subtitleField,
             titleField,
-            whiteGradientView,
-            fillGradientView,
-            gradientView,
+            self.fillGradientView,
+            self.gradientView,
             copyButton,
             nil
         ];
@@ -202,27 +189,49 @@
 
 - (void) setActive {
   [currentState setActive];
+  [self.layer setBackgroundColor: [self hoverColor]];
+  [self.fillGradientView setStartingColor:[self hoverColor]];
+  [self.gradientView setStartingColor:[NSColor colorWithCalibratedRed:207/255.0f green:242/255.0f blue:249/255.0f alpha:0.0f]];
+  [self.gradientView setEndingColor:[self hoverColor]];
+  [hoverBackgroundView setStartingColor: [self hoverColor]];
+  [self setNeedsDisplay: YES];
+  [self.gradientView setNeedsDisplay: YES];
+  [hoverBackgroundView setNeedsDisplay: YES];
+  [self.fillGradientView setNeedsDisplay: YES];
   if ([currentState isOnline]) {
     [activityButton setTitle:@"Stop"];
   } else {
     [activityButton setTitle:@"Start"];
   }
+  [titleField setTextColor:[NSColor blackColor]];
+  [subtitleField setTextColor:[NSColor grayColor]];
   [self showActivityButtonIfMouseEntered];
 }
 
 - (void) setInactive {
+  [self.layer setBackgroundColor: [self disabledHoverColor]];
+  [self.fillGradientView setStartingColor:[self disabledHoverColor]];
+  [self.gradientView setStartingColor:[NSColor colorWithCalibratedRed:255/255.0f green:255/255.0f blue:255/255.0f alpha:0.0f]];
+  [self.gradientView setEndingColor:[self disabledHoverColor]];
+  [hoverBackgroundView setStartingColor: [self disabledHoverColor]];
+  [self setNeedsDisplay: YES];
+  [self.gradientView setNeedsDisplay: YES];
+  [hoverBackgroundView setNeedsDisplay: YES];
+  [self.fillGradientView setNeedsDisplay: YES];
   [currentState setInactive];
   [activityButton setTitle:@"Cancel"];
+  [titleField setTextColor: [self inactiveColor]];
+  [subtitleField setTextColor: [self inactiveColor]];
 }
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    //NSPoint point1 = NSMakePoint(NSMinX([self bounds]), NSMaxY([self bounds]));
-    //NSPoint point2 = NSMakePoint(NSMaxX([self bounds]), NSMaxY([self bounds]));
-    //[[self lineColor] set];
+    NSPoint point1 = NSMakePoint(NSMinX([self bounds]), NSMaxY([self bounds]));
+    NSPoint point2 = NSMakePoint(NSMaxX([self bounds]), NSMaxY([self bounds]));
+    [[self lineColor] set];
     [[NSColor whiteColor] setFill];
         NSRectFill(dirtyRect);
-    //[NSBezierPath strokeLineFromPoint:point1 toPoint:point2];
+    [NSBezierPath strokeLineFromPoint:point1 toPoint:point2];
 
 }
 -(void)mouseDown:(NSEvent *)theEvent {
@@ -230,11 +239,15 @@
 
 - (void) mouseEntered:(NSEvent *)theEvent {
   isMouseEntered = true;
-  self.layer.backgroundColor = [[self backgroundColor] CGColor];
+
+  if ([currentState isOnline] || [currentState isActive]) {
+    self.layer.backgroundColor = [[self backgroundColor] CGColor];
+  } else {
+    self.layer.backgroundColor = [[self disabledHoverColor] CGColor];
+  }
   [copyButton setHidden: NO];
   [gradientView setHidden:NO];
   [fillGradientView setHidden:NO];
-  //[otherWhiteGradientView setHidden:YES];
   [hoverBackgroundView setHidden:NO];
   [self showActivityButtonIfMouseEntered];
 }
@@ -254,7 +267,6 @@
     [copyButton setHidden: YES];
     [currentState setHidden: NO];
     [gradientView setHidden:YES];
-    //[otherWhiteGradientView setHidden:NO];
     [hoverBackgroundView setHidden:YES];
     [fillGradientView setHidden:YES];
         [activityButton setHidden:YES];

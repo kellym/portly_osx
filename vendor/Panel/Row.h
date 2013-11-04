@@ -14,13 +14,12 @@
     BOOL isMouseEntered;
     Button * activityButton;
     Button * copyButton;
-    ColorGradientView *baseBackgroundView;
     ColorGradientView *hoverBackgroundView;
     ColorGradientView *fillGradientView;
     ColorGradientView *gradientView;
-    ColorGradientView *whiteGradientView;
-    ColorGradientView *otherWhiteGradientView;
     NSColor *hoverColor;
+    NSColor *disabledHoverColor;
+    NSColor *inactiveColor;
     NSColor *lineColor;
     NSColor *backgroundColor;
     NSObject *parent;
@@ -42,5 +41,11 @@
 @property(nonatomic, retain) NSString *title;
 @property(nonatomic, retain) RowStatus * currentState;
 @property(nonatomic, retain) NSColor *lineColor;
+@property(nonatomic, retain) NSColor *hoverColor;
+@property(nonatomic, retain) NSColor *disabledHoverColor;
 @property(nonatomic, retain) NSColor *backgroundColor;
+@property(nonatomic, retain) NSColor *inactiveColor;
+@property(nonatomic, retain) ColorGradientView *fillGradientView;
+@property(nonatomic, retain) ColorGradientView *gradientView;
+
 @end

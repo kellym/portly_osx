@@ -130,7 +130,7 @@
     if (isOnline) {
       if (isActive) {
         aGradient = [[NSGradient alloc]
-                   initWithStartingColor:[NSColor colorWithCalibratedRed:97/255.0f green:191/255.0f blue:116/255.0f alpha:1.0f]
+                   initWithStartingColor:[NSColor colorWithCalibratedRed:70/255.0f green:181/255.0f blue:92/255.0f alpha:1.0f]
                                endingColor:[NSColor colorWithCalibratedRed:70/255.0f green:181/255.0f blue:92/255.0f alpha:1.0f]];
       } else {
         aGradient = [[NSGradient alloc]
@@ -145,18 +145,18 @@
     } else {
       if (isActive) {
         aGradient = [[NSGradient alloc]
-                           initWithStartingColor:[NSColor grayColor]
-                           endingColor:[NSColor colorWithCalibratedWhite:.15f alpha:1.f]]; // ;NSColor blackColor]];
+                           initWithStartingColor:[NSColor colorWithCalibratedWhite:0.35f alpha: 1.f]
+                           endingColor:[NSColor colorWithCalibratedWhite:.2f alpha:1.f]]; // ;NSColor blackColor]];
       } else {
         aGradient = [[NSGradient alloc]
-          initWithStartingColor:[NSColor colorWithCalibratedWhite:0.6f alpha: 1.f]
-                               endingColor:[NSColor colorWithCalibratedWhite: 0.6f alpha: 1.f]];
-
+          initWithStartingColor:[NSColor colorWithCalibratedWhite:0.803f alpha: 1.f]
+                               endingColor:[NSColor colorWithCalibratedWhite: 0.803f alpha: 1.f]];
       }
     }
 
     NSBezierPath *path2 = [NSBezierPath bezierPathWithRoundedRect:rect xRadius:5.0 yRadius:5.0];
     //[path2 addClip];
+    /*
     NSShadow *shadow = [[NSShadow alloc] init];
     [shadow setShadowColor:[NSColor colorWithCalibratedWhite:.0f alpha:.15f]];
     [shadow setShadowBlurRadius:1.5f];
@@ -164,6 +164,7 @@
     [shadow set];
 
     [[NSColor blackColor] set];
+    */
     [path2 fill];
     //NSRectFill(rect);
     NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:rect xRadius:4.0 yRadius:4.0];
@@ -171,7 +172,7 @@
     [aGradient drawInRect:self.bounds angle:90];
     //[path2 fill];
     [aGradient release];
-    [shadow release];
+    //[shadow release];
     [super drawRect:self.bounds];
     [innerPool release];
 }

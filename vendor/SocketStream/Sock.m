@@ -112,10 +112,17 @@
   NSFileHandle *fh = [notif object];
   NSString * data = [[NSString alloc] initWithData:[fh availableData] encoding:NSUTF8StringEncoding];
   [delegate resetTimeout];
+  NSLog(@"Received ping from connected port.");
   if ([data rangeOfString:@"TIMEOUT"].location == 0) {
     NSLog(@"DISCONNECT DUE TO FREE TIMEOUT");
+    NSUserNotification *notification = [[NSUserNotification alloc] init];
+    [notification setTitle: @"Free Plan Timeout"];
+    [notification setHasActionButton: NO];
+    [notification setInformativeText: @"Your port has reached its 15 minute time limit.  Restart the connection or upgrade to Portly Pro."];
+    [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification: notification];
+    [notification release];
     [delegate disableReconnect];
-    [delegate disconnect: false];
+    [delegate disconnectTimeout];
   }
   if ([delegate isRunning]) {
     [fh waitForDataInBackgroundAndNotifyForModes:[[[NSArray alloc] initWithObjects: NSEventTrackingRunLoopMode, NSDefaultRunLoopMode, nil] autorelease]];

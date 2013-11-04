@@ -7,11 +7,13 @@
 //
 
 #import "SocketStream.h"
+#import "Sock.h"
 #include <CFNetwork/CFSocketStream.h>
 
 @implementation SocketStream
 
 @synthesize delegate;
+@synthesize sock;
 
 - (id)init
 {
@@ -22,11 +24,16 @@
 
     return self;
 }
--(id)initWithHost:(NSString *)hostString port:(int)port {
+-(id)initWithHost:(NSString *)hostString port:(int)port delegate:(Stream *)aDelegate {
   self = [super init];
   if (self) {
     self.host = [NSHost hostWithName:hostString];
     self.port = port;
+    self.delegate = aDelegate;
+    self.sock = [[Sock alloc] initWithHost: hostString port: port];
+    isInitialized = NO;
+    timeout = 0;
+    queue = dispatch_queue_create("com.fully.portly.stream", 0);
   }
   return self;
 }
@@ -38,7 +45,33 @@
   }
   return self;
 }
-- (bool)open:(NSStream <NSStreamDelegate>*)inputDelegate output:(NSStream <NSStreamDelegate>*)outputDelegate {
+
+-(void)start
+{
+  [self open];
+  timer = [NSTimer scheduledTimerWithTimeInterval: 5.0f target: self selector:@selector(queuePing) userInfo: nil repeats: YES];
+}
+
+-(void) queuePing
+{
+  //NSLog(@"Ping queued but not yet sent.");
+  if([self outputStream]) {
+    [self sendPing];
+    timeout += 1;
+    if (timeout > 2) {
+      NSLog(@"Timeout expired. Retrying.");
+      [self retrySocket];
+    }
+  }
+}
+
+-(BOOL) isInitialized
+{
+  return isInitialized;
+}
+
+- (bool)open
+{
 
     CFReadStreamRef readStream = NULL;
     CFWriteStreamRef writeStream = NULL;
@@ -48,10 +81,10 @@
     self.inputStream = (NSInputStream *)readStream;
     self.outputStream = (NSOutputStream *)writeStream;
 
-    delegate = inputDelegate;
+    //delegate = inputDelegate;
 
-    [self.inputStream setDelegate: inputDelegate];
-    [self.outputStream setDelegate: outputDelegate];
+    [self.inputStream setDelegate: self];
+    [self.outputStream setDelegate: self];
 
     [self.inputStream scheduleInRunLoop:[NSRunLoop mainRunLoop]
                        forMode:NSDefaultRunLoopMode];
@@ -88,12 +121,59 @@
       return false;
     }
 }
+
 - (void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode {
   if(aStream == [self inputStream]) {
-    [delegate handleInput: eventCode];
+    //NSLog(@"HANDLING INPUT");
+    timeout = 0;
+    switch(eventCode) {
+      //case NSStreamEventOpenCompleted:
+      //  [[self delegate] setup_input];
+      //  break;
+      case NSStreamEventHasBytesAvailable:
+        //[[self delegate] resetTimeout];
+        [self handleInputAndTriggerAction];
+        break;
+      case NSStreamEventErrorOccurred:
+        //NSLog(@"End on output.");
+      case NSStreamEventEndEncountered:
+        //NSLog(@"Error on output.");
+        [self retrySocket];
+        break;
+    }
   } else {
-    [delegate handleOutput: eventCode];
+    //NSLog(@"HANDLING OUTPUT");
+    switch(eventCode) {
+      //case NSStreamEventOpenCompleted:
+      //  [[self delegate] setup_output];
+      //  break;
+      case NSStreamEventHasSpaceAvailable:
+        if (isInitialized == NO) {
+          [self keepOutputAlive];
+          [[self delegate] publish_as_online];
+          isInitialized = YES;
+        }
+        break;
+      case NSStreamEventErrorOccurred:
+        //NSLog(@"Error on input.");
+        [self retrySocket];
+        break;
+    }
+
   }
+}
+- (void) retrySocket
+{
+  if ([self inputStream] && [self outputStream]) {
+    [self close];
+    dispatch_async(queue, ^{
+      while([[self sock] connect] != true) {
+        [NSThread sleepForTimeInterval: 1.0f];
+      }
+      [self start];
+    });
+  }
+
 }
 - (void) handleInputAndTriggerAction
 {
@@ -102,11 +182,23 @@
     uint8_t buf[2048];
     len = [[self inputStream] read: buf maxLength: 2048];
     if (len > 0) {
+      //NSLog(@"Handling the input.");
       NSAutoreleasePool *innerPool = [NSAutoreleasePool new];
-      NSString *data = [[NSString alloc] initWithBytes: buf length:len encoding:NSUTF8StringEncoding];
-      NSArray *parts = [data componentsSeparatedByString: @":"];
+      NSString *unformatted_data = [[NSString alloc] initWithBytes: buf length:len encoding:NSUTF8StringEncoding];
+      NSString *data = [unformatted_data stringByTrimmingCharactersInSet:
+                                  [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+      [unformatted_data release];
+      NSArray *parts;
+      int location;
+      location = [data rangeOfString:@":"].location;
+      if (location != -1) {
+        parts = [ [NSArray alloc] initWithObjects: [data substringToIndex:location], [data substringFromIndex: location + 1], nil];
+      } else {
+        parts = [ [NSArray alloc] initWithObjects: data, nil];
+      }
+      //NSArray *parts = [data componentsSeparatedByString: @":"];
       [delegate triggerAction: parts];
-      [data release];
+      //[data release];
       [innerPool release];
     }
   }
@@ -114,16 +206,20 @@
 
 }
 - (void) sendPing {
+  NSLog(@"Sending ping.");
   [self sendData: @"\n" ];
 }
 - (void) sendData: (NSString *)data
 {
   if ([self outputStream]) {
-      NSAutoreleasePool *innerPool = [NSAutoreleasePool new];
+    //NSLog(data);
+//      NSAutoreleasePool *innerPool = [NSAutoreleasePool new];
       unsigned char *cdata;
-      cdata = [data cStringUsingEncoding:NSASCIIStringEncoding];
+      NSString *data_copy = [data copy];
+      cdata = [data_copy cStringUsingEncoding:NSASCIIStringEncoding];
     [[self outputStream] write: cdata maxLength:[data length]];
-      [innerPool release];
+    [data_copy release];
+//      [innerPool release];
   }
 }
 
@@ -158,15 +254,20 @@
 }
 
 -(void)close {
-    [self.inputStream setDelegate:nil];
-    [self.outputStream setDelegate:nil];
+  isInitialized = NO;
     [self.inputStream close];
     [self.outputStream close];
 
-    [self.inputStream removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
-    [self.outputStream removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
-    [self.inputStream removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSEventTrackingRunLoopMode];
-    [self.outputStream removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSEventTrackingRunLoopMode];
+    // CFRunLoopSourceInvalidate
+    //[self.inputStream removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    //[self.outputStream removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    //[self.inputStream removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSEventTrackingRunLoopMode];
+    //[self.outputStream removeFromRunLoop:[NSRunLoop mainRunLoop] forMode:NSEventTrackingRunLoopMode];
+
+    [self.inputStream setDelegate:nil];
+    [self.outputStream setDelegate:nil];
+    self.inputStream = nil;
+    self.outputStream = nil;
 }
 
 @end

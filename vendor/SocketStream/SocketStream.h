@@ -8,14 +8,27 @@
 
 #import <Foundation/Foundation.h>
 #import <sys/socket.h>
+#import "Sock.h"
+
+@interface Stream
+
+-(void) handleInput:(NSStreamEvent)aStream;
+-(void) handleOutput:(NSStreamEvent)aStream;
+
+@end
 
 @interface SocketStream : NSStream <NSStreamDelegate> {
-  NSResponder *delegate;
+  Stream *delegate;
+  Sock *sock;
+  BOOL isInitialized;
+  NSTimer *timer;
+  dispatch_queue_t queue;
+  int timeout;
 }
 -(id) init;
--(id) initWithHost:(NSString *)hostString port:(int)port;
+-(id) initWithHost:(NSString *)hostString port:(int)port delegate:(Stream *)aDelegate;
 -(id) initWithAddress:(NSString *)addressString port:(int)port;
-- (bool)open:(NSStream <NSStreamDelegate>*)inputDelegate output:(NSStream <NSStreamDelegate>*)outputDelegate;
+- (bool)open;
 -(void) close;
 - (bool)keepOutputAlive;
 - (bool)keepInputAlive;
@@ -24,9 +37,10 @@
 
 @property (nonatomic, retain) NSInputStream * inputStream;
 @property (nonatomic, retain) NSOutputStream * outputStream;
-@property (nonatomic, weak) NSResponder *delegate;
+@property (nonatomic, weak) Stream *delegate;
 @property (retain)   NSHost * host;
 @property int port;
+@property (nonatomic, retain) Sock * sock;
 @property (nonatomic, retain) NSDictionary * settings;
 
 @end
