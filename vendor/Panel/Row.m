@@ -77,7 +77,7 @@
 
         subtitleField = NSTextField.alloc.init;
         subtitleField.stringValue = @"";
-        subtitleField.frame = NSMakeRect(76, 9, 200, 20);
+        subtitleField.frame = NSMakeRect(78, 9, 200, 20);
         [subtitleField setTextColor:[NSColor grayColor]];
         [subtitleField setBezeled:NO];
         [subtitleField setDrawsBackground:NO];
