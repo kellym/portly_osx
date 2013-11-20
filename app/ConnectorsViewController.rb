@@ -17,6 +17,7 @@ class ConnectorsViewController < NSViewController
   attr_accessor :new_suffix
 
   attr_accessor :connection_string
+  attr_accessor :connection_string_title
   attr_accessor :connection_type_view
   attr_accessor :connection_type
   attr_accessor :connection_type_raw_tcp_socket
@@ -30,6 +31,7 @@ class ConnectorsViewController < NSViewController
 
   attr_accessor :new_connection_type_view
   attr_accessor :new_connection_string
+  attr_accessor :new_connection_string_title
   attr_accessor :new_connection_type
   attr_accessor :new_cname
   attr_accessor :new_subdomain
@@ -97,7 +99,13 @@ class ConnectorsViewController < NSViewController
     #if sender == self.new_connection_type.menu
     title = self.new_connection_type.titleOfSelectedItem
     self.new_connection_type.setTitle title
-
+    if title == "Web Server"
+      self.new_connection_string_title.stringValue = 'Local URL:'
+      self.new_connection_string.cell.placeholderString = "http://localhost:3000"
+    else
+      self.new_connection_string_title.stringValue = 'Host and Port:'
+      self.new_connection_string.cell.placeholderString = "localhost:3000"
+    end
     hide = title != 'Web Server'
     self.new_connection_type_view.setHidden hide
   end
@@ -184,6 +192,13 @@ class ConnectorsViewController < NSViewController
                 'Web Server'
               end
       @connection_type.setTitle title
+      if title == 'Web Server'
+        @connection_string_title.stringValue = "Local URL:"
+        @connection_string.cell.placeholderString = "http://localhost:3000"
+      else
+        @connection_string_title.stringValue = "Host and Port:"
+        @connection_string.cell.placeholderString = "localhost:3000"
+      end
       @connection_type_view.setHidden(connector.socket_type == 'tcp')
       self.cname.stringValue = connector.cname || ''
       self.subdomain.stringValue = connector.subdomain || ''

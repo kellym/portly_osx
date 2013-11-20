@@ -167,6 +167,7 @@ class ConnectorMonitor
 
     def self.parse_connection_string(connection_string)
         data = {}
+        connection_string = connection_string.gsub(/^[a-z]{3,6}:\/\//, '')
         if connection_string.index('(')
           first = connection_string.index('(')
           last = connection_string.rindex(')') || connection_string.length
@@ -279,6 +280,7 @@ class ConnectorMonitor
                 'subdomain' => @model.subdomain,
                 'nickname' => @model.nickname,
                 'cname' => @model.cname,
+                'path' => @model.path,
                 'auth_type' => @model.auth_type,
                 'socket_type' => @model.socket_type,
                 'computer_name' => NSHost.currentHost.localizedName,
@@ -315,36 +317,33 @@ class ConnectorMonitor
     end
 
     def self.load_all
-        if App.global.connectors.size == 0
-          Logger.debug "LOADING THIS MANY CONNECTORS: #{self.all.size}"
-            self.all.each do |connector|
-                ConnectorMonitor.new(connector)
-            end
-        end
-        # now that they're all loaded, let's download the list and synchronize. we may have to destroy old connectors
-        @load_sync ||= Dispatch::Queue.new("load_sync:connectors")
-        @load_sync.async do
-            Logger.debug 'getting all connectors'
-            res = App.api_get("/connectors")
-            connectors = res ? res : []
-            synchronized = []
-            connectors.each do |connector|
-                c = App.global.connectors.select { |c| c.connector_id == connector['id'] }.first
-                if c
-                    c.synchronize_with(connector)
-                    synchronized << c
-                else
-                    Logger.debug 'creating'
-                    Logger.debug connector.inspect
-                    synchronized << ConnectorMonitor.create_model(connector)
-                end
-            end
-            (App.global.connectors - synchronized).each do |deleted_connector|
-                Logger.debug 'destroying'
-                Logger.debug deleted_connector.inspect
-                deleted_connector.disconnect
-            end
-        end
+      if App.global.connectors.size == 0
+        Logger.debug "LOADING THIS MANY CONNECTORS: #{self.all.size}"
+          self.all.each do |connector|
+              ConnectorMonitor.new(connector)
+          end
+      end
+      # now that they're all loaded, let's download the list and synchronize. we may have to destroy old connectors
+      Logger.debug 'getting all connectors'
+      res = App.api_get("/connectors")
+      connectors = res ? res : []
+      synchronized = []
+      connectors.each do |connector|
+          c = App.global.connectors.select { |c| c.connector_id == connector['id'] }.first
+          if c
+              c.synchronize_with(connector)
+              synchronized << c
+          else
+              Logger.debug 'creating'
+              Logger.debug connector.inspect
+              synchronized << ConnectorMonitor.create_model(connector)
+          end
+      end
+      (App.global.connectors - synchronized).each do |deleted_connector|
+          Logger.debug 'destroying'
+          Logger.debug deleted_connector.inspect
+          deleted_connector.disconnect
+      end
     end
 
     def update

@@ -158,6 +158,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A2D717D6183C78FD0092145A /* Portly2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = Portly2.xcdatamodel; sourceTree = "<group>"; };
 		A2E2184217E6878F00B81D4E /* Portly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Portly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2E2184417E687A400B81D4E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Cocoa.framework; sourceTree = "<group>"; };
 		A2E2184717E687A400B81D4E /* Computer.m.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = Computer.m.o; sourceTree = "<group>"; };
@@ -1189,6 +1190,7 @@
 		A2E2195F17E687AF00B81D4E /* Portly.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				A2D717D6183C78FD0092145A /* Portly2.xcdatamodel */,
 				A2E2196017E687AF00B81D4E /* LocalPort.xcdatamodel */,
 				A2E2196117E687AF00B81D4E /* Portly.xcdatamodel */,
 			);

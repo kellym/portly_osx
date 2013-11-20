@@ -92,6 +92,11 @@ class App
         'com.portly.queue'
     end
 
+    def self.link_color
+      @link_color ||= NSColor.colorWithCalibratedRed 230.0/255.0, green: 35.0/255.0, blue:142.0/255.0, alpha:1.0
+    end
+
+
     def self.client_id
         return @client_id if @client_id
         p1 = 'c02'
@@ -271,7 +276,7 @@ class App
         postBodyString = []
         data.each do |k,v|
           v = v.to_s
-          postBodyString << "#{k.to_s}=#{v.gsub('+','%2B')}"
+          postBodyString << "#{k.to_s}=#{v.gsub('+','%2B').gsub('/','%2F')}"
         end
         postBodyString = postBodyString.join '&'
         postBodyData = postBodyString.dataUsingEncoding(NSUTF8StringEncoding)

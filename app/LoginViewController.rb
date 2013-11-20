@@ -85,8 +85,6 @@ class LoginViewController < NSViewController
                 App.savePrivateKeyToFile(result['private_key'])
                 ApplicationController.singleton.startApp
                 # gotta do something with the code now!!!
-                #ApplicationController.singleton.loadConnectors
-                #ApplicationController.singleton.closeLogin
                 self.window.close
             end
         end
