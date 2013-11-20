@@ -19,6 +19,9 @@
 //@property IBOutlet NSMenuItem *use_http_authentication;
 //@property IBOutlet NSView *connection_type_view;
 //@property IBOutlet NSButton *connection_type;
+//@property IBOutlet NSTextField *connection_string_title;
+//@property IBOutlet NSTextField *new_connection_string_title;
+
 @end
 
 @implementation ConnectorsViewController

@@ -83,6 +83,7 @@ class Stream
       case parts[0]
       when @action[0]
         App.global.plan_type = parts[1]
+        ApplicationController.singleton.set_plan_title
       when @action[1]
         ApplicationController.singleton.signOut
       when @action[2]

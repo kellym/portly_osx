@@ -112,19 +112,37 @@ class ApplicationController
       if res
         App.global.token_model.suffix = res['suffix']
         App.global.plan_type = res['plan_type']
-        self.panel.header = "#{App.global.plan_type.to_s} Plan"
+        #self.panel.header = "#{App.global.plan_type.to_s} Plan "
+        set_plan_title
         App.save!
         loadConnectors
         ConnectorsViewController.setup
         @preferences_menu.setEnabled(true)
         self.panel.showAddButton
-        #@add_tunnel_menu.setEnabled(true)
       else
         # we need to close out this joint, yo!
         Logger.debug "Putting token failed. Signing out."
         signOut
       end
     end
+
+    def set_plan_title
+      header = NSMutableAttributedString.alloc.initWithString "#{App.global.plan_type.to_s} Plan "
+      #header = "#{App.global.plan_type.to_s} Plan "
+      if 'Free' == App.global.plan_type
+        link_name = "Upgrade"
+        url = NSURL.URLWithString "http://getportly.com/plans?token=#{App.global.token}"
+        hyperlinkString = NSMutableAttributedString.alloc.initWithString link_name
+        hyperlinkString.beginEditing
+        hyperlinkString.addAttribute NSLinkAttributeName, value: url, range: NSMakeRange(0, hyperlinkString.length)
+        hyperlinkString.addAttribute NSForegroundColorAttributeName, value:App.link_color, range:NSMakeRange(0, hyperlinkString.length)
+        hyperlinkString.endEditing
+        header.appendAttributedString hyperlinkString
+       # header += ' <a href="https://getportly.com/upgrade">Upgrade</a>'
+      end
+      self.panel.header = header
+    end
+
 
     def getUUID
       if NSUserDefaults.standardUserDefaults['uuid']
@@ -290,6 +308,7 @@ class ApplicationController
       self.panel.showAddButton
       if App.global.connectors.size == 0
         self.panel.showBlankSlate
+        self.panel.triggerActivePanel true
       end
     end
 
