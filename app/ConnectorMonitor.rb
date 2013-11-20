@@ -40,6 +40,7 @@ class ConnectorMonitor
         @_init = @start_on_boot
         @auth_type = data.auth_type
         @nickname = data.nickname
+        @path = data.path
         @socket_type = data.socket_type || 'http'
         @server_port = data.server_port
         @server_host = data.server_host
@@ -161,6 +162,7 @@ class ConnectorMonitor
         @host = data[:host]
         @port = data[:port]
         @nickname = data[:nickname]
+        @path = data[:path]
     end
 
     def self.parse_connection_string(connection_string)
@@ -171,6 +173,12 @@ class ConnectorMonitor
           data[:nickname] = connection_string[first+1..last-1]
           connection_string = connection_string[0..first]
         end
+        if connection_string.index('/')
+          first = connection_string.index('/')
+          data[:path] = connection_string[first..connection_string.length-1]
+          connection_string = connection_string[0..first]
+        end
+
         if connection_string =~ /^[0-9]*$/
             Logger.debug 'only port'
             data[:host] = 'localhost'
@@ -292,6 +300,7 @@ class ConnectorMonitor
         @model.auth_type = @auth_type
         @model.cname = @cname
         @model.nickname = @nickname
+        @model.path = @path
         @model.socket_type = @socket_type
         @model.connector_id = @connector_id
         @model.subdomain = @subdomain
@@ -393,7 +402,7 @@ class ConnectorMonitor
     end
 
     def set_connection_string
-      @connection_string = "#{@host}:#{@port}"
+      @connection_string = "#{@host}:#{@port}#{@path}"
     end
 
     def set_menu_item_title
