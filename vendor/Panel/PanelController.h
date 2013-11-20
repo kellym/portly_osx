@@ -52,13 +52,14 @@
 @property (nonatomic, retain) SettingsView *settingsView;
 @property (nonatomic, retain) AddPortView *addPortView;
 @property (nonatomic, retain) NSString *title;
+@property (nonatomic, retain) NSAttributedString *header;
 @property (nonatomic, unsafe_unretained) NSMutableArray *rows;
 @property (nonatomic, retain) NSMenu *statusMenu;
 @property (nonatomic) BOOL hasActivePanel;
 @property (nonatomic) BOOL isAnimating;
 @property (nonatomic, unsafe_unretained, readonly) id<PanelControllerDelegate> delegate;
 
-- (void) setHeader: (NSString *) value;
+- (void) setHeader: (NSAttributedString *) value;
 - (void) showAddButton;
 - (void) hideAddButton;
 - (void) showBlankSlate;

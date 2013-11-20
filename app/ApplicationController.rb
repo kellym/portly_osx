@@ -399,7 +399,7 @@ class ApplicationController
     end
 
     def signOut
-      self.panel.header = ""
+      self.panel.header = NSAttributedString.alloc.initWithString ""
       @preferences_menu.setEnabled(false)
       #@add_tunnel_menu.setEnabled(false)
       self.panel.hideAddButton

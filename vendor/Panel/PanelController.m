@@ -24,6 +24,7 @@
 @synthesize statusMenu;
 @synthesize settingsView;
 @synthesize rows;
+@synthesize header;
 @synthesize isAnimating;
 
 #pragma mark -
@@ -76,7 +77,7 @@
     headerField = HyperlinkTextField.alloc.init;
     //headerField.frame = NSMakeRect(130,height - CONTENT_HEIGHT_BOTTOM + 3,140,23);
     headerField.frame = NSMakeRect(10,4,150,20);
-    headerField.stringValue = header;
+    headerField.attributedStringValue = header;
     //[headerField setAlignment: NSRightTextAlignment];
     [headerField setTextColor:[NSColor colorWithDeviceWhite:0.4f alpha:1.0f]];
     [headerField setBezeled:NO];
@@ -329,7 +330,7 @@
   if ( header != nil) {
     [header release];
   }
-  header = [[NSAttributedString alloc] initWithString: value];
+  header = [[NSAttributedString alloc] initWithAttributedString: value];
   if ( headerField != nil) {
     headerField.attributedStringValue = value;
   }

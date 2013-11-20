@@ -117,6 +117,9 @@
 <method selector='hasActivePanel'>
 <retval declared_type='BOOL' type='B'/>
 </method>
+<method selector='header'>
+<retval declared_type='NSAttributedString*' type='@'/>
+</method>
 <method selector='hideAddButton'>
 <retval declared_type='void' type='v'/>
 </method>
@@ -161,7 +164,7 @@
 <retval declared_type='void' type='v'/>
 </method>
 <method selector='setHeader:'>
-<arg declared_type='NSString*' index='0' name='value' type='@'/>
+<arg declared_type='NSAttributedString*' index='0' name='value' type='@'/>
 <retval declared_type='void' type='v'/>
 </method>
 <method selector='setIsAnimating:'>
