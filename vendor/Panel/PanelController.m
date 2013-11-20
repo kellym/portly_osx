@@ -24,7 +24,6 @@
 @synthesize statusMenu;
 @synthesize settingsView;
 @synthesize rows;
-@synthesize header;
 @synthesize isAnimating;
 
 #pragma mark -
@@ -37,7 +36,7 @@
         _delegate = delegate;
         statusMenu = [[NSMenu alloc] init];
         rows = NSMutableArray.alloc.init;
-        header = NSString.alloc.init;
+        header = NSAttributedString.alloc.init;
     }
     return self;
 }
@@ -74,7 +73,7 @@
     [logo setImage: [NSImage imageNamed: @"logo"]];
     [self.window.contentView addSubview: logo];
 
-    headerField = NSTextField.alloc.init;
+    headerField = HyperlinkTextField.alloc.init;
     //headerField.frame = NSMakeRect(130,height - CONTENT_HEIGHT_BOTTOM + 3,140,23);
     headerField.frame = NSMakeRect(10,4,150,20);
     headerField.stringValue = header;
@@ -322,6 +321,18 @@
             [self closePanel];
         }
     }
+}
+
+- (void) setHeader: (NSAttributedString *) value
+{
+
+  if ( header != nil) {
+    [header release];
+  }
+  header = [[NSAttributedString alloc] initWithString: value];
+  if ( headerField != nil) {
+    headerField.attributedStringValue = value;
+  }
 }
 
 - (BOOL) isAnimating

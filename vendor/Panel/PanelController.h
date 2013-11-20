@@ -6,6 +6,7 @@
 #import "StatusItemView.h"
 #import "UrlView.h"
 #import "Button.h"
+#import "HyperlinkTextField.h"
 
 #define STATUS_ITEM_VIEW_WIDTH 24.0
 @class PanelController;
@@ -27,14 +28,14 @@
     __unsafe_unretained id<PanelControllerDelegate> _delegate;
     NSString *title;
     NSTextField *titleField;
-    NSTextField *headerField;
+    HyperlinkTextField *headerField;
     NSImageView *logo;
     UrlView *getportly;
     SettingsView *settingsView;
     AddPortView *addPortView;
     NSMenu *statusMenu;
     NSMutableArray *rows;
-    NSString * header;
+    NSAttributedString * header;
     NSTextField *arrowTextField;
     NSImageView * arrowView;
     ColorGradientView * blankSlateView;
@@ -51,13 +52,13 @@
 @property (nonatomic, retain) SettingsView *settingsView;
 @property (nonatomic, retain) AddPortView *addPortView;
 @property (nonatomic, retain) NSString *title;
-@property (nonatomic, retain) NSString *header;
 @property (nonatomic, unsafe_unretained) NSMutableArray *rows;
 @property (nonatomic, retain) NSMenu *statusMenu;
 @property (nonatomic) BOOL hasActivePanel;
 @property (nonatomic) BOOL isAnimating;
 @property (nonatomic, unsafe_unretained, readonly) id<PanelControllerDelegate> delegate;
 
+- (void) setHeader: (NSString *) value;
 - (void) showAddButton;
 - (void) hideAddButton;
 - (void) showBlankSlate;
