@@ -4,6 +4,7 @@
         <attribute name="auth_type" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="cname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="connector_id" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="hide_wordpress_alert" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="host" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="nickname" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="path" optional="YES" attributeType="String" syncable="YES"/>

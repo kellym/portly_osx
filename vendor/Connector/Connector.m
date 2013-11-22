@@ -17,6 +17,7 @@
 @dynamic nickname;
 @dynamic host;
 @dynamic port;
+@dynamic path;
 @dynamic start_on_boot;
 @dynamic subdomain;
 @dynamic reference;

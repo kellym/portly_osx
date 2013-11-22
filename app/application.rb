@@ -93,9 +93,16 @@ class App
     end
 
     def self.link_color
-      @link_color ||= NSColor.colorWithCalibratedRed 230.0/255.0, green: 35.0/255.0, blue:142.0/255.0, alpha:1.0
+      @link_color ||= NSColor.colorWithCalibratedRed 104.0/255.0, green: 84.0/255.0, blue:90.0/255.0, alpha:1.0
     end
 
+    def self.error=(error)
+      @error = error
+    end
+
+    def self.error
+      @error
+    end
 
     def self.client_id
         return @client_id if @client_id
@@ -140,7 +147,15 @@ class App
     end
 
     def self.forgot_password_url
-        "http://getportly.com/"
+        "http://getportly.com/reset-password/"
+    end
+
+    def self.install_wordpress_plugin_url
+      "http://getportly.com/wordpress-support/"
+    end
+
+    def self.upgrade_url
+      "https://getportly.com/upgrade"
     end
 
     def self.online
@@ -231,7 +246,12 @@ class App
         @token.suffix
     end
 
+    def self.reset_error!
+      @error = nil
+    end
+
     def self.api_get(url, data = {})
+      self.reset_error!
         data['access_token'] = App.global.token if App.global.token && App.global.token != ''
         getBodyString = []
         data.each { |k,v| getBodyString << "#{k.to_s}=#{v}" }
@@ -254,8 +274,11 @@ class App
             else
                 nil
             end
+        elsif resp.value.statusCode >= 400
+          e = Pointer.new(:object)
+          c = NSJSONSerialization.JSONObjectWithData(conn, options:0, error: e) rescue {}
+          self.error = c['error']
         else
-            puts 'HERE'
             #conn = NSString.alloc.initWithData(conn, encoding: NSUTF8StringEncoding)
             #puts conn
             #c = JSON.parse(conn)
@@ -270,45 +293,60 @@ class App
     def self.api_put(url, data)
         self.api_post(url, data, 'PUT')
     end
+
+
     def self.api_post(url, data, method='POST')
-        #@uri ||= URI.parse("#{App.api_endpoint}")
-        data['access_token'] = App.global.token if App.global.token && App.global.token != ''
-        postBodyString = []
-        data.each do |k,v|
-          v = v.to_s
-          postBodyString << "#{k.to_s}=#{v.gsub('+','%2B').gsub('/','%2F')}"
+      self.reset_error!
+      #@uri ||= URI.parse("#{App.api_endpoint}")
+      data['access_token'] = App.global.token if App.global.token && App.global.token != ''
+      postBodyString = []
+      data.each do |k,v|
+        v = v.to_s
+        postBodyString << "#{k.to_s}=#{v.gsub('+','%2B').gsub('/','%2F')}"
+      end
+      postBodyString = postBodyString.join '&'
+      postBodyData = postBodyString.dataUsingEncoding(NSUTF8StringEncoding)
+      #NSData.dataWithBytes(postBodyString.pointer, length:postBodyString.length)
+      request = NSMutableURLRequest.alloc.initWithURL NSURL.alloc.initWithString("#{App.api_endpoint}#{url}")
+      Logger.debug '----'
+      Logger.debug "#{App.api_endpoint}#{url}"
+      Logger.debug postBodyString
+      Logger.debug '----'
+      request.setHTTPMethod method
+      request.setValue "application/x-www-form-urlencoded", forHTTPHeaderField: "content-type"
+      request.setHTTPBody postBodyData
+      resp = Pointer.new(:object)
+      err = Pointer.new(:object)
+      conn = NSURLConnection.sendSynchronousRequest request, returningResponse: resp, error: err
+      if err.value
+          err = err.value.code
+          Logger.debug "Error with connection: #{err} for #{method} #{url}"
+          if err == -1012
+              nil #TODO: handle this 401 later
+          else
+              nil
+          end
+      elsif resp.value && resp.value.statusCode >= 400
+        conn_string = NSString.alloc.initWithData(conn, encoding: NSUTF8StringEncoding)
+        if conn_string.length > 2
+          e = Pointer.new(:object)
+          result = NSJSONSerialization.JSONObjectWithData(conn, options:0, error: e) rescue {}
+          if result.is_a?(Hash)
+            self.error = result['error']
+          else
+            self.error = resp.value.statusCode
+          end
         end
-        postBodyString = postBodyString.join '&'
-        postBodyData = postBodyString.dataUsingEncoding(NSUTF8StringEncoding)
-        #NSData.dataWithBytes(postBodyString.pointer, length:postBodyString.length)
-        request = NSMutableURLRequest.alloc.initWithURL NSURL.alloc.initWithString("#{App.api_endpoint}#{url}")
-        Logger.debug '----'
-        Logger.debug "#{App.api_endpoint}#{url}"
-        Logger.debug postBodyString
-        Logger.debug '----'
-        request.setHTTPMethod method
-        request.setValue "application/x-www-form-urlencoded", forHTTPHeaderField: "content-type"
-        request.setHTTPBody postBodyData
-        resp = Pointer.new(:object)
-        err = Pointer.new(:object)
-        conn = NSURLConnection.sendSynchronousRequest request, returningResponse: resp, error: err
-        if err.value
-            err = err.value.code
-            Logger.debug "Error with connection: #{err} for #{method} #{url}"
-            if err == -1012
-                nil #TODO: handle this 401 later
-            else
-                nil
-            end
-        else
-            conn_string = NSString.alloc.initWithData(conn, encoding: NSUTF8StringEncoding)
-            if conn_string.length > 2
-              e = Pointer.new(:object)
-              NSJSONSerialization.JSONObjectWithData(conn, options:0, error: e) rescue {}
-            else
-              {}
-            end
-        end
+        nil
+      else
+          conn_string = NSString.alloc.initWithData(conn, encoding: NSUTF8StringEncoding)
+          if conn_string.length > 2
+            e = Pointer.new(:object)
+            NSJSONSerialization.JSONObjectWithData(conn, options:0, error: e) rescue {}
+          else
+            {}
+          end
+      end
     end
 
 end

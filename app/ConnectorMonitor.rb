@@ -30,6 +30,7 @@ class ConnectorMonitor
     def initialize(data)
         @host = data.host
         @port = data.port
+        @path = data.path
 
         @modes = [NSEventTrackingRunLoopMode, NSDefaultRunLoopMode]
         set_connection_string
@@ -40,10 +41,10 @@ class ConnectorMonitor
         @_init = @start_on_boot
         @auth_type = data.auth_type
         @nickname = data.nickname
-        @path = data.path
         @socket_type = data.socket_type || 'http'
         @server_port = data.server_port
         @server_host = data.server_host
+        @hide_wordpress_alert = data.hide_wordpress_alert == 1
         @pref = nil
         @model = data
         @online = false
@@ -177,7 +178,7 @@ class ConnectorMonitor
         if connection_string.index('/')
           first = connection_string.index('/')
           data[:path] = connection_string[first..connection_string.length-1]
-          connection_string = connection_string[0..first]
+          connection_string = connection_string[0..first-1]
         end
 
         if connection_string =~ /^[0-9]*$/
@@ -227,6 +228,7 @@ class ConnectorMonitor
             opts.delete :connection_string
             opts[:host] = data[:host]
             opts[:port] = data[:port]
+            opts[:path] = data[:path]
             opts[:nickname] = data[:nickname]
             opts[:server_port] = result['server_port']
             opts[:server_host] = result['server_host']
@@ -297,6 +299,7 @@ class ConnectorMonitor
     def save_model
       if @model
         @model.start_on_boot = @start_on_boot
+        @model.hide_wordpress_alert = @hide_wordpress_alert
         @model.host = @host
         @model.port = @port
         @model.auth_type = @auth_type
@@ -505,16 +508,46 @@ class ConnectorMonitor
           'publish' => 'false'
         }
         response = App.api_post("/tunnels",data)
-        Logger.debug response.inspect
         if response
           @response = response
+          unless @hide_wordpress_alert
+            URLValidator.send "http://#{@connection_string}", delegate: self
+          end
           event_connect @response['connection_string'], @response['tunnel_string']
+        elsif App.error == 'already_connected'
+          event_disconnect
+          alert = NSAlert.alertWithMessageText 'Already in Use', defaultButton: nil, alternateButton: nil, otherButton: nil, informativeTextWithFormat: "The domain you are attempting to use is already in use. Please try another."
+          alert.beginSheetModalForWindow ApplicationController.singleton.panel.window, modalDelegate: self, didEndSelector: nil, contextInfo: nil
         else
-          # publish_disconnect
           @awaiting_reconnect = true
           queue_reconnect
         end
       end
+    end
+
+    def handleValidationResponse(response, data: data, error: error)
+      content = NSString.alloc.initWithData(data, encoding: NSUTF8StringEncoding)
+      if content.downcase.index('wp-content/themes')
+          @alert = Alert.alloc.init.retain
+          @alert.alert 'WordPress Plugin Needed', defaultButton: "Visit Download URL", alternateButton: "Skip This", otherButton: "Remind Me Later", informativeTextWithFormat: "It appears you are running WordPress on this port. Please install the Portly Router plugin for full support.", window: ApplicationController.singleton.window, delegate: self
+      end
+    end
+
+    def handleAlertSuccessResponse
+      NSWorkspace.sharedWorkspace.openURL NSURL.URLWithString(App.install_wordpress_plugin_url)
+      @hide_wordpress_alert = true
+      self.save_model
+      @alert.release
+    end
+
+    def handleAlertIgnoreResponse
+      @hide_wordpress_alert = true
+      self.save_model
+      @alert.release
+    end
+
+    def handleAlertOtherResponse
+      @alert.release
     end
 
     def event_connect(connection_string, tunnel_string)

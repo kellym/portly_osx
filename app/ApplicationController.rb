@@ -112,7 +112,6 @@ class ApplicationController
       if res
         App.global.token_model.suffix = res['suffix']
         App.global.plan_type = res['plan_type']
-        #self.panel.header = "#{App.global.plan_type.to_s} Plan "
         set_plan_title
         App.save!
         loadConnectors
@@ -127,18 +126,18 @@ class ApplicationController
     end
 
     def set_plan_title
-      header = NSMutableAttributedString.alloc.initWithString "#{App.global.plan_type.to_s} Plan "
-      #header = "#{App.global.plan_type.to_s} Plan "
       if 'Free' == App.global.plan_type
-        link_name = "Upgrade"
-        url = NSURL.URLWithString "http://getportly.com/plans?token=#{App.global.token}"
+        header = NSMutableAttributedString.alloc.init
+        link_name = "Upgrade to Portly Pro"
+        url = NSURL.URLWithString App.upgrade_url
         hyperlinkString = NSMutableAttributedString.alloc.initWithString link_name
         hyperlinkString.beginEditing
         hyperlinkString.addAttribute NSLinkAttributeName, value: url, range: NSMakeRange(0, hyperlinkString.length)
         hyperlinkString.addAttribute NSForegroundColorAttributeName, value:App.link_color, range:NSMakeRange(0, hyperlinkString.length)
         hyperlinkString.endEditing
         header.appendAttributedString hyperlinkString
-       # header += ' <a href="https://getportly.com/upgrade">Upgrade</a>'
+      else
+        header = NSMutableAttributedString.alloc.initWithString "Portly Pro"
       end
       self.panel.header = header
     end

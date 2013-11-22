@@ -18,6 +18,7 @@
 @property (nonatomic, retain) NSString * nickname;
 @property (nonatomic, retain) NSString * host;
 @property (nonatomic, retain) NSNumber * port;
+@property (nonatomic, retain) NSString * path;
 @property (nonatomic, retain) NSNumber * start_on_boot;
 @property (nonatomic, retain) NSString * subdomain;
 @property (nonatomic, retain) NSNumber * reference;

@@ -92,7 +92,7 @@
     [addPortView setHidden:YES];
 
     // link to getportly
-    getportly = [[ UrlView alloc ] initWithFrame: NSMakeRect(35,height - CONTENT_HEIGHT_BOTTOM + 3, 90, 23) title: @"getportly.com" url: @"https://getportly.com" delegate: self];
+    getportly = [[ UrlView alloc ] initWithFrame: NSMakeRect(35,height - CONTENT_HEIGHT_BOTTOM + 3, 90, 23) title: @"Portly" url: @"https://getportly.com" delegate: self];
     //[getportly setAlignment: NSRightTextAlignment];
     [self.window.contentView addSubview: getportly];
 
