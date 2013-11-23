@@ -518,6 +518,11 @@ class ConnectorMonitor
           event_disconnect
           alert = NSAlert.alertWithMessageText 'Already in Use', defaultButton: nil, alternateButton: nil, otherButton: nil, informativeTextWithFormat: "The domain you are attempting to use is already in use. Please try another."
           alert.beginSheetModalForWindow ApplicationController.singleton.panel.window, modalDelegate: self, didEndSelector: nil, contextInfo: nil
+        elsif App.error == 'exceeded_limit'
+          event_disconnect
+          @upgrade_alert ||= UpgradeAlert.new
+          @alert = Alert.alloc.init.retain
+          @alert.alert 'Exceeded Limit', defaultButton: "Upgrade Now", alternateButton: "Upgrade Later", otherButton: nil, informativeTextWithFormat: "You have exceeded the number of simultaneously connected ports for your plan. Please upgrade your account to remove this limit.", window: ApplicationController.singleton.panel.window, delegate: @upgrade_alert
         else
           @awaiting_reconnect = true
           queue_reconnect
