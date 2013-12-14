@@ -11,15 +11,15 @@
 
 #pragma mark -
 
-- (id)initWithStatusItem:(NSStatusItem *)statusItem
+- (id)init
 {
-    CGFloat itemWidth = [statusItem length];
+    _statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength: NSSquareStatusItemLength];
+    CGFloat itemWidth = [_statusItem length];
     CGFloat itemHeight = [[NSStatusBar systemStatusBar] thickness];
     NSRect itemRect = NSMakeRect(0.0, 0.0, itemWidth, itemHeight);
     self = [super initWithFrame:itemRect];
 
     if (self != nil) {
-        _statusItem = statusItem;
         _statusItem.view = self;
     }
     return self;

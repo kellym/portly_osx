@@ -252,8 +252,8 @@ class ApplicationController
       #@notification ||= Notification.new(App.title)
 
       Logger.debug "Putting it on the menu"
-      @statusItem = NSStatusBar.systemStatusBar.statusItemWithLength 24
-      @statusItemView = StatusItemView.alloc.initWithStatusItem @statusItem
+      @statusItemView = StatusItemView.alloc.init
+      @statusItem = @statusItemView.statusItem
       @statusItemView.action = "togglePanel:"
       @statusItemView.image = NSImage.imageNamed "icon-connected"
       @statusItemView.alternateImage = NSImage.imageNamed "icon-connected"

@@ -396,8 +396,7 @@
 <method selector='image'>
 <retval declared_type='NSImage*' type='@'/>
 </method>
-<method selector='initWithStatusItem:'>
-<arg declared_type='NSStatusItem*' index='0' name='statusItem' type='@'/>
+<method selector='init'>
 <retval declared_type='id' type='@'/>
 </method>
 <method selector='isHighlighted'>

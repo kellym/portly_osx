@@ -8,9 +8,9 @@
     __unsafe_unretained id _target;
 }
 
-- (id)initWithStatusItem:(NSStatusItem *)statusItem;
+- (id)init;
 
-@property (nonatomic, strong, readonly) NSStatusItem *statusItem;
+@property (nonatomic, strong, retain) NSStatusItem *statusItem;
 @property (nonatomic, strong) NSImage *image;
 @property (nonatomic, strong) NSImage *alternateImage;
 @property (nonatomic, setter = setHighlighted:) BOOL isHighlighted;
