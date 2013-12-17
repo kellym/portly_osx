@@ -83,6 +83,26 @@
 <retval declared_type='NSColor*' type='@'/>
 </method>
 </class>
+<class name='LoginController'>
+<method class_method='true' selector='close'>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='init'>
+<retval declared_type='id' type='@'/>
+</method>
+<method class_method='true' selector='sharedController'>
+<retval declared_type='LoginController*' type='@'/>
+</method>
+<method selector='showWindow:'>
+<arg declared_type='id' index='0' name='sender' type='@'/>
+<retval declared_type='void' type='v'/>
+</method>
+</class>
+<class name='LoginViewController'>
+<method class_method='true' selector='sharedController'>
+<retval declared_type='LoginViewController*' type='@'/>
+</method>
+</class>
 <class name='NSObject'>
 <method selector='statusItemViewForPanelController:'>
 <arg declared_type='PanelController*' index='0' name='controller' type='@'/>

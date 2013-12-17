@@ -79,15 +79,6 @@ class App
         end
     end
 
-    def self.api
-        return @http if @http
-        uri = URI.parse("#{App.api_endpoint}")
-        @http = Net::HTTP.new(uri.host, uri.port)
-        @http.use_ssl = true
-        @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-        @http
-    end
-
     def self.queue_prefix
         'com.portly.queue'
     end

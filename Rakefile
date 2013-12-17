@@ -23,8 +23,6 @@ Motion::Project::App.setup do |app|
   app.vendor_project('vendor/Computer', :static)
   app.vendor_project('vendor/StayAwake', :static)
   app.vendor_project('vendor/HoverButton', :static)
-  app.vendor_project('vendor/LoginView', :static)
-  app.vendor_project('vendor/LoginWindow', :static)
   app.vendor_project('vendor/LaunchAtLoginController', :static)
   app.vendor_project('vendor/Token', :static)
   app.vendor_project('vendor/Connector', :static)
