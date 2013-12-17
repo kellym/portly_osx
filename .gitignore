@@ -12,6 +12,7 @@ nbproject
 #*#
 *~
 *.sw[po]
+*.bridgesupport
 .eprj
 .sass-cache
 .idea
