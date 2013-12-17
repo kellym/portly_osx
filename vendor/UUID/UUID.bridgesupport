@@ -1,8 +1,0 @@
-<?xml version='1.0'?>
-<signatures version='1.0'>
-<class name='UUID'>
-<method class_method='true' selector='uuidString'>
-<retval declared_type='NSString*' type='@'/>
-</method>
-</class>
-</signatures>
