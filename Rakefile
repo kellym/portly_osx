@@ -18,15 +18,15 @@ Motion::Project::App.setup do |app|
   app.frameworks_dependencies << 'IOKit'
   app.embedded_frameworks = ['vendor/Sparkle.framework']
 
-  app.vendor_project('vendor/Panel', :static)
-  app.vendor_project('vendor/SocketStream', :static)
-  app.vendor_project('vendor/Computer', :static)
-  app.vendor_project('vendor/StayAwake', :static)
-  app.vendor_project('vendor/HoverButton', :static)
-  app.vendor_project('vendor/LaunchAtLoginController', :static)
-  app.vendor_project('vendor/Token', :static)
-  app.vendor_project('vendor/Connector', :static)
-  app.vendor_project('vendor/UUID', :static)
+  app.vendor_project('c/Panel', :static)
+  app.vendor_project('c/SocketStream', :static)
+  app.vendor_project('c/Computer', :static)
+  app.vendor_project('c/StayAwake', :static)
+  app.vendor_project('c/HoverButton', :static)
+  app.vendor_project('c/LaunchAtLoginController', :static)
+  app.vendor_project('c/Token', :static)
+  app.vendor_project('c/Connector', :static)
+  app.vendor_project('c/UUID', :static)
 
   app.files_dependencies 'app/inheritable_attrs.rb' => 'app/core_data.rb'
   app.files_dependencies 'app/Entity.rb' => 'app/inheritable_attrs.rb'
