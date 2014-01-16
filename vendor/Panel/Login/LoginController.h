@@ -12,11 +12,10 @@
 
 @interface LoginController : NSWindowController {
   LoginWindow * loginWindow;
+  LoginViewController * _delegate;
 }
 
-+ (LoginController *) sharedController;
-+ (void) close;
-- (id)init;
+- (id)initWithLoginViewController:(LoginViewController *)delegate;
 - (IBAction)showWindow:(id)sender;
 
 @end

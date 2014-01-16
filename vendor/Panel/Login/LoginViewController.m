@@ -1,34 +1,32 @@
 #import "LoginViewController.h"
 
-@interface LoginViewController
+@implementation LoginViewController
 
-static LoginViewController * loginViewControllerSingleton;
+//@synthesize view;
+@synthesize window;
 
-+ (LoginViewController *) sharedController {
-  @synchronized(self)
-  {
-    if (loginViewControllerSingleton == NULL)
-      loginViewControllerSingleton = [[self alloc] init];
-  }
-  return(loginViewControllerSingleton);
+-(void)initWithLoginService:(NSResponder <LoginServiceDelegate> *)delegate
+{
+  _delegate = delegate;
+  [self initWithNibName: @"LoginScreen" bundle: nil];
+  [_delegate setController: self];
 }
 
 -(void) awakeFromNib
 {
-  if(super) {
-    [[self email] setFocusRingType: NSFocusRingTypeNone];
-    [[self password] setFocusRingType: NSFocusRingTypeNone];
-  }
+  [super awakeFromNib];
+  [[self email] setFocusRingType: NSFocusRingTypeNone];
+  [[self password] setFocusRingType: NSFocusRingTypeNone];
 }
 
 -(IBAction) signInClicked: (id) sender
 {
-  [[[[LoginService alloc] init] signIn: sender] release];
+  [_delegate signIn: sender];
 }
 
 -(IBAction) forgotPasswordClicked: (id) sender
 {
-  [[[[LoginService alloc] init] forgotPassword: sender] release];
+  [_delegate forgotPassword: sender];
 }
 
 @end

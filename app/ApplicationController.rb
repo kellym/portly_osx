@@ -28,6 +28,10 @@ class ApplicationController
     attr_accessor :panel
     attr_accessor :ports
 
+    attr_accessor :loginController
+    attr_accessor :loginViewController
+    attr_accessor :loginService
+
     def initialize
         @@singleton = self
     end
@@ -53,13 +57,19 @@ class ApplicationController
     end
 
     def drawLoginScreen
-       self.panel.hideAddButton
-        NSApplication.sharedApplication.activateIgnoringOtherApps(true)
-        LoginController.sharedController.showWindow nil
+      self.panel.hideAddButton
+      NSApplication.sharedApplication.activateIgnoringOtherApps(true)
+      @loginService        = LoginService.new
+      @loginViewController = LoginViewController.alloc.initWithLoginService @loginService
+      @loginController     = LoginController.alloc.initWithLoginViewController @loginViewController
+      @loginController.showWindow nil
     end
 
     def closeLogin
-      LoginController.close
+      @loginController.close
+      @loginController.release
+      @loginViewController.release
+      @loginService.release
     end
 
     def createPortlyFolder

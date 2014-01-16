@@ -1,6 +1,10 @@
 class LoginService
 
-  def initialize(controller)
+  def initialize
+
+  end
+
+  def setController(controller)
     @controller = controller
   end
 
@@ -14,8 +18,8 @@ class LoginService
         'computer_model' => Computer.machineModel,
         'version' => App.version,
         'uuid' => App.global.uuid,
-        'user[email]' => self.email.stringValue,
-        'user[password]' => self.password.stringValue
+        'user[email]' => @controller.email.stringValue,
+        'user[password]' => @controller.password.stringValue
     }
     data['token'] = tokens.first.key if tokens.first
     result = App.api_post("/authorizations", data)
